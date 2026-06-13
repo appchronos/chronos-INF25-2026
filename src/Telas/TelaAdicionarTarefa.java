@@ -113,8 +113,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 if ( rs.next() ) { // Se Alterou OK
                 // Escrever os campos, salvos na variável "rs", na Tela!
                 txtCodTopico.setText(rs.getString(1)); // Nome do Tópico do banco
-                txtDescPermissao.setText(rs.getString(2));
-                lblDataHoje.setText("14/05/2026");                                 
+                              
                 }else{
                     JOptionPane.showMessageDialog(null," Anterior INEXISTENTE!!!!");
                     fazLimpar();
@@ -144,8 +143,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 if ( rs.next() ) { // Se Alterou OK
                 // Escrever os campos, salvos na variável "rs", na Tela!
                 txtCodTopico.setText(rs.getString(1)); // Nro. da Coluna do banco
-                txtDescPermissao.setText(rs.getString(2));
-                lblDataHoje.setText("14/05/2026");                                 
+                              
                 }else{
                     JOptionPane.showMessageDialog(null," Anterior INEXISTENTE!!!!");
                     fazLimpar();
@@ -169,10 +167,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 rs = pst.executeQuery();  //Faz a Consulta
                 // 8 - Testar se consultou OK, se achou!?
                 if ( rs.first() ) {
-                // Escrever os campos, salvos na variável "rs", na Tela!
-                txtCodPermissao.setText(rs.getString(1)); // Nro. da Coluna do banco
-                txtDescPermissao.setText(rs.getString(2));
-                lblDataHoje.setText("14/05/2026");                                 
+                // Escrever os campos, salvos na variável "rs", na Tela!                         
                 }else{
                     JOptionPane.showMessageDialog(null," Cadastro de Permissões VAZIO!!!!");
                     fazLimpar();
@@ -196,10 +191,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 rs = pst.executeQuery();  //Faz a Consulta
                 // 8 - Testar se consultou OK, se achou!?
                 if ( rs.last() ) {
-                // Escrever os campos, salvos na variável "rs", na Tela!
-                txtCodPermissao.setText(rs.getString(1)); // Nro. da Coluna do banco
-                txtDescPermissao.setText(rs.getString(2));
-                lblDataHoje.setText("14/05/2026");                                 
+                // Escrever os campos, salvos na variável "rs", na Tela!                               
                 }else {
                     JOptionPane.showMessageDialog(null," Cadastro de Permissões VAZIO!!!!");
                     fazLimpar();
