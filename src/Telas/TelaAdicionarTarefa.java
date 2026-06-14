@@ -16,12 +16,12 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
     ResultSet rs = null; // Variável com o resultado do comando executado
     
     public void fazLimpar() {
-        txtCodTopico.setText("");
-        txtCodUsuario.setText(""); //Limpando o campo!
+        txtCodUsuario.setText("");  //Limpando o campo!
+        txtCodTopico.setText(""); 
         txtTarefa.setText("");
         txtDesTarefa.setText("");
         txtValor.setText("");
-        txtCodTopico.requestFocus(); // Coloca o foco do cursor, neste campo!   
+        txtCodUsuario.requestFocus(); // Coloca o foco do cursor, neste campo!   
     }
 
     public void fazIncluir() {
@@ -33,7 +33,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null," Campos inválidos/não preenchidos na Tela!!!");
         }else {
             // 4 - Definição da String com o comando SQL de Alteração = UPDATE!
-            String sql = "insert INTO T_TAREFA(id_tarefa, id_topico, id_usuario, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao, dt_conclusao) values(?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "insert INTO T_TAREFA(id_tarefa, id_topico, id_usuario, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao, dt_conclusao) values(NULL, ?, ?, ?, ?, ?, NOW(), NULL)";
 
             // 5 - Fazer acesso ao banco de dados com a consulta/chave informada!
             try {
@@ -41,8 +41,8 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 // 6 - Associar o comando SQL na conexão do banco
                 pst = conexao.prepareStatement(sql);
                 // Substituir a "?" pela informação do campo Chave da Tela
-                pst.setString(2,txtCodTopico.getText());
-                pst.setString(3,txtCodUsuario.getText());
+                pst.setString(2,txtCodUsuario.getText());
+                pst.setString(3,txtCodTopico.getText());
                 pst.setString(4,txtTarefa.getText());
                 pst.setString(5,txtDesTarefa.getText());
                 pst.setString(6,txtValor.getText());
@@ -66,8 +66,8 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
     }
     
     public void fazConsultar() {
-        // 4 - Definição da String com o comando SQL de COnsulta!
-        String sql = "select * from t_permissao where id_Permissao = ?";
+        // 4 - Definição da String com o comando SQL de Consulta!
+        String sql = "select * from t_tarefa where id_usuario = ?";
         
         // 5 - Fazer acesso ao banco de dados com a consulta/chave informada!
         try {
@@ -75,14 +75,14 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             // 6 - Associar o comando SQL na conexão do banco
             pst = conexao.prepareStatement(sql);
             // Substituir a "?" pela informação do campo Chave da Tela
-            pst.setString(1,txtCodTopico.getText());
+            pst.setString(2,txtCodUsuario.getText());
             // 7 - Executar o comando/consulta na Conexão do banco
             rs = pst.executeQuery();  //Faz a Consulta
             // 8 - Testar se consultou OK, se achou!?
             if ( rs.next() ) { // Se encontrou o registro/próximo
                 // Escrever os campos, salvos na variável "rs", na Tela!
-                txtCodTopico.setText(rs.getString(2)); // Nro. da Coluna do banco
-                txtCodUsuario.setText(rs.getString(3));
+                txtCodUsuario.setText(rs.getString(2)); // Nro. da Coluna do banco
+                txtCodTopico.setText(rs.getString(3));
                 txtTarefa.setText(rs.getString(4));
                 txtCodUsuario.setText(rs.getString(5));
                 txtCodUsuario.setText(rs.getString(6));
@@ -92,28 +92,30 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             }
                  
         } catch ( Exception varERRO ) { // Fazer o tratamento da Exceção/ERRO
-            JOptionPane.showMessageDialog(null," Erro na Consulta Tabela - tpermissao!");
+            JOptionPane.showMessageDialog(null," Erro na Consulta Tabela - t_tarefa!");
             System.out.println("O ERRO é: " + varERRO.toString());  // Exibe na console o erro!
         }        
     }
     
     public void consultarPrior() {
         //  Definição da String com o comando SQL de COnsulta Anterior!
-        String sql = "select * from t_permissao where id_Permissao = ? - 1";
+        String sql = "select * from t_tarefa where id_topico = ? - 1";
         // Fazendo acesso ao registro anterior com o try/catch
                     try {
                 // Bloco de comandos OK
                 // 6 - Associar o comando SQL na conexão do banco
                 pst = conexao.prepareStatement(sql);
                 // Substituir a "?" pela informação do campo Chave da Tela
-                pst.setString(1,txtCodTopico.getText());
+                pst.setString(3,txtCodTopico.getText());
                 // 7 - Executar o comando UPDATE na Conexão do banco
                 rs = pst.executeQuery();  //Faz a Consulta
                 // 8 - Testar se consultou OK, se achou!?
                 if ( rs.next() ) { // Se Alterou OK
                 // Escrever os campos, salvos na variável "rs", na Tela!
-                txtCodTopico.setText(rs.getString(1)); // Nome do Tópico do banco
-                              
+                txtCodTopico.setText(rs.getString(3)); // Nome do Tópico do banco
+                txtTarefa.setText(rs.getString(4));
+                txtCodUsuario.setText(rs.getString(5));
+                txtCodUsuario.setText(rs.getString(6));                                 
                 }else{
                     JOptionPane.showMessageDialog(null," Anterior INEXISTENTE!!!!");
                     fazLimpar();
@@ -129,35 +131,37 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
     }
     public void consultarNext() {
             //  Definição da String com o comando SQL de COnsulta Anterior!
-        String sql = "select * from t_permissao where id_Permissao = ? + 1";
+        String sql = "select * from t_permissao where id_topico = ? + 1";
         // Fazendo acesso ao registro anterior com o try/catch
                     try {
                 // Bloco de comandos OK
                 // 6 - Associar o comando SQL na conexão do banco
                 pst = conexao.prepareStatement(sql);
                 // Substituir a "?" pela informação do campo Chave da Tela
-                pst.setString(1,txtCodTopico.getText());
+                pst.setString(3,txtCodTopico.getText());
                 // 7 - Executar o comando UPDATE na Conexão do banco
                 rs = pst.executeQuery();  //Faz a Consulta
                 // 8 - Testar se consultou OK, se achou!?
                 if ( rs.next() ) { // Se Alterou OK
                 // Escrever os campos, salvos na variável "rs", na Tela!
-                txtCodTopico.setText(rs.getString(1)); // Nro. da Coluna do banco
-                              
+                txtCodTopico.setText(rs.getString(3));
+                txtTarefa.setText(rs.getString(4));
+                txtCodUsuario.setText(rs.getString(5));
+                txtCodUsuario.setText(rs.getString(6));                             
                 }else{
                     JOptionPane.showMessageDialog(null," Anterior INEXISTENTE!!!!");
                     fazLimpar();
                 }
 
             } catch ( Exception varERRO ) { // Fazer o tratamento da Exceção/ERRO
-                JOptionPane.showMessageDialog(null," Erro na consulta do anterior - t_permissao!");
+                JOptionPane.showMessageDialog(null," Erro na consulta do anterior - t_tarefa!");
                 System.out.println("O ERRO é: " + varERRO.toString());  // Exibe na console o erro!
             }
     }
     
     public void consultarFirst() {
             //  Definição da String com o comando SQL de COnsulta Anterior!
-        String sql = "select * from t_permissao";
+        String sql = "select * from t_tarefa";
         // Fazendo acesso ao registro anterior com o try/catch
             try {
                 // Bloco de comandos OK
@@ -167,21 +171,25 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 rs = pst.executeQuery();  //Faz a Consulta
                 // 8 - Testar se consultou OK, se achou!?
                 if ( rs.first() ) {
-                // Escrever os campos, salvos na variável "rs", na Tela!                         
+                // Escrever os campos, salvos na variável "rs", na Tela!
+                txtCodTopico.setText(rs.getString(3));
+                txtTarefa.setText(rs.getString(4));
+                txtCodUsuario.setText(rs.getString(5));
+                txtCodUsuario.setText(rs.getString(6));                                
                 }else{
-                    JOptionPane.showMessageDialog(null," Cadastro de Permissões VAZIO!!!!");
+                    JOptionPane.showMessageDialog(null," Cadastro de Tarefas VAZIO!!!!");
                     fazLimpar();
                 }
 
             } catch ( Exception varERRO ) { // Fazer o tratamento da Exceção/ERRO
-                JOptionPane.showMessageDialog(null," Erro na consulta do Primeiro Registro - t_permissao!");
+                JOptionPane.showMessageDialog(null," Erro na consulta do Primeiro Registro - t_tarefa!");
                 System.out.println("O ERRO é: " + varERRO.toString());  // Exibe na console o erro!
             }
     }
     
     public void consultarLast() {
             //  Definição da String com o comando SQL de COnsulta Anterior!
-        String sql = "select * from t_permissao";
+        String sql = "select * from t_tarefa";
         // Fazendo acesso ao registro anterior com o try/catch
             try {
                 // Bloco de comandos OK
@@ -191,14 +199,18 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 rs = pst.executeQuery();  //Faz a Consulta
                 // 8 - Testar se consultou OK, se achou!?
                 if ( rs.last() ) {
-                // Escrever os campos, salvos na variável "rs", na Tela!                               
+                // Escrever os campos, salvos na variável "rs", na Tela!
+                txtCodTopico.setText(rs.getString(3));
+                txtTarefa.setText(rs.getString(4));
+                txtCodUsuario.setText(rs.getString(5));
+                txtCodUsuario.setText(rs.getString(6));                             
                 }else {
-                    JOptionPane.showMessageDialog(null," Cadastro de Permissões VAZIO!!!!");
+                    JOptionPane.showMessageDialog(null," Cadastro de Tarefas VAZIO!!!!");
                     fazLimpar();
                 }
 
             } catch ( Exception varERRO ) { // Fazer o tratamento da Exceção/ERRO
-                JOptionPane.showMessageDialog(null," Erro na consulta do Último Registro - t_permissao!");
+                JOptionPane.showMessageDialog(null," Erro na consulta do Último Registro - t_tarefa!");
                 System.out.println("O ERRO é: " + varERRO.toString());  // Exibe na console o erro!
             }
 
@@ -210,6 +222,16 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
      */
     public TelaAdicionarTarefa() {
         initComponents();
+        // 3 - Fazer/executar a conexão ao banco de Dados com 
+        // o retorno na variável "conexao"
+        conexao = ModuloDbConecta.connector();
+        if (conexao != null) {
+            lblMensagens.setText("Conexão OK!!!");
+            lblMensagens.setForeground(Color.blue);
+        }else {
+            lblMensagens.setText("ERRO - NÃO CONECTADO!");
+            lblMensagens.setForeground(Color.red);
+        } 
     }
 
     /**
@@ -241,6 +263,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
         txtCodTopico = new javax.swing.JTextField();
         lblSelecionarTopico1 = new javax.swing.JLabel();
         txtCodUsuario = new javax.swing.JTextField();
+        lblMensagens = new javax.swing.JLabel();
 
         btnLast.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnLast.setText(">>");
@@ -338,6 +361,9 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             }
         });
 
+        lblMensagens.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblMensagens.setText("Mensagens....");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -380,7 +406,9 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                             .addGap(177, 177, 177)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(btnFechar)
-                                .addComponent(btnLimpar))))
+                                .addComponent(btnLimpar))
+                            .addGap(55, 55, 55)
+                            .addComponent(lblMensagens, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblSelecionarTopico1)
                         .addGap(18, 18, 18)
@@ -434,7 +462,9 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 .addGap(28, 28, 28)
                 .addComponent(btnLimpar)
                 .addGap(18, 18, 18)
-                .addComponent(btnFechar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFechar)
+                    .addComponent(lblMensagens))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -509,6 +539,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblAdicionarTarefa;
     private javax.swing.JLabel lblCadPermissoes;
     private javax.swing.JLabel lblDescricaoTarefa;
+    private javax.swing.JLabel lblMensagens;
     private javax.swing.JLabel lblObservacao;
     private javax.swing.JLabel lblSelecionarTopico;
     private javax.swing.JLabel lblSelecionarTopico1;

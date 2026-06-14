@@ -15,7 +15,7 @@ public class ModuloDbConecta {
         // Definir as demais variáveis da String de conexão
         String url = "jdbc:mysql://127.0.0.1:3306/db_chronos";
         String user = "root";
-        String senha = "cedup123";
+        String senha = "1234";
         
         // 2 - Fazer a conexao ao banco
         try {

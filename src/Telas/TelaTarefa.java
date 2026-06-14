@@ -83,26 +83,26 @@ public class TelaTarefa extends javax.swing.JFrame {
             .addGroup(pnlDesktop1Layout.createSequentialGroup()
                 .addGroup(pnlDesktop1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlDesktop1Layout.createSequentialGroup()
-                        .addGap(406, 406, 406)
-                        .addComponent(lblMensagem))
-                    .addGroup(pnlDesktop1Layout.createSequentialGroup()
                         .addGap(290, 290, 290)
-                        .addComponent(btnNovaTarefa)))
-                .addContainerGap(463, Short.MAX_VALUE))
+                        .addComponent(btnNovaTarefa))
+                    .addGroup(pnlDesktop1Layout.createSequentialGroup()
+                        .addGap(336, 336, 336)
+                        .addComponent(lblMensagem)))
+                .addContainerGap(533, Short.MAX_VALUE))
         );
         pnlDesktop1Layout.setVerticalGroup(
             pnlDesktop1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDesktop1Layout.createSequentialGroup()
                 .addGap(214, 214, 214)
                 .addComponent(btnNovaTarefa)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 471, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 464, Short.MAX_VALUE)
                 .addComponent(lblMensagem)
-                .addGap(35, 35, 35))
+                .addGap(42, 42, 42))
         );
 
         jMenu1.setText("Configurações");
 
-        mnUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK));
+        mnUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnUsuario.setText("Usuário");
         mnUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,7 +120,7 @@ public class TelaTarefa extends javax.swing.JFrame {
             }
         });
 
-        mnSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
+        mnSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnSair.setText("Exit");
         mnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -178,9 +178,8 @@ public class TelaTarefa extends javax.swing.JFrame {
     private void mnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnUsuarioActionPerformed
         // TODO add your handling code here:
         TelaUsuario tlUsuario = new TelaUsuario();
-        tlUsuario.setVisible(true);
-        // Abrindo a tela na área de tarabalho da tela principal
-        pnlDesktop1.add(tlUsuario);  
+        // Com a Classe/TelaPrincipal na memória, devemos fazê-la visível!
+        tlUsuario.setVisible(true);  
     }//GEN-LAST:event_mnUsuarioActionPerformed
 
     private void btnNovaTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaTarefaActionPerformed
