@@ -138,8 +138,12 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblUsuario.setText("Email:");
 
+        txtEmail.setToolTipText("Digite seu email");
+
         lblSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha.setText("Senha:");
+
+        txtSenha1.setToolTipText("Digite sua senha");
 
         btncadastro.setBackground(new java.awt.Color(51, 102, 255));
         btncadastro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -159,12 +163,15 @@ public class TelaCadastro extends javax.swing.JFrame {
             }
         });
 
+        txtSenha2.setToolTipText("Confirmar senha");
+
         lblSenha1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha1.setText("Repitir Senha:");
 
         lblUsuario1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblUsuario1.setText("Nome:");
 
+        txtNome.setToolTipText("Digite seu nome");
         txtNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNomeActionPerformed(evt);
@@ -175,6 +182,7 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblUsuario2.setText("Data de Nascimento:");
 
         txtDataNasc.setText("  /  /    ");
+        txtDataNasc.setToolTipText("Digite sua data de nascimento");
         txtDataNasc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDataNascActionPerformed(evt);
