@@ -81,8 +81,9 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnlDesktop1" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnNovaTarefa" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="pnlDesktop1" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -91,6 +92,8 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="btnNovaTarefa" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="pnlDesktop1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
@@ -112,26 +115,16 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="290" max="-2" attributes="0"/>
-                          <Component id="btnNovaTarefa" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="336" max="-2" attributes="0"/>
-                          <Component id="lblMensagem" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <EmptySpace pref="533" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="336" max="-2" attributes="0"/>
+                  <Component id="lblMensagem" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="757" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace min="-2" pref="214" max="-2" attributes="0"/>
-                  <Component id="btnNovaTarefa" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="464" max="32767" attributes="0"/>
+                  <EmptySpace pref="672" max="32767" attributes="0"/>
                   <Component id="lblMensagem" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
               </Group>
@@ -150,15 +143,15 @@
             <Property name="text" type="java.lang.String" value="Mensagem..."/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btnNovaTarefa">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Nova Tarefa"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNovaTarefaActionPerformed"/>
-          </Events>
-        </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="btnNovaTarefa">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Teste"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNovaTarefaActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>
