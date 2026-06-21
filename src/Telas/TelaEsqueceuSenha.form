@@ -26,34 +26,27 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="197" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace pref="94" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="lblNovaSenha" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Component id="lblSenhaRepetida" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Component id="lblSeuEmail" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="26" pref="26" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="txtSeuEmail" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtSenhaRepetida" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtNovaSenha" alignment="0" min="-2" pref="195" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="txtNovaSenha" min="-2" pref="195" max="-2" attributes="0"/>
+                          <Component id="txtSeuEmail" min="-2" pref="195" max="-2" attributes="0"/>
+                          <Component id="txtSenhaRepetida" min="-2" pref="195" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace min="-2" pref="150" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="lblSeuNome" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="txtSeuNome" min="-2" pref="196" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                      <Component id="lblMensagens" min="-2" pref="281" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                   </Group>
-              </Group>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="86" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="lblEsqueceuSenha" min="-2" max="-2" attributes="0"/>
@@ -62,19 +55,12 @@
                       <EmptySpace min="-2" pref="362" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="btnVoltar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="btnAlterarSenha" alignment="1" min="-2" pref="170" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="200" max="-2" attributes="0"/>
+                      <Component id="btnAlterarSenha" min="-2" pref="170" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="217" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="283" max="-2" attributes="0"/>
-                      <Component id="lblMensagens" min="-2" pref="281" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="btnVoltar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="265" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -87,22 +73,17 @@
               <Component id="lblLogin2" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="lblEsqueceuSenha" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblSeuNome" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtSeuNome" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblSeuEmail" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtSeuEmail" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblNovaSenha" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtNovaSenha" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblSenhaRepetida" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtSenhaRepetida" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -113,7 +94,7 @@
               <Component id="btnVoltar" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="lblMensagens" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="91" max="32767" attributes="0"/>
+              <EmptySpace pref="89" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -211,14 +192,6 @@
         <Property name="text" type="java.lang.String" value="Chrono$"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="lblSeuNome">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="14" style="1"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Qual &#xe9; o seu nome?"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="lblEsqueceuSenha">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -226,14 +199,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Voc&#xea; n&#xe3;o lembra a senha?"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtSeuNome">
-      <Properties>
-        <Property name="toolTipText" type="java.lang.String" value="Digite seu nome"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtSeuNomeActionPerformed"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>
