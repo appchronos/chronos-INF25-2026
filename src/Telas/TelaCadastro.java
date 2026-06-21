@@ -38,30 +38,6 @@ public class TelaCadastro extends javax.swing.JFrame {
         String txtNomeTela = txtNome.getText();
         int idPermissao = 2; // Inicia como comum por padrão
 
-String chaveAdmin = JOptionPane.showInputDialog(null, "Se você for Administrador, digite a Chave de Ativação (ou deixe em branco para Usuário Comum):", "Validação de Administrador", JOptionPane.QUESTION_MESSAGE);
-
-        if (chaveAdmin != null && chaveAdmin.equals("admin123")) { 
-            idPermissao = 1; 
-            JOptionPane.showMessageDialog(null, "Acesso de Administrador confirmado!");
-        }
-        // Validando...
-        if  (txtNomeTela.isEmpty()) {
-            // Faz critica
-            JOptionPane.showMessageDialog(null," Campos inválidos/não preenchidos na Tela!!!");
-        }else {
-            // 4 - Definição da String com o comando SQL de Alteração = UPDATE!
-            //String sql = "insert INTO T_USUARIO(nm_usuario, dt_nascimento, ds_email, ds_senha) values(?, ?, ?, ?)";
-            String sql = "insert INTO T_USUARIO(nm_usuario, dt_nascimento, ds_email, ds_senha, id_permissao) values(?, ?, ?, ?, ?)";
-
-            // 5 - Fazer acesso ao banco de dados com a consulta/chave informada!
-            try {
-                // Bloco de comandos OK
-                // 6 - Associar o comando SQL na conexão do banco
-                pst = conexao.prepareStatement(sql);
-                // Substituir a "?" pela informação do campo Chave da Tela
-                //pst.setString(1,txtNome.getText());     Alterada para novo cod.
-               // pst.setString(2,txtDataNasc.getText()); Alterada para novo cod.
-               // pst.setString(3,txtEmail.getText());    Alterada para novo cod.
 // Converte o formato da data de BR (dd/MM/yyyy) para MySQL (yyyy-MM-dd)
     String dataFormatada = "";
     try {
@@ -75,6 +51,21 @@ String chaveAdmin = JOptionPane.showInputDialog(null, "Se você for Administrado
         return; 
     }
 
+
+        // Validando...
+        if  (txtNomeTela.isEmpty()) {
+            // Faz critica
+            JOptionPane.showMessageDialog(null," Campos inválidos/não preenchidos na Tela!!!");
+        }else {
+            // 4 - Definição da String com o comando SQL de Alteração = UPDATE!
+            String sql = "insert INTO T_USUARIO(nm_usuario, dt_nascimento, ds_email, ds_senha, id_permissao) values(?, ?, ?, ?, ?)";
+
+            // 5 - Fazer acesso ao banco de dados com a consulta/chave informada!
+            try {
+                // Bloco de comandos OK
+                // 6 - Associar o comando SQL na conexão do banco
+                pst = conexao.prepareStatement(sql);
+
     // Define os 3 primeiros parâmetros das interrogações
     pst.setString(1, txtNome.getText());       // Primeira ?: nm_usuario
     pst.setString(2, dataFormatada);         // Segunda ?: dt_nascimento (já convertida!)
@@ -83,6 +74,14 @@ String chaveAdmin = JOptionPane.showInputDialog(null, "Se você for Administrado
         String senha1 = txtSenha1.getText();
         String senha2 = txtSenha2.getText();
 
+        String chaveAdmin = JOptionPane.showInputDialog(null, "Se você for Administrador, digite a Chave de Ativação (ou deixe em branco para Usuário Comum):", "Validação de Administrador", JOptionPane.QUESTION_MESSAGE);
+
+        if (chaveAdmin != null && chaveAdmin.equals("adm123")) { 
+            pst.setInt(5, idPermissao = 1);
+            JOptionPane.showMessageDialog(null, "Acesso de Administrador confirmado!");
+        }else{
+            pst.setInt(5, idPermissao = 2);
+        }
             // 2. Verifica se algum dos campos ficou em branco
         if (senha1.isEmpty() || senha2.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos de senha!");
@@ -91,7 +90,6 @@ String chaveAdmin = JOptionPane.showInputDialog(null, "Se você for Administrado
         }else if (senha1.equals(senha2)) {
         // Se forem iguais, associa a senha ao parâmetro correto do banco de dados
                 pst.setString(4, senha1);
-                pst.setInt(5, idPermissao);
     
         // CONTINUAÇÃO DO SEU CÓDIGO (Executar o update, verificar se inseriu, etc.)
         int fgInsOK = pst.executeUpdate();
@@ -104,11 +102,6 @@ String chaveAdmin = JOptionPane.showInputDialog(null, "Se você for Administrado
         else {
             JOptionPane.showMessageDialog(null, "ERRO: As senhas digitadas não são iguais! Favor verificar.");
 }
-
-           // } catch ( HeadlessException | SQLException varERRO ) { // Fazer o tratamento da Exceção/ERRO
-           // JOptionPane.showMessageDialog(null," Erro na Inclusão Tabela - t_permissao!");
-            //    System.out.println("O ERRO é: " + varERRO.toString());  // Exibe na console o erro!
-            //} Substituido pelo codigo debaixo.
             } catch (Exception e) {
     JOptionPane.showMessageDialog(null, "Erro real: " + e.getMessage());
 }
@@ -316,15 +309,14 @@ String chaveAdmin = JOptionPane.showInputDialog(null, "Se você for Administrado
     }// </editor-fold>//GEN-END:initComponents
 
     private void btncadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncadastroActionPerformed
-        // TODO add your handling code here:
-
-               
+        // TODO add your handling code here:       
         cadastro();   
     }//GEN-LAST:event_btncadastroActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         // TODO add your handling code here:
-        System.exit(0);
+        TelaLogin tlLogin = new TelaLogin();
+        tlLogin.setVisible(true);   
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void lblMensagensComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_lblMensagensComponentHidden
