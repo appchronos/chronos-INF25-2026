@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
+//teste
 /**
  *
  * @author ALUNO
@@ -21,40 +22,71 @@ public class TelaLogin extends javax.swing.JFrame {
     ResultSet rs = null; // Variável com o resultado do comando executado
     
     // 4 - Criar o método/rotina "logar()"
-    public void  logar() {
-        // Declarar a variável com o comando SQL do LOGIN!!!
-        String sql = "select * from t_usuario where ds_email = ? and ds_senha = ? ";
-        // Fazer o acesso na tabela desejada
-        try {
-            // 5 - Não ocorrendo erro
-            // Colocar o comando na conexao do banco e executá-lo
-            pst = conexao.prepareStatement(sql);
-            // Substituir as " ? " pelos campos da tela
-            pst.setString(1, txtUsuario.getText());
-            pst.setString(2, txtSenha.getText());
-            // Executar a conexa....
-            rs = pst.executeQuery();
-            // Verificar se encontrou o usuário e senha!
-            if  (rs.next()){
-                // Se OK/encontrou... abaixo, cria-se a variável tlPrincipal
-                // e carregamos nela a Classe "TelaPrincipal";
-                TelaTarefa tlPrincipal = new TelaTarefa();
-                // Com a Classe/TelaPrincipal na memória, devemos fazê-la visível!
-                tlPrincipal.setVisible(true);
-                // Fechando a "TelaLogin"
-                this.dispose();  // O comando "this", acessar os atributos da Classe atual!                
-            }else {
-                JOptionPane.showMessageDialog(this, "Usuário/Senha INVÁLIDOS!!! Tente outra Vez! ");
-                // Escrever na Tela, limpando o campo
-                txtUsuario.setText("");
-                txtSenha.setText("");                
-            }
-            
-        }catch(Exception varERRO) {
-            // Tratando o erro ao banco de dados
-            JOptionPane.showMessageDialog(null,"Erro no acesso ao banco de dados: " + varERRO.toString() );
-        }
+public void logar() {
+        // 1. Busca simplificada apenas na tabela t_usuario
+        String sqlUsuario = "select * from t_usuario where ds_email = ? and ds_senha = ?";
         
+        try {
+            pst = conexao.prepareStatement(sqlUsuario);
+            pst.setString(1, txtUsuario.getText()); 
+            pst.setString(2, txtSenha.getText());   
+            rs = pst.executeQuery();
+            
+            if (rs.next()) {
+                String nomeUsuario = rs.getString("nm_usuario");
+                
+                // Tenta pegar o ID da permissão testando variações de nome
+                int idPermissao = 0;
+                try {
+                    idPermissao = rs.getInt("T_PERMISSAO_id_permissao");
+                } catch (Exception e) {
+                    try {
+                        idPermissao = rs.getInt("t_permissao_id_permissao");
+                    } catch (Exception e2) {
+                        try {
+                            idPermissao = rs.getInt("id_permissao");
+                        } catch (Exception e3) {
+                            System.out.println("Não foi possível encontrar a coluna de permissão.");
+                        }
+                    }
+                }
+                
+                // 2. Busca o nome da permissão usando o ID encontrado
+                String perfil = "Usuário Comum"; 
+                String sqlPermissao = "select ds_permissao from t_permissao where id_permissao = ?";
+                
+                try (PreparedStatement pstP = conexao.prepareStatement(sqlPermissao)) {
+                    pstP.setInt(1, idPermissao);
+                    try (ResultSet rsP = pstP.executeQuery()) {
+                        if (rsP.next()) {
+                            perfil = rsP.getString("ds_permissao");
+                        }
+                    }
+                } catch (Exception e) {
+                    // Mantém como Usuário Comum se falhar
+                }
+                
+                JOptionPane.showMessageDialog(this, "Bem-vindo ao Chronos, " + nomeUsuario + "!");
+                
+                TelaTarefa tlPrincipal = new TelaTarefa();
+                
+                if (perfil.equalsIgnoreCase("Administrador")) {
+                    System.out.println("Acesso como: Administrador");
+                } else {
+                    System.out.println("Acesso como: Usuário Comum");
+                }
+                
+                tlPrincipal.setVisible(true);
+                this.dispose();
+                
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuário/Senha INVÁLIDOS!!! Tente outra Vez!");
+                txtUsuario.setText("");
+                txtSenha.setText("");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao conectar: " + e.getMessage());
+        }
     }
 
     public TelaLogin() {  // Método construtor da TelaLogin
