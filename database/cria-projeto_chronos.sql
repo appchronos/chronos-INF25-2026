@@ -44,6 +44,30 @@ INSERT INTO `t_acao` VALUES (1,1,'Iniciada','2026-06-03 21:00:00'),(2,2,'Iniciad
 UNLOCK TABLES;
 
 --
+-- Table structure for table `t_permissao`
+--
+
+DROP TABLE IF EXISTS `t_permissao`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_permissao` (
+  `id_permissao` int(11) NOT NULL AUTO_INCREMENT,
+  `ds_permissao` varchar(50) NOT NULL,
+  PRIMARY KEY (`id_permissao`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `t_permissao`
+--
+
+LOCK TABLES `t_permissao` WRITE;
+/*!40000 ALTER TABLE `t_permissao` DISABLE KEYS */;
+INSERT INTO `t_permissao` VALUES (1,'Admin'),(2,'Usuário');
+/*!40000 ALTER TABLE `t_permissao` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `t_tarefa`
 --
 
@@ -115,9 +139,12 @@ CREATE TABLE `t_usuario` (
   `dt_nascimento` date NOT NULL,
   `ds_email` varchar(80) NOT NULL,
   `ds_senha` varchar(50) NOT NULL,
+  `id_permissao` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_usuario`),
-  UNIQUE KEY `UN_USUARIO_EMAIL` (`ds_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+  UNIQUE KEY `UN_USUARIO_EMAIL` (`ds_email`),
+  KEY `id_permissaofK` (`id_permissao`),
+  CONSTRAINT `id_permissaofK` FOREIGN KEY (`id_permissao`) REFERENCES `t_permissao` (`id_permissao`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -126,7 +153,7 @@ CREATE TABLE `t_usuario` (
 
 LOCK TABLES `t_usuario` WRITE;
 /*!40000 ALTER TABLE `t_usuario` DISABLE KEYS */;
-INSERT INTO `t_usuario` VALUES (1,'Kalyson','2000-08-17','4555854224@estudante.sed.sc.gov.br','1234'),(2,'Gabriel','1999-02-28','4544039745@estudante.sed.sc.gov.br','1234'),(3,'Jose','1967-10-18','4555854518@estudante.sed.sc.gov.br','1234');
+INSERT INTO `t_usuario` VALUES (1,'Kalyson','2000-08-17','4555854224@estudante.sed.sc.gov.br','1234',2),(2,'Gabriel','1999-02-28','4544039745@estudante.sed.sc.gov.br','1234',2),(3,'Jose','1967-10-18','4555854518@estudante.sed.sc.gov.br','1234',2),(4,'Admin','2026-06-21','Admin','adm123',1);
 /*!40000 ALTER TABLE `t_usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -139,4 +166,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-12 17:49:19
+-- Dump completed on 2026-06-21  5:45:56
