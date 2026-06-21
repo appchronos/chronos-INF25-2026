@@ -10,6 +10,8 @@ import javax.swing.JOptionPane;
 import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
+import java.awt.HeadlessException;
+// teste
 
 /**
  *
@@ -34,13 +36,22 @@ public class TelaCadastro extends javax.swing.JFrame {
     public void cadastro() {
                 // Fazer a validação das informações da Tela
         String txtNomeTela = txtNome.getText();
+        int idPermissao = 2; // Inicia como comum por padrão
+
+String chaveAdmin = JOptionPane.showInputDialog(null, "Se você for Administrador, digite a Chave de Ativação (ou deixe em branco para Usuário Comum):", "Validação de Administrador", JOptionPane.QUESTION_MESSAGE);
+
+        if (chaveAdmin != null && chaveAdmin.equals("admin123")) { 
+            idPermissao = 1; 
+            JOptionPane.showMessageDialog(null, "Acesso de Administrador confirmado!");
+        }
         // Validando...
         if  (txtNomeTela.isEmpty()) {
             // Faz critica
             JOptionPane.showMessageDialog(null," Campos inválidos/não preenchidos na Tela!!!");
         }else {
             // 4 - Definição da String com o comando SQL de Alteração = UPDATE!
-            String sql = "insert INTO T_USUARIO(nm_usuario, dt_nascimento, ds_email, ds_senha) values(?, ?, ?, ?)";
+            //String sql = "insert INTO T_USUARIO(nm_usuario, dt_nascimento, ds_email, ds_senha) values(?, ?, ?, ?)";
+            String sql = "insert INTO T_USUARIO(nm_usuario, dt_nascimento, ds_email, ds_senha, id_permissao) values(?, ?, ?, ?, ?)";
 
             // 5 - Fazer acesso ao banco de dados com a consulta/chave informada!
             try {
@@ -48,30 +59,60 @@ public class TelaCadastro extends javax.swing.JFrame {
                 // 6 - Associar o comando SQL na conexão do banco
                 pst = conexao.prepareStatement(sql);
                 // Substituir a "?" pela informação do campo Chave da Tela
-                pst.setString(1,txtNome.getText());
-                pst.setString(2,txtDataNasc.getText());
-                pst.setString(3,txtEmail.getText());
+                //pst.setString(1,txtNome.getText());     Alterada para novo cod.
+               // pst.setString(2,txtDataNasc.getText()); Alterada para novo cod.
+               // pst.setString(3,txtEmail.getText());    Alterada para novo cod.
+// Converte o formato da data de BR (dd/MM/yyyy) para MySQL (yyyy-MM-dd)
+    String dataFormatada = "";
+    try {
+        String dataDigitada = txtDataNasc.getText(); 
+        java.text.SimpleDateFormat formatoEntrada = new java.text.SimpleDateFormat("dd/MM/yyyy");
+        java.text.SimpleDateFormat formatoSaida = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date data = formatoEntrada.parse(dataDigitada);
+        dataFormatada = formatoSaida.format(data);
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(null, "Formato de data inválido! Use DD/MM/AAAA");
+        return; 
+    }
 
-                if ("".equals(txtSenha1.getText()) || "".equals(txtSenha2.getText())) {
-                    pst.setString(4,txtSenha1.getText());
-                }else{
-                   JOptionPane.showMessageDialog(null," ERRO Senhas diferentes, favor verificar!!!!"); 
-                }
-                // 7 - Executar o comando UPDATE na Conexão do banco
-                int fgInsOK = pst.executeUpdate();  //Faz a Altualização
-                // 8 - Testar se consultou OK, se achou!?
-                if ( fgInsOK > 0 ) { // Se Alterou OK
-                    JOptionPane.showMessageDialog(null," Registro incluído com sucesso!!!");
-                fazLimpar();                   
-                }else{
-                    JOptionPane.showMessageDialog(null," ERRO na Inclusão de registros de permissão, favor verificar!!!!");
+    // Define os 3 primeiros parâmetros das interrogações
+    pst.setString(1, txtNome.getText());       // Primeira ?: nm_usuario
+    pst.setString(2, dataFormatada);         // Segunda ?: dt_nascimento (já convertida!)
+    pst.setString(3, txtEmail.getText());      // Terceira ?: ds_email
+                // 1. Primeiro, pega o texto digitado nos dois campos
+        String senha1 = txtSenha1.getText();
+        String senha2 = txtSenha2.getText();
 
-                }
+            // 2. Verifica se algum dos campos ficou em branco
+        if (senha1.isEmpty() || senha2.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos de senha!");
+     
+            //3. Verifica se a senha digitada é IGUAL à confirmação
+        }else if (senha1.equals(senha2)) {
+        // Se forem iguais, associa a senha ao parâmetro correto do banco de dados
+                pst.setString(4, senha1);
+                pst.setInt(5, idPermissao);
+    
+        // CONTINUAÇÃO DO SEU CÓDIGO (Executar o update, verificar se inseriu, etc.)
+        int fgInsOK = pst.executeUpdate();
+        if (fgInsOK > 0) {
+            JOptionPane.showMessageDialog(null, "Registro incluído com sucesso!!!");
+                fazLimpar();
+    }
+} 
+// 4. Se não forem iguais, exibe o erro
+        else {
+            JOptionPane.showMessageDialog(null, "ERRO: As senhas digitadas não são iguais! Favor verificar.");
+}
 
-            } catch ( Exception varERRO ) { // Fazer o tratamento da Exceção/ERRO
-                JOptionPane.showMessageDialog(null," Erro na Inclusão Tabela - tpermissao!");
-                System.out.println("O ERRO é: " + varERRO.toString());  // Exibe na console o erro!
-            }
+           // } catch ( HeadlessException | SQLException varERRO ) { // Fazer o tratamento da Exceção/ERRO
+           // JOptionPane.showMessageDialog(null," Erro na Inclusão Tabela - t_permissao!");
+            //    System.out.println("O ERRO é: " + varERRO.toString());  // Exibe na console o erro!
+            //} Substituido pelo codigo debaixo.
+            } catch (Exception e) {
+    JOptionPane.showMessageDialog(null, "Erro real: " + e.getMessage());
+}
+            
         }        
         
     }
@@ -117,8 +158,8 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblUsuario1 = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
         lblUsuario2 = new javax.swing.JLabel();
-        txtDataNasc = new javax.swing.JFormattedTextField();
         lblMensagens = new javax.swing.JLabel();
+        txtDataNasc = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tela Cadastro");
@@ -138,12 +179,8 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblUsuario.setText("Email:");
 
-        txtEmail.setToolTipText("Digite seu email");
-
         lblSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha.setText("Senha:");
-
-        txtSenha1.setToolTipText("Digite sua senha");
 
         btncadastro.setBackground(new java.awt.Color(51, 102, 255));
         btncadastro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -163,7 +200,11 @@ public class TelaCadastro extends javax.swing.JFrame {
             }
         });
 
-        txtSenha2.setToolTipText("Confirmar senha");
+        txtSenha2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSenha2ActionPerformed(evt);
+            }
+        });
 
         lblSenha1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha1.setText("Repitir Senha:");
@@ -171,7 +212,6 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblUsuario1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblUsuario1.setText("Nome:");
 
-        txtNome.setToolTipText("Digite seu nome");
         txtNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNomeActionPerformed(evt);
@@ -180,14 +220,6 @@ public class TelaCadastro extends javax.swing.JFrame {
 
         lblUsuario2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblUsuario2.setText("Data de Nascimento:");
-
-        txtDataNasc.setText("  /  /    ");
-        txtDataNasc.setToolTipText("Digite sua data de nascimento");
-        txtDataNasc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDataNascActionPerformed(evt);
-            }
-        });
 
         lblMensagens.setText("Mensagem...");
         lblMensagens.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -205,7 +237,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addComponent(btncadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(183, Short.MAX_VALUE)
+                .addContainerGap(175, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -216,10 +248,13 @@ public class TelaCadastro extends javax.swing.JFrame {
                                     .addComponent(lblLogin)
                                     .addComponent(lblBemVindo)
                                     .addComponent(lblLogin2))
-                                .addGap(25, 25, 25)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(25, 25, 25)
+                                        .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(26, 26, 26)
+                                        .addComponent(txtDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(lblSenha)
@@ -247,7 +282,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addComponent(lblLogin)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblBemVindo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsuario1)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -282,6 +317,8 @@ public class TelaCadastro extends javax.swing.JFrame {
 
     private void btncadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncadastroActionPerformed
         // TODO add your handling code here:
+
+               
         cadastro();   
     }//GEN-LAST:event_btncadastroActionPerformed
 
@@ -290,17 +327,17 @@ public class TelaCadastro extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNomeActionPerformed
-
-    private void txtDataNascActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDataNascActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDataNascActionPerformed
-
     private void lblMensagensComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_lblMensagensComponentHidden
         // TODO add your handling code here:
     }//GEN-LAST:event_lblMensagensComponentHidden
+
+    private void txtSenha2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenha2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSenha2ActionPerformed
+
+    private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNomeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -349,7 +386,7 @@ public class TelaCadastro extends javax.swing.JFrame {
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JLabel lblUsuario1;
     private javax.swing.JLabel lblUsuario2;
-    private javax.swing.JFormattedTextField txtDataNasc;
+    private javax.swing.JTextField txtDataNasc;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtSenha1;
