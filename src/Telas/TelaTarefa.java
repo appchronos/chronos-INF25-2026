@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package Telas;
 import javax.swing.JOptionPane;
 
@@ -10,10 +7,7 @@ import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
 
-/**
- *
- * @author goget
- */
+
 public class TelaTarefa extends javax.swing.JFrame {
     // 2 - criar as variáveis necessárias à conexão
     Connection conexao = null;  // É a variável que retorna a conexao
@@ -48,8 +42,22 @@ public class TelaTarefa extends javax.swing.JFrame {
 
         lblMensagens = new javax.swing.JLabel();
         pnlDesktop1 = new javax.swing.JDesktopPane();
-        lblMensagem = new javax.swing.JLabel();
+        scrollPainelCards = new javax.swing.JScrollPane();
+        pnlListaTarefas = new javax.swing.JPanel();
         btnNovaTarefa = new javax.swing.JButton();
+        btnEstudo = new javax.swing.JButton();
+        btnCasa = new javax.swing.JButton();
+        btnProjeto = new javax.swing.JButton();
+        btnRotina = new javax.swing.JButton();
+        btnTrabalho = new javax.swing.JButton();
+        btnViagem = new javax.swing.JButton();
+        btnLivro = new javax.swing.JButton();
+        btnPesquisa = new javax.swing.JButton();
+        btnOutro = new javax.swing.JButton();
+        lblMensagem = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnUsuario = new javax.swing.JMenuItem();
@@ -62,39 +70,64 @@ public class TelaTarefa extends javax.swing.JFrame {
 
         lblMensagens.setText("Mensagem...");
 
-        lblMensagem.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblMensagem.setForeground(new java.awt.Color(255, 255, 255));
-        lblMensagem.setText("Mensagem...");
+        pnlDesktop1.setLayout(new javax.swing.BoxLayout(pnlDesktop1, javax.swing.BoxLayout.Y_AXIS));
 
-        pnlDesktop1.setLayer(lblMensagem, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        javax.swing.GroupLayout pnlDesktop1Layout = new javax.swing.GroupLayout(pnlDesktop1);
-        pnlDesktop1.setLayout(pnlDesktop1Layout);
-        pnlDesktop1Layout.setHorizontalGroup(
-            pnlDesktop1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlDesktop1Layout.createSequentialGroup()
-                .addGap(336, 336, 336)
-                .addComponent(lblMensagem)
-                .addContainerGap(757, Short.MAX_VALUE))
+        javax.swing.GroupLayout pnlListaTarefasLayout = new javax.swing.GroupLayout(pnlListaTarefas);
+        pnlListaTarefas.setLayout(pnlListaTarefasLayout);
+        pnlListaTarefasLayout.setHorizontalGroup(
+            pnlListaTarefasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 792, Short.MAX_VALUE)
         );
-        pnlDesktop1Layout.setVerticalGroup(
-            pnlDesktop1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDesktop1Layout.createSequentialGroup()
-                .addContainerGap(672, Short.MAX_VALUE)
-                .addComponent(lblMensagem)
-                .addGap(42, 42, 42))
+        pnlListaTarefasLayout.setVerticalGroup(
+            pnlListaTarefasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 822, Short.MAX_VALUE)
         );
 
-        btnNovaTarefa.setText("Teste");
+        scrollPainelCards.setViewportView(pnlListaTarefas);
+
+        pnlDesktop1.add(scrollPainelCards);
+
+        btnNovaTarefa.setText("Criar Tarefa");
         btnNovaTarefa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNovaTarefaActionPerformed(evt);
             }
         });
 
+        btnEstudo.setText("Estudo");
+
+        btnCasa.setText("Casa");
+
+        btnProjeto.setText("Projeto");
+
+        btnRotina.setText("Rotina");
+
+        btnTrabalho.setText("Trabalho");
+
+        btnViagem.setText("Viagem");
+
+        btnLivro.setText("Livro");
+
+        btnPesquisa.setText("Pesquisa");
+
+        btnOutro.setText("Outro");
+
+        lblMensagem.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblMensagem.setForeground(new java.awt.Color(255, 255, 255));
+        lblMensagem.setText("Mensagem...");
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setText("Selecione um Tópico:");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setText("Seja bem vindo");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setText("usuário");
+
         jMenu1.setText("Configurações");
 
-        mnUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK));
+        mnUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnUsuario.setText("Usuário");
         mnUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -112,7 +145,7 @@ public class TelaTarefa extends javax.swing.JFrame {
             }
         });
 
-        mnSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
+        mnSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnSair.setText("Exit");
         mnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,27 +165,82 @@ public class TelaTarefa extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(954, 954, 954)
-                        .addComponent(lblMensagens, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(136, 136, 136)
+                        .addComponent(lblMensagem)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(747, 747, 747)
+                                .addComponent(lblMensagens, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(92, 92, 92)
+                                .addComponent(btnNovaTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnNovaTarefa))
-                    .addComponent(pnlDesktop1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(pnlDesktop1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(244, 244, 244))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(86, 86, 86)
+                        .addComponent(btnEstudo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCasa)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnProjeto)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnRotina)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnTrabalho)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnViagem)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnLivro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPesquisa)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnOutro)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnNovaTarefa)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel3))
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEstudo)
+                    .addComponent(btnCasa)
+                    .addComponent(btnProjeto)
+                    .addComponent(btnRotina)
+                    .addComponent(btnTrabalho)
+                    .addComponent(btnViagem)
+                    .addComponent(btnLivro)
+                    .addComponent(btnPesquisa)
+                    .addComponent(btnOutro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlDesktop1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlDesktop1)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblMensagem, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnNovaTarefa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
                 .addComponent(lblMensagens)
                 .addGap(36, 36, 36))
         );
 
-        setSize(new java.awt.Dimension(911, 819));
+        btnNovaTarefa.getAccessibleContext().setAccessibleName("Clique aqui para Criar Tarefa");
+
+        setSize(new java.awt.Dimension(857, 1061));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -183,6 +271,11 @@ public class TelaTarefa extends javax.swing.JFrame {
         tlAdicionaT.setVisible(true);
         // Abrindo a tela na área de tarabalho da tela principal
         pnlDesktop1.add(tlAdicionaT);
+        try {
+        tlAdicionaT.setSelected(true);
+        } catch (java.beans.PropertyVetoException e) {
+        e.printStackTrace();
+}
     }//GEN-LAST:event_btnNovaTarefaActionPerformed
 
     /**
@@ -223,7 +316,19 @@ public class TelaTarefa extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu Sair;
+    private javax.swing.JButton btnCasa;
+    private javax.swing.JButton btnEstudo;
+    private javax.swing.JButton btnLivro;
     private javax.swing.JButton btnNovaTarefa;
+    private javax.swing.JButton btnOutro;
+    private javax.swing.JButton btnPesquisa;
+    private javax.swing.JButton btnProjeto;
+    private javax.swing.JButton btnRotina;
+    private javax.swing.JButton btnTrabalho;
+    private javax.swing.JButton btnViagem;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel lblMensagem;
@@ -231,5 +336,7 @@ public class TelaTarefa extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnSair;
     private javax.swing.JMenuItem mnUsuario;
     private javax.swing.JDesktopPane pnlDesktop1;
+    private javax.swing.JPanel pnlListaTarefas;
+    private javax.swing.JScrollPane scrollPainelCards;
     // End of variables declaration//GEN-END:variables
 }

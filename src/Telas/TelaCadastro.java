@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Telas;
 import javax.swing.JOptionPane;
 
@@ -11,12 +7,8 @@ import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
 import java.awt.HeadlessException;
-// teste
 
-/**
- *
- * @author ALUNO
- */
+
 public class TelaCadastro extends javax.swing.JFrame {
     // 2 - criar as variáveis necessárias à conexão
     Connection conexao = null;  // É a variável que retorna a conexao

@@ -21,5 +21,9 @@ public class Topico {
     public String toString() {
         return this.nmTopico;
     }
+
+    int getId() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

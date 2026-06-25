@@ -11,7 +11,7 @@ public class ModuloDbConecta {
         // Definindi as variáveis
         java.sql.Connection conexao = null; // Recebe o resultado da conexão. 
         // Definir o Driver para o SGBD a ser conectado
-        String driver = "com.mysql.jdbc.Driver";
+        String driver = "com.mysql.cj.jdbc.Driver";
         // Definir as demais variáveis da String de conexão
         String url = "jdbc:mysql://127.0.0.1:3306/db_chronos";
         String user = "root";
