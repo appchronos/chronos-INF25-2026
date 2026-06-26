@@ -139,6 +139,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtUsuario">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Digite seu email"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblSenha">
       <Properties>
@@ -149,6 +152,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtSenha">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Digite sua senha"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnLogin">
       <Properties>

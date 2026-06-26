@@ -1,4 +1,8 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Telas;
 import javax.swing.JOptionPane;
 
@@ -7,8 +11,12 @@ import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
 import java.awt.HeadlessException;
+// teste
 
-
+/**
+ *
+ * @author ALUNO
+ */
 public class TelaCadastro extends javax.swing.JFrame {
     // 2 - criar as variáveis necessárias à conexão
     Connection conexao = null;  // É a variável que retorna a conexao
@@ -164,8 +172,12 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblUsuario.setText("Email:");
 
+        txtEmail.setToolTipText("Digite seu email");
+
         lblSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha.setText("Senha:");
+
+        txtSenha1.setToolTipText("Crie uma senha");
 
         btncadastro.setBackground(new java.awt.Color(51, 102, 255));
         btncadastro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -185,6 +197,7 @@ public class TelaCadastro extends javax.swing.JFrame {
             }
         });
 
+        txtSenha2.setToolTipText("Confirme sua senha");
         txtSenha2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSenha2ActionPerformed(evt);
@@ -197,6 +210,7 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblUsuario1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblUsuario1.setText("Nome:");
 
+        txtNome.setToolTipText("Digite seu nome");
         txtNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNomeActionPerformed(evt);
@@ -212,6 +226,8 @@ public class TelaCadastro extends javax.swing.JFrame {
                 lblMensagensComponentHidden(evt);
             }
         });
+
+        txtDataNasc.setToolTipText("Digite sua data de nascimento");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

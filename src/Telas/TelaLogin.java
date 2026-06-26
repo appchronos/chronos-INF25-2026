@@ -143,8 +143,12 @@ public void logar() {
         lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblUsuario.setText("Email:");
 
+        txtUsuario.setToolTipText("Digite seu email");
+
         lblSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha.setText("Senha:");
+
+        txtSenha.setToolTipText("Digite sua senha");
 
         btnLogin.setBackground(new java.awt.Color(51, 102, 255));
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
