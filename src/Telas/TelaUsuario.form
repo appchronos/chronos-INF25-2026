@@ -41,21 +41,21 @@
                                   <Component id="lblCodEmail" alignment="1" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblDataNasc" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lblEmail" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtDataNasc" alignment="0" min="-2" pref="116" max="-2" attributes="0"/>
                                   <Component id="txtNome" min="-2" pref="221" max="-2" attributes="0"/>
-                                  <Component id="txtDataNasc" min="-2" pref="116" max="-2" attributes="0"/>
-                                  <Component id="txtNome1" min="-2" pref="221" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="276" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="239" max="-2" attributes="0"/>
                       <Component id="btnAlterar" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="155" max="32767" attributes="0"/>
+              <EmptySpace pref="173" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -64,24 +64,24 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
               <Component id="lblCadPermissoes" min="-2" pref="32" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblCodEmail" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtNome" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblEmail" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblDescNome" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtNome1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtNome" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblDataNasc" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtDataNasc" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
               <Component id="btnAlterar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="121" max="32767" attributes="0"/>
+              <EmptySpace pref="164" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -112,9 +112,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtNome">
-      <Properties>
-        <Property name="toolTipText" type="java.lang.String" value="Digite seu email"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblDataNasc">
       <Properties>
@@ -135,15 +132,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAlterarActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtDataNasc">
+    <Component class="javax.swing.JLabel" name="lblEmail">
       <Properties>
-        <Property name="toolTipText" type="java.lang.String" value="Digite sua data de nascimento"/>
+        <Property name="text" type="java.lang.String" value="Email"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtNome1">
-      <Properties>
-        <Property name="toolTipText" type="java.lang.String" value="Digite seu nome"/>
-      </Properties>
+    <Component class="javax.swing.JTextField" name="txtDataNasc">
     </Component>
   </SubComponents>
 </Form>

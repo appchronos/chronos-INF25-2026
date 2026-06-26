@@ -32,8 +32,17 @@ public void logar() {
             pst.setString(2, txtSenha.getText());   
             rs = pst.executeQuery();
             
+            String sql = "SELECT id_usuario, nm_usuario FROM t_usuario WHERE ds_email = ? AND ds_senha = ?";
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtUsuario.getText());
+            pst.setString(2, txtSenha.getText());
+
+            ResultSet rs = pst.executeQuery();           
+            
             if (rs.next()) {
                 String nomeUsuario = rs.getString("nm_usuario");
+                SessaoUsuario.getInstance().setIdUsuario(rs.getInt("id_usuario"));
+                SessaoUsuario.getInstance().setNomeUsuario(rs.getString("nm_usuario"));
                 
                 // Tenta pegar o ID da permissão testando variações de nome
                 int idPermissao = 0;
@@ -143,12 +152,8 @@ public void logar() {
         lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblUsuario.setText("Email:");
 
-        txtUsuario.setToolTipText("Digite seu email");
-
         lblSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha.setText("Senha:");
-
-        txtSenha.setToolTipText("Digite sua senha");
 
         btnLogin.setBackground(new java.awt.Color(51, 102, 255));
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N

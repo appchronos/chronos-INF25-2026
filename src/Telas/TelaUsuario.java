@@ -33,8 +33,8 @@ public class TelaUsuario extends javax.swing.JFrame {
         txtNome = new javax.swing.JTextField();
         lblDataNasc = new javax.swing.JLabel();
         btnAlterar = new javax.swing.JButton();
+        lblEmail = new javax.swing.JLabel();
         txtDataNasc = new javax.swing.JTextField();
-        txtNome1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -48,8 +48,6 @@ public class TelaUsuario extends javax.swing.JFrame {
         lblDescNome.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblDescNome.setText("Nome:");
 
-        txtNome.setToolTipText("Digite seu email");
-
         lblDataNasc.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblDataNasc.setText("Data de Nascimento:");
 
@@ -61,9 +59,7 @@ public class TelaUsuario extends javax.swing.JFrame {
             }
         });
 
-        txtDataNasc.setToolTipText("Digite sua data de nascimento");
-
-        txtNome1.setToolTipText("Digite seu nome");
+        lblEmail.setText("Email");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -82,36 +78,36 @@ public class TelaUsuario extends javax.swing.JFrame {
                                     .addComponent(lblDescNome)
                                     .addComponent(lblCodEmail)
                                     .addComponent(lblDataNasc))
-                                .addGap(28, 28, 28)
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblEmail)
                                     .addComponent(txtDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNome1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(276, 276, 276)
+                        .addGap(239, 239, 239)
                         .addComponent(btnAlterar)))
-                .addContainerGap(155, Short.MAX_VALUE))
+                .addContainerGap(173, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addComponent(lblCadPermissoes, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46)
+                .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCodEmail)
-                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblEmail))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDescNome)
-                    .addComponent(txtNome1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDataNasc)
                     .addComponent(txtDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54)
+                .addGap(45, 45, 45)
                 .addComponent(btnAlterar)
-                .addContainerGap(121, Short.MAX_VALUE))
+                .addContainerGap(164, Short.MAX_VALUE))
         );
 
         setSize(new java.awt.Dimension(650, 451));
@@ -163,8 +159,8 @@ public class TelaUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel lblCodEmail;
     private javax.swing.JLabel lblDataNasc;
     private javax.swing.JLabel lblDescNome;
+    private javax.swing.JLabel lblEmail;
     private javax.swing.JTextField txtDataNasc;
     private javax.swing.JTextField txtNome;
-    private javax.swing.JTextField txtNome1;
     // End of variables declaration//GEN-END:variables
 }

@@ -119,62 +119,57 @@ public class CardTarefa extends javax.swing.JPanel {
 }
      
      private void ExcluirTarefa() {                                           
-    // 1. Pergunta se o usuário tem certeza
-    int resposta = JOptionPane.showConfirmDialog(this, 
-            "Tem certeza que deseja excluir esta tarefa de forma permanente?", 
-            "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+int resposta = JOptionPane.showConfirmDialog(this, 
+                "Tem certeza que deseja excluir esta tarefa de forma permanente?", 
+                "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
-    if (resposta == JOptionPane.YES_OPTION) {
-        
-        // Strings SQL: primeiro limpa o histórico da tabela 'acao', depois apaga a 'tarefa'
-        String sqlAcoes = "DELETE FROM t_acao WHERE id_tarefa = ?";
-        String sqlTarefa = "DELETE FROM t_tarefa WHERE id = ?";
+        if (resposta == JOptionPane.YES_OPTION) {
+            
+            String sqlAcoes = "DELETE FROM t_acao WHERE id_tarefa = ?";
+            String sqlTarefa = "DELETE FROM t_tarefa WHERE id = ?";
 
-        try {
-            Connection conexao = null;  // É a variável que retorna a conexao
-            // Desativamos o autocommit para garantir que ou apaga tudo ou não apaga nada
-            conexao.setAutoCommit(false); 
+            try {
+                // CORREÇÃO: Removida a declaração duplicada 'Connection conexao = null;' que gerava erro
+                conexao.setAutoCommit(false); 
 
-            try (PreparedStatement stmtAcoes = conexao.prepareStatement(sqlAcoes);
-                 PreparedStatement stmtTarefa = conexao.prepareStatement(sqlTarefa)) {
+                try (PreparedStatement stmtAcoes = conexao.prepareStatement(sqlAcoes);
+                     PreparedStatement stmtTarefa = conexao.prepareStatement(sqlTarefa)) {
 
-                // Passo A: Exclui as ações vinculadas no MySQL
-                stmtAcoes.setInt(1, this.idTarefa);
-                stmtAcoes.executeUpdate();
+                    stmtAcoes.setInt(1, this.idTarefa);
+                    stmtAcoes.executeUpdate();
 
-                // Passo B: Exclui a tarefa no MySQL
-                stmtTarefa.setInt(1, this.idTarefa);
-                stmtTarefa.executeUpdate();
+                    stmtTarefa.setInt(1, this.idTarefa);
+                    stmtTarefa.executeUpdate();
 
-                // Se os dois comandos deram certo, confirma no banco de dados
-                conexao.commit();
+                    conexao.commit();
 
-                // 2. ATUALIZAÇÃO DA TELA (Faz o card sumir da TELA TAREFA)
-                java.awt.Container painelPai = this.getParent(); // Captura o pnlListaTarefas de trás
-                
-                if (painelPai != null) {
-                    painelPai.remove(this);     // Remove este Card específico de dentro do painel
-                    painelPai.revalidate(); // Avisa o layout (BoxLayout) para reorganizar os cards restantes
-                    painelPai.repaint();    // Redesenha a tela atualizada sem o card excluído
+                    // ATUALIZAÇÃO FLUIDA DA TELA
+                    java.awt.Container painelPai = this.getParent(); 
+                    if (painelPai != null) {
+                        painelPai.remove(this);     
+                        painelPai.revalidate(); 
+                        painelPai.repaint();    
+                    }
+
+                    JOptionPane.showMessageDialog(this, "Tarefa excluída com sucesso!");
+
+                } catch (SQLException e) {
+                    conexao.rollback(); 
+                    throw e;
                 }
 
-                JOptionPane.showMessageDialog(this, "Tarefa excluída com sucesso!");
-
             } catch (SQLException e) {
-                conexao.rollback(); // Se der erro em algum passo, desfaz tudo no banco para segurança
-                throw e;
+                JOptionPane.showMessageDialog(this, "Erro ao excluir do banco de dados: " + e.getMessage());
             }
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao excluir do banco de dados: " + e.getMessage());
         }
-    }
 }
 
     public CardTarefa() {
-        initComponents(); // Método obrigatório do NetBeans que desenha a tela
+        initComponents(); 
         
-        // Aqui dentro do construtor você pode inicializar o seu cronômetro
+        // CORREÇÃO: Inicializa a conexão com o banco de dados para este card
+        conexao = AcessoDB.ModuloDbConecta.connector();
+        
         cronometro = new javax.swing.Timer(1000, new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 segundos++;
@@ -283,9 +278,8 @@ public class CardTarefa extends javax.swing.JPanel {
                         .addComponent(lblValor)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnAlterar)
-                        .addComponent(btnExcluir))
+                    .addComponent(btnAlterar)
+                    .addComponent(btnExcluir)
                     .addComponent(lblDescricao))
                 .addContainerGap(42, Short.MAX_VALUE))
         );

@@ -1,88 +1,131 @@
 
 package Telas;
-import javax.swing.JOptionPane;
 
-// 1 - Importar as bibliotecas
+import javax.swing.JOptionPane;
 import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
 
 public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
     
-    // 2 - criar as variáveis necessárias à conexão
-    Connection conexao = null;  // É a variável que retorna a conexao
-    PreparedStatement pst = null; // É variável com o comando SQL
-    ResultSet rs = null; // Variável com o resultado do comando executado
-
-    TelaAdicionarTarefa(TelaTarefa aThis, boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    private TelaTarefa telaPrincipal;
     
-    public void fazLimpar() {
+    // Variáveis necessárias à conexão
+    Connection conexao = null;  
+    PreparedStatement pst = null; 
+    ResultSet rs = null; 
 
+    public void fazLimpar() {
         txtNome.setText("");
         txtDescricao.setText("");
         txtValor.setText("");
-        txtNome.requestFocus(); // Coloca o foco do cursor, neste campo!   
+        txtNome.requestFocus();   
     }
 
-    public void cadastroTarefa() {
-    // Validação rápida obrigatória
-    if (txtNome.getText().trim().isEmpty() || cbTopico.getSelectedIndex() == -1) {
-        JOptionPane.showMessageDialog(this, "Por favor, preencha o Nome da tarefa e selecione um Tópico!");
-        return;
-    }
-
-    // 1. String SQL para inserção da tarefa
-    String sql = "INSERT INTO t_tarefa (id_topico, nm_tarefa, ds_tarefa, vl_tarefa) VALUES (?, ?, ?, ?)";
-
-    try  {
-        pst = conexao.prepareStatement(sql);
-        
-        // Pegando o ID do tópico (supondo que o ComboBox guarde o ID ou o índice + 1)
-        int idTopico = cbTopico.getSelectedIndex() + 1; 
-        String nome = txtNome.getText().trim();
-        String descricao = txtDescricao.getText().trim();
-        double valor = txtValor.getText().isEmpty() ? 0.0 : Double.parseDouble(txtValor.getText().replace(",", "."));
-
-        // Preenchendo as interrogações (?) do SQL
-        pst.setInt(1, idTopico);
-        pst.setString(2, nome);
-        pst.setString(3, descricao);
-        pst.setDouble(4, valor);
-
-        pst.executeUpdate();
-        
-        JOptionPane.showMessageDialog(this, "Tarefa adicionada com sucesso!");
-        this.dispose(); // Fecha a tela de cadastro
-        
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Erro ao salvar tarefa: " + e.getMessage());
-    }
-        // 4. Fechar a tela e avisar a tela principal para atualizar
-        this.dispose();
-    }
-    
-
-    public TelaAdicionarTarefa() {
+    public TelaAdicionarTarefa(TelaTarefa telaPrincipal) {
         initComponents();
-        // 3 - Fazer/executar a conexão ao banco de Dados com 
-        // o retorno na variável "conexao"
+        this.telaPrincipal = telaPrincipal; // Inicialização da referência corrigida!
+        
         conexao = ModuloDbConecta.connector();
         if (conexao != null) {
             lblMensagens.setText("Conexão OK!!!");
             lblMensagens.setForeground(Color.blue);
-        }else {
+            
+            // Carrega os tópicos reais cadastrados no banco de dados
+            preencherComboTopicos();
+        } else {
             lblMensagens.setText("ERRO - NÃO CONECTADO!");
             lblMensagens.setForeground(Color.red);
-        } 
+        }
+    }
+    
+    // Método para buscar os tópicos no banco e colocar no ComboBox
+    private void preencherComboTopicos() {
+    String sql = "SELECT id_topico, nm_topico FROM t_topico ORDER BY id_topico ASC";
+    
+    try {
+        pst = conexao.prepareStatement(sql);
+        rs = pst.executeQuery();
+        
+        cbTopico.removeAllItems();
+        
+        while (rs.next()) {
+            // Cria o objeto com o ID e Nome vindos do banco de dados
+            Modelos.Topico topico = new Modelos.Topico(rs.getInt("id_topico"), rs.getString("nm_topico"));
+            
+            // Adiciona o objeto inteiro dentro do ComboBox!
+            cbTopico.addItem(topico.toString()); 
+            // NOTA: Se o seu combo no NetBeans estiver tipado como JComboBox<Topico>, 
+            // você usaria cbTopico.addItem(topico);
+        }
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Erro ao carregar tópicos: " + e.getMessage());
+    }
+}
+    
+    public void cadastroTarefa() {
+        if (txtNome.getText().trim().isEmpty() || cbTopico.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha o Nome da tarefa e selecione um Tópico!");
+            return;
+        }
+
+        String sql = "INSERT INTO t_tarefa (id_usuario, id_topico, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao) VALUES (?, ?, ?, ?, ?, CURDATE())";
+
+        try {
+            pst = conexao.prepareStatement(sql);
+            int idLogado = SessaoUsuario.getInstance().getIdUsuario();
+            
+            // O ID do tópico continua mapeado pelo índice selecionado + 1
+            String nomeTopicoSelecionado = cbTopico.getSelectedItem().toString();
+            int idTopico = 1; // Padrão de segurança
+            String sqlBuscarId = "SELECT id_topico FROM t_topico WHERE nm_topico = ?";
+            try (PreparedStatement pstId = conexao.prepareStatement(sqlBuscarId)) {
+                pstId.setString(1, nomeTopicoSelecionado);
+                try (ResultSet rsId = pstId.executeQuery()) {
+                    if (rsId.next()) {
+                        idTopico = rsId.getInt("id_topico"); // Captura o ID real e seguro do banco!
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println("Erro ao mapear ID do tópico: " + e.getMessage());
+            }
+
+            pst.setInt(2, idTopico);
+
+            String nome = txtNome.getText().trim();
+            String descricao = txtDescricao.getText().trim();
+            double valor = txtValor.getText().isEmpty() ? 0.0 : Double.parseDouble(txtValor.getText().replace(",", "."));
+
+            pst.setInt(1, idLogado);
+            pst.setInt(2, idTopico);
+            pst.setString(3, nome);
+            pst.setString(4, descricao);
+            pst.setDouble(5, valor);
+
+            pst.executeUpdate();
+            
+            JOptionPane.showMessageDialog(this, "Tarefa adicionada com sucesso!");
+            
+            // Recarrega o painel da tela principal para exibir a nova tarefa instantaneamente
+            if (telaPrincipal != null) {
+                telaPrincipal.carregarTarefasDoBanco(idTopico);
+            }
+            
+            this.dispose(); 
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao salvar tarefa: " + e.getMessage());
+        }
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+    // Método que sincroniza o combo com a aba que o usuário já estava navegando
+    void setTopicoSelecionado(int idTopicoAtual) {
+        if (idTopicoAtual >= 1 && idTopicoAtual <= cbTopico.getItemCount()) {
+            cbTopico.setSelectedIndex(idTopicoAtual - 1);
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -246,7 +289,4 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtValor;
     // End of variables declaration//GEN-END:variables
 
-    void setTopicoSelecionado(int idTopicoAtual) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }
