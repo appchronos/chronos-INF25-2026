@@ -1,36 +1,30 @@
 
 package Telas;
-import javax.swing.JOptionPane;
 
-// 1 - Importar as bibliotecas
+import javax.swing.JOptionPane;
 import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
 import java.awt.HeadlessException;
 
-
 public class TelaCadastro extends javax.swing.JFrame {
-    // 2 - criar as variáveis necessárias à conexão
-    Connection conexao = null;  // É a variável que retorna a conexao
-    PreparedStatement pst = null; // É variável com o comando SQL
-    ResultSet rs = null; // Variável com o resultado do comando executado
+    Connection conexao = null;  
+    PreparedStatement pst = null; 
+    ResultSet rs = null; 
 
     public void fazLimpar() {
-        txtNome.setText(""); //Limpando o campo!
+        txtNome.setText(""); 
         txtDataNasc.setText("");
         txtEmail.setText("");
         txtSenha1.setText("");
         txtSenha2.setText("");
-        txtNome.requestFocus(); // Coloca o foco do cursor, neste campo!   
+        txtNome.requestFocus();    
     }
     
-    // 4 Criando o método "cadastro()"
     public void cadastro() {
-                // Fazer a validação das informações da Tela
         String txtNomeTela = txtNome.getText();
-        int idPermissao = 2; // Inicia como comum por padrão
+        int idPermissao = 2; 
 
-// Converte o formato da data de BR (dd/MM/yyyy) para MySQL (yyyy-MM-dd)
     String dataFormatada = "";
     try {
         String dataDigitada = txtDataNasc.getText(); 
@@ -41,28 +35,18 @@ public class TelaCadastro extends javax.swing.JFrame {
     } catch (Exception e) {
         javax.swing.JOptionPane.showMessageDialog(null, "Formato de data inválido! Use DD/MM/AAAA");
         return; 
-    }
-
-
-        // Validando...
-        if  (txtNomeTela.isEmpty()) {
-            // Faz critica
+    }      
+        if  (txtNomeTela.isEmpty()) {          
             JOptionPane.showMessageDialog(null," Campos inválidos/não preenchidos na Tela!!!");
-        }else {
-            // 4 - Definição da String com o comando SQL de Alteração = UPDATE!
+        }else {            
             String sql = "insert INTO T_USUARIO(nm_usuario, dt_nascimento, ds_email, ds_senha, id_permissao) values(?, ?, ?, ?, ?)";
-
-            // 5 - Fazer acesso ao banco de dados com a consulta/chave informada!
-            try {
-                // Bloco de comandos OK
-                // 6 - Associar o comando SQL na conexão do banco
+         
+            try {                
                 pst = conexao.prepareStatement(sql);
 
-    // Define os 3 primeiros parâmetros das interrogações
-    pst.setString(1, txtNome.getText());       // Primeira ?: nm_usuario
-    pst.setString(2, dataFormatada);         // Segunda ?: dt_nascimento (já convertida!)
-    pst.setString(3, txtEmail.getText());      // Terceira ?: ds_email
-                // 1. Primeiro, pega o texto digitado nos dois campos
+    pst.setString(1, txtNome.getText());       
+    pst.setString(2, dataFormatada);         
+    pst.setString(3, txtEmail.getText());      
         String senha1 = txtSenha1.getText();
         String senha2 = txtSenha2.getText();
 
@@ -74,42 +58,27 @@ public class TelaCadastro extends javax.swing.JFrame {
         }else{
             pst.setInt(5, idPermissao = 2);
         }
-            // 2. Verifica se algum dos campos ficou em branco
         if (senha1.isEmpty() || senha2.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos de senha!");
-     
-            //3. Verifica se a senha digitada é IGUAL à confirmação
         }else if (senha1.equals(senha2)) {
-        // Se forem iguais, associa a senha ao parâmetro correto do banco de dados
                 pst.setString(4, senha1);
-    
-        // CONTINUAÇÃO DO SEU CÓDIGO (Executar o update, verificar se inseriu, etc.)
         int fgInsOK = pst.executeUpdate();
         if (fgInsOK > 0) {
             JOptionPane.showMessageDialog(null, "Registro incluído com sucesso!!!");
                 fazLimpar();
     }
 } 
-// 4. Se não forem iguais, exibe o erro
         else {
             JOptionPane.showMessageDialog(null, "ERRO: As senhas digitadas não são iguais! Favor verificar.");
 }
             } catch (Exception e) {
     JOptionPane.showMessageDialog(null, "Erro real: " + e.getMessage());
-}
-            
-        }        
-        
+}        
+        }           
     }
     
-
-    /**
-     * Creates new form TelaCadastro
-     */
     public TelaCadastro() {
         initComponents();
-        // 3 - Fazer/executar a conexão ao banco de Dados com 
-        // o retorno na variável "conexao"
         conexao = ModuloDbConecta.connector();
         if (conexao != null) {
             lblMensagens.setText("Conexão OK!!!");
@@ -120,11 +89,6 @@ public class TelaCadastro extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -323,34 +287,8 @@ public class TelaCadastro extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNomeActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new TelaCadastro().setVisible(true);
