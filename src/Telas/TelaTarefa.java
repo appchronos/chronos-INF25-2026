@@ -1,6 +1,5 @@
 
 package Telas;
-
 import java.sql.*;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
@@ -11,99 +10,82 @@ import java.awt.Color;
 
 
 public class TelaTarefa extends javax.swing.JFrame {
-    // Única variável de conexão mantida na classe para ser compartilhada com os cards
-    private Connection conexao = null;
+    // Variáveis de conexão do Banco de Dados
+    Connection conexao = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
     
     // Controla qual o tópico selecionado no momento (Padrão: Tópico 1)
     private int idTopicoAtual = 1;
     
-    // Método responsável por buscar no banco e renderizar os cards dinamicamente
+
+    public TelaTarefa() {
+        initComponents();
+        conexao = ModuloDbConecta.connector();
+        
+        // Garante que o painel de tarefas use o BoxLayout vertical via código por segurança
+        pnlListaTarefas.setLayout(new BoxLayout(pnlListaTarefas, BoxLayout.Y_AXIS));
+        
+        // Carrega as tarefas do Tópico 1 assim que o programa abre
+        carregarTarefasDoBanco(idTopicoAtual);
+        // 3 - Fazer/executar a conexão ao banco de Dados com 
+        // o retorno na variável "conexao"
+        conexao = ModuloDbConecta.connector();
+        if (conexao != null) {
+            lblMensagem.setText("Conexão OK!!!");
+            lblMensagem.setForeground(Color.blue);
+        }else {
+            lblMensagem.setText("ERRO - NÃO CONECTADO!");
+            lblMensagem.setForeground(Color.red);
+        }
+    }
+
+// Método responsável por buscar no banco e renderizar os cards dinamicamente
     public void carregarTarefasDoBanco(int idTopico) {
         this.idTopicoAtual = idTopico;
-    
+        
         // 1. Limpa todos os cards antigos que estão na tela
         pnlListaTarefas.removeAll();
-    
+        
         // 2. Query filtrando pelo Usuário Logado na Sessão e pelo Tópico clicado
         String sql = "SELECT * FROM t_tarefa WHERE id_usuario = ? AND id_topico = ?";
-    
-        try (PreparedStatement pstLocal = conexao.prepareStatement(sql)) {
         
-            pstLocal.setInt(1, SessaoUsuario.getInstance().getIdUsuario());
-            pstLocal.setInt(2, idTopico);
-        
-            boolean encontrouTarefas = false;
-        
-            try (ResultSet rsLocal = pstLocal.executeQuery()) {
-                // 3. Varre o banco criando o objeto CardTarefa
-                while (rsLocal.next()) {
-                    encontrouTarefas = true;
-                    int id = rsLocal.getInt("id_tarefa");
-                    String nome = rsLocal.getString("nm_tarefa");
-                    String desc = rsLocal.getString("ds_tarefa");
-                    double valor = rsLocal.getDouble("vl_tarefa");
-                
-                    CardTarefa card = new CardTarefa(this.conexao, id);
-                    card.setExibirDados(nome, desc, valor);
-                
-                    pnlListaTarefas.add(card);
-                }
-            }
-        
-            // NOVO: Se não houver tarefas no tópico, mostra um aviso amigável
-            if (!encontrouTarefas) {
-                javax.swing.JLabel lblAvisoVazio = new javax.swing.JLabel("Você não tem tarefas aqui. Clique em 'Criar Tarefa' para começar!");
-                lblAvisoVazio.setFont(new java.awt.Font("Segoe UI", java.awt.Font.ITALIC, 14));
-                lblAvisoVazio.setForeground(java.awt.Color.GRAY);
-                lblAvisoVazio.setAlignmentX(Component.CENTER_ALIGNMENT); // Centraliza no BoxLayout
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setInt(1, SessaoUsuario.getInstance().getIdUsuario());
+            pst.setInt(2, idTopico);
+            rs = pst.executeQuery();
             
-                // Espaçamento para não colar no topo
-                pnlListaTarefas.add(javax.swing.Box.createVerticalStrut(20)); 
-                pnlListaTarefas.add(lblAvisoVazio);
+            // 3. Varre o banco criando um objeto CardTarefa para cada linha encontrada
+            while (rs.next()) {
+                CardTarefa card = new CardTarefa();
+                
+                // Passa os dados do banco para dentro do objeto do card
+                card.setIdTarefa(rs.getInt("id"));
+                card.setExibirDados(
+                    rs.getString("nm_tarefa"),
+                    rs.getString("ds_tarefa"),
+                    rs.getDouble("vl_tarefa")
+                );
+                
+                // Adiciona o card físico dentro do painel vertical da tela
+                pnlListaTarefas.add(card);
             }
-        
-            // 4. Força o Java Swing a recalcular o layout e redesenhar
+            
+            // 4. Força o Java Swing a recalcular o layout e redesenhar os elementos na hora
             pnlListaTarefas.revalidate();
             pnlListaTarefas.repaint();
-        
+            
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar tarefas do tópico: " + e.getMessage());
         }
     }
     
     // Método auxiliar associado aos eventos de clique dos 9 botões de tópicos
-    public void selecionarTopico(int numeroTopico) {
+    private void selecionarTopico(int numeroTopico) {
         this.idTopicoAtual = numeroTopico;
         carregarTarefasDoBanco(numeroTopico);
     }
-    
-
-    public TelaTarefa() {
-        initComponents();
-        
-        // RECUPERAÇÃO DA SESSÃO: Seta o nome do usuário logado na Label correspondente
-        if (SessaoUsuario.getInstance().getNomeUsuario() != null) {
-            nomeUsuario.setText(SessaoUsuario.getInstance().getNomeUsuario());
-        }
-        
-        // Inicializa a conexão APENAS UMA VEZ aqui no início
-        conexao = ModuloDbConecta.connector();
-        
-        // Garante que o painel de tarefas use o BoxLayout vertical via código por segurança
-        pnlListaTarefas.setLayout(new BoxLayout(pnlListaTarefas, BoxLayout.Y_AXIS));
-        
-        if (conexao != null) {
-            lblMensagem.setText("Conexão OK!!!");
-            lblMensagem.setForeground(Color.blue);
-        } else {
-            lblMensagem.setText("ERRO - NÃO CONECTADO!");
-            lblMensagem.setForeground(Color.red);
-        }
-        
-        // Carrega as tarefas do Tópico 1 assim que o programa abre
-        carregarTarefasDoBanco(idTopicoAtual);
-    }
-
     
     
     @SuppressWarnings("unchecked")
@@ -222,9 +204,11 @@ public class TelaTarefa extends javax.swing.JFrame {
         desktopPaneLayout.setHorizontalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(desktopPaneLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
                 .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scrollPainelCards, javax.swing.GroupLayout.PREFERRED_SIZE, 790, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(desktopPaneLayout.createSequentialGroup()
-                        .addGap(39, 39, 39)
+                        .addGap(21, 21, 21)
                         .addComponent(btnEstudo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnCasa)
@@ -241,11 +225,8 @@ public class TelaTarefa extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnPesquisa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnOutro))
-                    .addGroup(desktopPaneLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(scrollPainelCards, javax.swing.GroupLayout.PREFERRED_SIZE, 790, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(28, Short.MAX_VALUE))
+                        .addComponent(btnOutro)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         desktopPaneLayout.setVerticalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,9 +242,9 @@ public class TelaTarefa extends javax.swing.JFrame {
                     .addComponent(btnLivro)
                     .addComponent(btnPesquisa)
                     .addComponent(btnOutro))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrollPainelCards, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
 
         btnNovaTarefa.setText("Criar Tarefa");
@@ -339,7 +320,7 @@ public class TelaTarefa extends javax.swing.JFrame {
                         .addComponent(nomeUsuario)
                         .addGap(173, 173, 173)
                         .addComponent(jLabel1)
-                        .addGap(129, 129, 129)
+                        .addGap(175, 175, 175)
                         .addComponent(lblMensagem)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );

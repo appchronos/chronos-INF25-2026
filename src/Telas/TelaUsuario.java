@@ -1,23 +1,84 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Telas;
 
-/**
- *
- * @author ALUNO
- */
 public class TelaUsuario extends javax.swing.JFrame {
 
-    /**
-     * Creates new form TelaUsuario
-     */
+    // 1. Variáveis de conexão declaradas corretamente
+    java.sql.Connection con = null;
+    java.sql.PreparedStatement pst = null;
+    private int idUsuarioLogado = 1; // ID padrão para teste
+
+    // 2. Construtor padrão da tela limpando e inicializando os componentes
     public TelaUsuario() {
         initComponents();
     }
 
+    // 3. Método alterar independente e fora do construtor
+    public void alterar() {
+        String sql = "UPDATE tb_usuarios SET nome_usuario=?, ds_email=? WHERE id_usuario=?";
+        // SQL simples alterando apenas o nome e o email baseado no ID
+      
+        
+        try {
+            con = AcessoDB.ModuloDbConecta.connector();
+            if (con == null) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Erro: Conexão falhou!");
+                return;
+            }
+
+            pst = con.prepareStatement(sql);
+            
+            // Pega os textos exatamente dos dois únicos campos da sua tela
+            pst.setString(1, txtUsuNome.getText());
+            pst.setString(2, txtUsuEmail.getText());
+            pst.setInt(3, idUsuarioLogado); // ID de referência
+
+            int atualizado = pst.executeUpdate();
+            if (atualizado > 0) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Dados alterados com sucesso!");
+            }
+            
+            pst.close();
+            con.close();
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Erro ao alterar: " + e.getMessage());
+        }
+    }
+    public void excluir() {
+        // 1. SQL para apagar primeiro os tópicos vinculados ao usuário
+        String sqlTopicos = "DELETE FROM t_topico WHERE T_USUARIO_id_usuario=?";
+        // 2. SQL para apagar o usuário depois
+        String sqlUsuario = "DELETE FROM t_usuario WHERE id_usuario=?";
+        
+        int confirma = javax.swing.JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover este usuário e todos os seus tópicos?", "Atenção", javax.swing.JOptionPane.YES_NO_OPTION);
+        
+        if (confirma == javax.swing.JOptionPane.YES_OPTION) {
+            try {
+                con = AcessoDB.ModuloDbConecta.connector();
+                
+                // Primeiro: Apaga os tópicos (Filhos)
+                pst = con.prepareStatement(sqlTopicos);
+                pst.setInt(1, idUsuarioLogado);
+                pst.executeUpdate();
+                pst.close();
+                
+                // Segundo: Apaga o usuário (Pai)
+                pst = con.prepareStatement(sqlUsuario);
+                pst.setInt(1, idUsuarioLogado);
+                
+                int apagado = pst.executeUpdate();
+                if (apagado > 0) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Usuário removido com sucesso!");
+                    txtUsuNome.setText(null);
+                    txtUsuEmail.setText(null);
+                }
+                
+                pst.close();
+                con.close();
+            } catch (Exception e) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Erro ao excluir: " + e.getMessage());
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,17 +91,17 @@ public class TelaUsuario extends javax.swing.JFrame {
         lblCadPermissoes = new javax.swing.JLabel();
         lblCodEmail = new javax.swing.JLabel();
         lblDescNome = new javax.swing.JLabel();
-        txtNome = new javax.swing.JTextField();
-        lblDataNasc = new javax.swing.JLabel();
+        txtUsuEmail = new javax.swing.JTextField();
+        btnExcluir = new javax.swing.JButton();
+        txtUsuNome = new javax.swing.JTextField();
         btnAlterar = new javax.swing.JButton();
-        lblEmail = new javax.swing.JLabel();
-        txtDataNasc = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
         lblCadPermissoes.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lblCadPermissoes.setText("Dados do usuário");
+        lblCadPermissoes.setForeground(new java.awt.Color(0, 153, 255));
+        lblCadPermissoes.setText("Conta Usuario");
 
         lblCodEmail.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblCodEmail.setText("Email:");
@@ -48,10 +109,22 @@ public class TelaUsuario extends javax.swing.JFrame {
         lblDescNome.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblDescNome.setText("Nome:");
 
-        lblDataNasc.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblDataNasc.setText("Data de Nascimento:");
+        txtUsuEmail.setText("Alterar Email");
 
+        btnExcluir.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnExcluir.setForeground(new java.awt.Color(0, 153, 255));
+        btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
+
+        txtUsuNome.setText("Alterar Nome");
+
+        btnAlterar.setBackground(new java.awt.Color(0, 153, 255));
         btnAlterar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnAlterar.setForeground(new java.awt.Color(255, 255, 255));
         btnAlterar.setText("Alterar");
         btnAlterar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -59,63 +132,65 @@ public class TelaUsuario extends javax.swing.JFrame {
             }
         });
 
-        lblEmail.setText("Email");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblCadPermissoes, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(84, 84, 84))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblDescNome)
+                    .addComponent(lblCodEmail))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(104, 104, 104)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(92, 92, 92)
-                                .addComponent(lblCadPermissoes, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblDescNome)
-                                    .addComponent(lblCodEmail)
-                                    .addComponent(lblDataNasc))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblEmail)
-                                    .addComponent(txtDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(239, 239, 239)
-                        .addComponent(btnAlterar)))
-                .addContainerGap(173, Short.MAX_VALUE))
+                        .addComponent(btnAlterar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnExcluir))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtUsuEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtUsuNome, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
+                .addGap(25, 25, 25)
                 .addComponent(lblCadPermissoes, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(85, 85, 85)
+                        .addComponent(lblCodEmail))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblDescNome)
+                            .addComponent(txtUsuNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(txtUsuEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(74, 74, 74)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCodEmail)
-                    .addComponent(lblEmail))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDescNome)
-                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDataNasc)
-                    .addComponent(txtDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(45, 45, 45)
-                .addComponent(btnAlterar)
-                .addContainerGap(164, Short.MAX_VALUE))
+                    .addComponent(btnAlterar)
+                    .addComponent(btnExcluir))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
-        setSize(new java.awt.Dimension(650, 451));
+        setSize(new java.awt.Dimension(359, 341));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        // TODO add your handling code here:
+        excluir();
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         // TODO add your handling code here:
+        alterar();
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     /**
@@ -155,12 +230,11 @@ public class TelaUsuario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterar;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JLabel lblCadPermissoes;
     private javax.swing.JLabel lblCodEmail;
-    private javax.swing.JLabel lblDataNasc;
     private javax.swing.JLabel lblDescNome;
-    private javax.swing.JLabel lblEmail;
-    private javax.swing.JTextField txtDataNasc;
-    private javax.swing.JTextField txtNome;
+    private javax.swing.JTextField txtUsuEmail;
+    private javax.swing.JTextField txtUsuNome;
     // End of variables declaration//GEN-END:variables
 }
