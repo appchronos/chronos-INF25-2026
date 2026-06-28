@@ -10,7 +10,6 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
     
     private TelaTarefa telaPrincipal;
     
-    // Variáveis necessárias à conexão
     Connection conexao = null;  
     PreparedStatement pst = null; 
     ResultSet rs = null; 
@@ -22,47 +21,24 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
         txtNome.requestFocus();   
     }
 
-    public TelaAdicionarTarefa(TelaTarefa telaPrincipal) {
-        initComponents();
-        this.telaPrincipal = telaPrincipal; // Inicialização da referência corrigida!
-        
-        conexao = ModuloDbConecta.connector();
-        if (conexao != null) {
-            lblMensagens.setText("Conexão OK!!!");
-            lblMensagens.setForeground(Color.blue);
-            
-            // Carrega os tópicos reais cadastrados no banco de dados
-            preencherComboTopicos();
-        } else {
-            lblMensagens.setText("ERRO - NÃO CONECTADO!");
-            lblMensagens.setForeground(Color.red);
-        }
-    }
-    
-    // Método para buscar os tópicos no banco e colocar no ComboBox
     private void preencherComboTopicos() {
-    String sql = "SELECT id_topico, nm_topico FROM t_topico ORDER BY id_topico ASC";
-    
-    try {
-        pst = conexao.prepareStatement(sql);
-        rs = pst.executeQuery();
+        String sql = "SELECT id_topico, nm_topico FROM t_topico ORDER BY id_topico ASC";
         
-        cbTopico.removeAllItems();
-        
-        while (rs.next()) {
-            // Cria o objeto com o ID e Nome vindos do banco de dados
-            Modelos.Topico topico = new Modelos.Topico(rs.getInt("id_topico"), rs.getString("nm_topico"));
+        try {
+            pst = conexao.prepareStatement(sql);
+            rs = pst.executeQuery();
             
-            // Adiciona o objeto inteiro dentro do ComboBox!
-            cbTopico.addItem(topico.toString()); 
-            // NOTA: Se o seu combo no NetBeans estiver tipado como JComboBox<Topico>, 
-            // você usaria cbTopico.addItem(topico);
+            cbTopico.removeAllItems();
+            
+            while (rs.next()) {
+                Modelos.Topico topico = new Modelos.Topico(rs.getInt("id_topico"), rs.getString("nm_topico"));
+                cbTopico.addItem(topico.toString()); 
+            }
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar tópicos: " + e.getMessage());
         }
-        
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Erro ao carregar tópicos: " + e.getMessage());
     }
-}
     
     public void cadastroTarefa() {
         if (txtNome.getText().trim().isEmpty() || cbTopico.getSelectedIndex() == -1) {
@@ -73,26 +49,24 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
         String sql = "INSERT INTO t_tarefa (id_usuario, id_topico, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao) VALUES (?, ?, ?, ?, ?, CURDATE())";
 
         try {
-            pst = conexao.prepareStatement(sql);
-            int idLogado = SessaoUsuario.getInstance().getIdUsuario();
-            
-            // O ID do tópico continua mapeado pelo índice selecionado + 1
             String nomeTopicoSelecionado = cbTopico.getSelectedItem().toString();
-            int idTopico = 1; // Padrão de segurança
+            int idTopico = 1; 
             String sqlBuscarId = "SELECT id_topico FROM t_topico WHERE nm_topico = ?";
+            
             try (PreparedStatement pstId = conexao.prepareStatement(sqlBuscarId)) {
                 pstId.setString(1, nomeTopicoSelecionado);
                 try (ResultSet rsId = pstId.executeQuery()) {
                     if (rsId.next()) {
-                        idTopico = rsId.getInt("id_topico"); // Captura o ID real e seguro do banco!
+                        idTopico = rsId.getInt("id_topico"); 
                     }
                 }
             } catch (SQLException e) {
                 System.out.println("Erro ao mapear ID do tópico: " + e.getMessage());
             }
 
-            pst.setInt(2, idTopico);
-
+            pst = conexao.prepareStatement(sql);
+            int idLogado = SessaoUsuario.getInstance().getIdUsuario();
+            
             String nome = txtNome.getText().trim();
             String descricao = txtDescricao.getText().trim();
             double valor = txtValor.getText().isEmpty() ? 0.0 : Double.parseDouble(txtValor.getText().replace(",", "."));
@@ -107,9 +81,10 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             
             JOptionPane.showMessageDialog(this, "Tarefa adicionada com sucesso!");
             
-            // Recarrega o painel da tela principal para exibir a nova tarefa instantaneamente
+            // ALTERAÇÃO AQUI: Força a Tela Principal a selecionar e carregar o tópico onde a tarefa foi criada
             if (telaPrincipal != null) {
-                telaPrincipal.carregarTarefasDoBanco(idTopico);
+                // se o seu método na TelaTarefa se chamar 'selecionarTopico', use ele aqui:
+                telaPrincipal.carregarTarefasDoBanco(idTopico); 
             }
             
             this.dispose(); 
@@ -119,10 +94,24 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
         }
     }
 
-    // Método que sincroniza o combo com a aba que o usuário já estava navegando
     void setTopicoSelecionado(int idTopicoAtual) {
         if (idTopicoAtual >= 1 && idTopicoAtual <= cbTopico.getItemCount()) {
             cbTopico.setSelectedIndex(idTopicoAtual - 1);
+        }
+    }
+
+    public TelaAdicionarTarefa(TelaTarefa telaPrincipal) {
+        initComponents();
+        this.telaPrincipal = telaPrincipal; 
+        
+        conexao = ModuloDbConecta.connector();
+        if (conexao != null) {
+            lblMensagens.setText("Conexão OK!!!");
+            lblMensagens.setForeground(Color.blue);
+            preencherComboTopicos();
+        } else {
+            lblMensagens.setText("ERRO - NÃO CONECTADO!");
+            lblMensagens.setForeground(Color.red);
         }
     }
     

@@ -1,135 +1,103 @@
 
 package Telas;
-import javax.swing.JOptionPane;
 
-// 1 - Importar as bibliotecas
+import javax.swing.JOptionPane;
 import java.sql.*;
-import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
+import java.awt.Component;
 
 public class CardTarefa extends javax.swing.JPanel {
 
-    // 2 - criar as variáveis necessárias à conexão
-    Connection conexao = null;  // É a variável que retorna a conexao
-    PreparedStatement pst = null; // É variável com o comando SQL
-    ResultSet rs = null; // Variável com o resultado do comando executado
-    
+private Connection conexao = null; 
     private int segundos = 0, minutos = 0, horas = 0;
     private javax.swing.Timer cronometro;
-    private int idTarefa; // Recebido ao instanciar o card
+    private int idTarefa;
     
     public void IniciarTarefa() {
-    // 1. Inicia o cronômetro na tela
-    cronometro.start();
-    btnIniciar.setEnabled(false);
-
-    // 2. String SQL para registrar o início
-    String sql = "INSERT INTO t_acao (id_tarefa, tp_acao, dt_registro_acao) VALUES (?, 'Iniciada', NOW())";
-
-    try {
-        pst = conexao.prepareStatement(sql);
-        
-        pst.setInt(1, this.idTarefa); // ID da tarefa deste card específico
-        pst.executeUpdate();
-        
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Erro ao registrar início no banco: " + e.getMessage());
-  }
-    
-}
-    
-    public void FinalizarTarefa() {
-    if (chkConcluido.isSelected()) {
-        // 1. Para o cronômetro na tela
-        cronometro.stop();
+        cronometro.start();
         btnIniciar.setEnabled(false);
 
-        // 2. String SQL para registrar o fim
-        String sql = "INSERT INTO t_acao (id_tarefa, tp_acao, dt_registro_acao) VALUES (?, 'Finalizada', NOW())";
+        String sql = "INSERT INTO t_acao (id_tarefa, tp_acao, dt_registro_acao) VALUES (?, 'Iniciada', NOW())";
 
-        try {
-            pst = conexao.prepareStatement(sql);
-            
-            pst.setInt(1, this.idTarefa);
+        try (PreparedStatement pst = conexao.prepareStatement(sql)) {
+            pst.setInt(1, this.idTarefa); 
             pst.executeUpdate();
-            
-            // Opcional: desativa o checkbox para não clicar de novo
-            chkConcluido.setEnabled(false); 
-            
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao registrar a conclusão no banco: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Erro ao registrar início no banco: " + e.getMessage());
         }
     }
     
-}
- 
-     private void AlterarTarefa() {                                           
-    // 1. Resgata os textos que já estão aparecendo na tela atualmente
-    String nomeAtual = lblNome.getText();
-    String descAtual = lblDescricao.getText();
-    String valorAtual = lblValor.getText().replace("R$ ", "").trim();
+    public void FinalizarTarefa() {
+        if (chkConcluido.isSelected()) {
+            cronometro.stop();
+            btnIniciar.setEnabled(false);
+            chkConcluido.setEnabled(false); 
 
-    // 2. Abre caixas de diálogo simples para o usuário editar
-    String novoNome = JOptionPane.showInputDialog(this, "Digite o novo nome da tarefa:", nomeAtual);
-    // Se o usuário cancelar ou deixar o nome vazio (que é obrigatório), cancela a operação
-    if (novoNome == null || novoNome.trim().isEmpty()) {
-        return; 
-    }
+            String sql = "INSERT INTO t_acao (id_tarefa, tp_acao, dt_registro_acao) VALUES (?, 'Finalizada', NOW())";
 
-    String novaDescricao = JOptionPane.showInputDialog(this, "Digite a nova descrição(ou deixe vazio):", descAtual);
-    if (novaDescricao == null) return; 
-
-    String novoValorStr = JOptionPane.showInputDialog(this, "Digite o novo valor (ou deixe vazio):", valorAtual);
-    if (novoValorStr == null) return;
-
-    // Converte o valor digitado para double
-    double novoValor = 0.0;
-    try {
-        if (!novoValorStr.trim().isEmpty()) {
-            novoValor = Double.parseDouble(novoValorStr.replace(",", "."));
+            try (PreparedStatement pst = conexao.prepareStatement(sql)) {
+                pst.setInt(1, this.idTarefa);
+                pst.executeUpdate();  
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Erro ao registrar a conclusão no banco: " + e.getMessage());
+            }
         }
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Valor inválido! Operação cancelada.");
-        return;
     }
+    
+    private void AlterarTarefa() {                                            
+        String nomeAtual = lblNome.getText();
+        String descAtual = lblDescricao.getText();
+        String valorAtual = lblValor.getText().replace("R$ ", "").replace(",", ".").trim();
 
-    // 3. String SQL para atualizar os dados no MySQL
-    String sql = "UPDATE t_tarefa SET nome = ?, descricao = ?, valor = ? WHERE id = ?";
+        String novoNome = JOptionPane.showInputDialog(this, "Digite o novo nome da tarefa:", nomeAtual);
+        if (novoNome == null || novoNome.trim().isEmpty()) return; 
 
-    try {
-        pst = conexao.prepareStatement(sql);
+        String novaDescricao = JOptionPane.showInputDialog(this, "Digite a nova descrição(ou deixe vazio):", descAtual);
+        if (novaDescricao == null) return; 
 
-        pst.setString(1, novoNome);
-        pst.setString(2, novaDescricao);
-        pst.setDouble(3, novoValor);
-        pst.setInt(4, this.idTarefa); // Altera apenas a tarefa deste card
+        String novoValorStr = JOptionPane.showInputDialog(this, "Digite o novo valor (ou deixe vazio):", valorAtual);
+        if (novoValorStr == null) return;
 
-        pst.executeUpdate();
+        double novoValor = 0.0;
+        try {
+            if (!novoValorStr.trim().isEmpty()) {
+                novoValor = Double.parseDouble(novoValorStr.replace(",", "."));
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Valor inválido! Operação cancelada.");
+            return;
+        }
 
-        // 4. ATUALIZAÇÃO DA TELA: Altera os JLabels do próprio card imediatamente
-        lblNome.setText(novoNome);
-        lblDescricao.setText(novaDescricao);
-        lblValor.setText("R$ " + String.format("%.2f", novoValor));
+        String sql = "UPDATE t_tarefa SET nm_tarefa = ?, ds_tarefa = ?, vl_tarefa = ? WHERE id_tarefa = ?";
 
-        JOptionPane.showMessageDialog(this, "Tarefa atualizada com sucesso!");
+        try (PreparedStatement pst = conexao.prepareStatement(sql)) {
+            pst.setString(1, novoNome);
+            pst.setString(2, novaDescricao);
+            pst.setDouble(3, novoValor);
+            pst.setInt(4, this.idTarefa); 
 
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Erro ao atualizar no banco: " + e.getMessage());
+            pst.executeUpdate();
+
+            lblNome.setText(novoNome);
+            lblDescricao.setText(novaDescricao);
+            lblValor.setText("R$ " + String.format("%.2f", novoValor));
+
+            JOptionPane.showMessageDialog(this, "Tarefa updated com sucesso!");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar no banco: " + e.getMessage());
+        }
     }
-}
      
-     private void ExcluirTarefa() {                                           
-int resposta = JOptionPane.showConfirmDialog(this, 
-                "Tem certeza que deseja excluir esta tarefa de forma permanente?", 
-                "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+    private void ExcluirTarefa() {                                            
+        int resposta = JOptionPane.showConfirmDialog(this, 
+            "Tem certeza que deseja excluir esta tarefa de forma permanente?", 
+            "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
         if (resposta == JOptionPane.YES_OPTION) {
-            
             String sqlAcoes = "DELETE FROM t_acao WHERE id_tarefa = ?";
-            String sqlTarefa = "DELETE FROM t_tarefa WHERE id = ?";
+            String sqlTarefa = "DELETE FROM t_tarefa WHERE id_tarefa = ?";
 
             try {
-                // CORREÇÃO: Removida a declaração duplicada 'Connection conexao = null;' que gerava erro
                 conexao.setAutoCommit(false); 
 
                 try (PreparedStatement stmtAcoes = conexao.prepareStatement(sqlAcoes);
@@ -143,7 +111,6 @@ int resposta = JOptionPane.showConfirmDialog(this,
 
                     conexao.commit();
 
-                    // ATUALIZAÇÃO FLUIDA DA TELA
                     java.awt.Container painelPai = this.getParent(); 
                     if (painelPai != null) {
                         painelPai.remove(this);     
@@ -156,19 +123,21 @@ int resposta = JOptionPane.showConfirmDialog(this,
                 } catch (SQLException e) {
                     conexao.rollback(); 
                     throw e;
+                } finally {
+                    conexao.setAutoCommit(true); 
                 }
 
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Erro ao excluir do banco de dados: " + e.getMessage());
             }
         }
-}
+    }
 
-    public CardTarefa() {
+    public CardTarefa(Connection conexaoPai, int idTarefa) {
         initComponents(); 
         
-        // CORREÇÃO: Inicializa a conexão com o banco de dados para este card
-        conexao = AcessoDB.ModuloDbConecta.connector();
+        this.conexao = conexaoPai;
+        this.idTarefa = idTarefa;
         
         cronometro = new javax.swing.Timer(1000, new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -317,11 +286,7 @@ int resposta = JOptionPane.showConfirmDialog(this,
     private javax.swing.JLabel lblValor;
     // End of variables declaration//GEN-END:variables
 
-    void setIdTarefa(int id) {
-        this.idTarefa = id;
-    }
-
-    void setExibirDados(String nome, String descricao, double valor) {
+public void setExibirDados(String nome, String descricao, double valor) {
         lblNome.setText(nome);
         lblDescricao.setText(descricao);
         lblValor.setText("R$ " + String.format("%.2f", valor));
