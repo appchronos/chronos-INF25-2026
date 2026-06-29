@@ -79,14 +79,9 @@ public class TelaCadastro extends javax.swing.JFrame {
     
     public TelaCadastro() {
         initComponents();
+        lblMensagens.setVisible(false);
         conexao = ModuloDbConecta.connector();
-        if (conexao != null) {
-            lblMensagens.setText("Conexão OK!!!");
-            lblMensagens.setForeground(Color.blue);
-        }else {
-            lblMensagens.setText("ERRO - NÃO CONECTADO!");
-            lblMensagens.setForeground(Color.red);
-        }
+       
     }
 
     @SuppressWarnings("unchecked")

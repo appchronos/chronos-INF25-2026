@@ -121,6 +121,11 @@ public class TelaUsuario extends javax.swing.JFrame {
         });
 
         txtUsuNome.setText("Alterar Nome");
+        txtUsuNome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUsuNomeActionPerformed(evt);
+            }
+        });
 
         btnAlterar.setBackground(new java.awt.Color(0, 153, 255));
         btnAlterar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -192,6 +197,10 @@ public class TelaUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
         alterar();
     }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void txtUsuNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuNomeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUsuNomeActionPerformed
 
     /**
      * @param args the command line arguments

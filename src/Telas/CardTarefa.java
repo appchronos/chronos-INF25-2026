@@ -7,7 +7,7 @@ import java.awt.Color;
 import java.awt.Component;
 
 public class CardTarefa extends javax.swing.JPanel {
-//  TEste
+
 private Connection conexao = null; 
     private int segundos = 0, minutos = 0, horas = 0;
     private javax.swing.Timer cronometro;

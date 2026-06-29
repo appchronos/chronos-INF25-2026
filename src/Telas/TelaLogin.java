@@ -100,13 +100,7 @@ public void logar() {
         // 3 - Fazer/executar a conexão ao banco de Dados com 
         // o retorno na variável "conexao"
         conexao = ModuloDbConecta.connector();
-        if (conexao != null) {
-            lblMensagens.setText("Conexão OK!!!");
-            lblMensagens.setForeground(Color.blue);
-        }else {
-            lblMensagens.setText("ERRO - NÃO CONECTADO!");
-            lblMensagens.setForeground(Color.red);
-        }
+       
         
     }
 
@@ -127,7 +121,6 @@ public void logar() {
         txtSenha = new javax.swing.JTextField();
         btnLogin = new javax.swing.JButton();
         btnSair = new javax.swing.JButton();
-        lblMensagens = new javax.swing.JLabel();
         lblAplicativo = new javax.swing.JLabel();
         mnEsqueceuSenha = new javax.swing.JLabel();
         lblBemVindo2 = new javax.swing.JLabel();
@@ -169,8 +162,6 @@ public void logar() {
             }
         });
 
-        lblMensagens.setText("Mensagem...");
-
         lblAplicativo.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         lblAplicativo.setForeground(new java.awt.Color(255, 153, 51));
         lblAplicativo.setText("Chrono$");
@@ -203,15 +194,13 @@ public void logar() {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(263, Short.MAX_VALUE)
+                .addContainerGap(255, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblSenha)
                     .addComponent(lblUsuario))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblAplicativo)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(lblMensagens, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -224,15 +213,17 @@ public void logar() {
                                     .addComponent(mnEsqueceuSenha)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(btnMudarSenha)))
-                            .addGap(91, 91, 91))
+                            .addGap(264, 264, 264))
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(lblBemVindo2)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(btnCadastro))
                         .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblBemVindo)
-                        .addComponent(lblLogin)))
-                .addGap(173, 173, 173))
+                        .addComponent(lblLogin))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblAplicativo)
+                        .addGap(173, 173, 173))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,9 +254,7 @@ public void logar() {
                     .addComponent(btnCadastro))
                 .addGap(18, 18, 18)
                 .addComponent(btnSair)
-                .addGap(28, 28, 28)
-                .addComponent(lblMensagens)
-                .addContainerGap(202, Short.MAX_VALUE))
+                .addContainerGap(212, Short.MAX_VALUE))
         );
 
         setSize(new java.awt.Dimension(823, 719));
@@ -341,7 +330,6 @@ public void logar() {
     private javax.swing.JLabel lblBemVindo;
     private javax.swing.JLabel lblBemVindo2;
     private javax.swing.JLabel lblLogin;
-    private javax.swing.JLabel lblMensagens;
     private javax.swing.JLabel lblSenha;
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JLabel mnEsqueceuSenha;

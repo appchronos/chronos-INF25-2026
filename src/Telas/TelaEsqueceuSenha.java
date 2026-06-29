@@ -81,16 +81,7 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
 }
     public TelaEsqueceuSenha() {
         initComponents();
-        // 3 - Fazer/executar a conexão ao banco de Dados com 
-        // o retorno na variável "conexao"
-        conexao = ModuloDbConecta.connector();
-        if (conexao != null) {
-            lblMensagens.setText("Conexão OK!!!");
-            lblMensagens.setForeground(Color.blue);
-        }else {
-            lblMensagens.setText("ERRO - NÃO CONECTADO!");
-            lblMensagens.setForeground(Color.red);
-        }   
+ 
     }
     
 
@@ -100,7 +91,6 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
 
         lblSeuEmail = new javax.swing.JLabel();
         txtSeuEmail = new javax.swing.JTextField();
-        lblMensagens = new javax.swing.JLabel();
         lblNovaSenha = new javax.swing.JLabel();
         txtNovaSenha = new javax.swing.JTextField();
         btnAlterarSenha = new javax.swing.JButton();
@@ -120,13 +110,6 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
         txtSeuEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSeuEmailActionPerformed(evt);
-            }
-        });
-
-        lblMensagens.setText("Mensagem...");
-        lblMensagens.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentHidden(java.awt.event.ComponentEvent evt) {
-                lblMensagensComponentHidden(evt);
             }
         });
 
@@ -175,7 +158,7 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(94, Short.MAX_VALUE)
+                .addContainerGap(86, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -188,9 +171,6 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
                             .addComponent(txtSeuEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtSenhaRepetida, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(150, 150, 150))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblMensagens, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblEsqueceuSenha)
@@ -226,18 +206,12 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
                 .addComponent(btnAlterarSenha)
                 .addGap(28, 28, 28)
                 .addComponent(btnVoltar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblMensagens)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
         );
 
         setSize(new java.awt.Dimension(701, 471));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void lblMensagensComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_lblMensagensComponentHidden
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblMensagensComponentHidden
 
     private void btnAlterarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarSenhaActionPerformed
         // TODO add your handling code here:
@@ -298,7 +272,6 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
     private javax.swing.JButton btnVoltar;
     private javax.swing.JLabel lblEsqueceuSenha;
     private javax.swing.JLabel lblLogin2;
-    private javax.swing.JLabel lblMensagens;
     private javax.swing.JLabel lblNovaSenha;
     private javax.swing.JLabel lblSenhaRepetida;
     private javax.swing.JLabel lblSeuEmail;

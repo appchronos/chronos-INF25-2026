@@ -92,13 +92,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         // Garante que o painel de tarefas use o BoxLayout vertical via código por segurança
         pnlListaTarefas.setLayout(new BoxLayout(pnlListaTarefas, BoxLayout.Y_AXIS));
         
-        if (conexao != null) {
-            lblMensagem.setText("Conexão OK!!!");
-            lblMensagem.setForeground(Color.blue);
-        } else {
-            lblMensagem.setText("ERRO - NÃO CONECTADO!");
-            lblMensagem.setForeground(Color.red);
-        }
+      
         
         // Carrega as tarefas do Tópico 1 assim que o programa abre
         carregarTarefasDoBanco(idTopicoAtual);
@@ -127,7 +121,6 @@ public class TelaTarefa extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         nomeUsuario = new javax.swing.JLabel();
-        lblMensagem = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnUsuario = new javax.swing.JMenuItem();
@@ -263,7 +256,7 @@ public class TelaTarefa extends javax.swing.JFrame {
                     .addComponent(btnOutro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(scrollPainelCards, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(5, Short.MAX_VALUE))
         );
 
         btnNovaTarefa.setText("Criar Tarefa");
@@ -282,12 +275,9 @@ public class TelaTarefa extends javax.swing.JFrame {
         nomeUsuario.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         nomeUsuario.setText("usuário");
 
-        lblMensagem.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblMensagem.setText("Mensagem...");
-
         jMenu1.setText("Configurações");
 
-        mnUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_DOWN_MASK));
+        mnUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK));
         mnUsuario.setText("Usuário");
         mnUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -305,7 +295,7 @@ public class TelaTarefa extends javax.swing.JFrame {
             }
         });
 
-        mnSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_DOWN_MASK));
+        mnSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         mnSair.setText("Exit");
         mnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -338,9 +328,7 @@ public class TelaTarefa extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(nomeUsuario)
                         .addGap(173, 173, 173)
-                        .addComponent(jLabel1)
-                        .addGap(129, 129, 129)
-                        .addComponent(lblMensagem)))
+                        .addComponent(jLabel1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -351,8 +339,7 @@ public class TelaTarefa extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
                         .addComponent(nomeUsuario))
-                    .addComponent(jLabel1)
-                    .addComponent(lblMensagem))
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(desktopPane)
                 .addGap(18, 18, 18)
@@ -502,7 +489,6 @@ public class TelaTarefa extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JLabel lblMensagem;
     private javax.swing.JLabel lblMensagens;
     private javax.swing.JMenuItem mnSair;
     private javax.swing.JMenuItem mnUsuario;
