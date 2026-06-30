@@ -24,64 +24,61 @@ public class TelaCadastro extends javax.swing.JFrame {
     public void cadastro() {
         String txtNomeTela = txtNome.getText();
         int idPermissao = 2; 
-
-    String dataFormatada = "";
-    try {
-        String dataDigitada = txtDataNasc.getText(); 
-        java.text.SimpleDateFormat formatoEntrada = new java.text.SimpleDateFormat("dd/MM/yyyy");
-        java.text.SimpleDateFormat formatoSaida = new java.text.SimpleDateFormat("yyyy-MM-dd");
-        java.util.Date data = formatoEntrada.parse(dataDigitada);
-        dataFormatada = formatoSaida.format(data);
-    } catch (Exception e) {
-        javax.swing.JOptionPane.showMessageDialog(null, "Formato de data inválido! Use DD/MM/AAAA");
-        return; 
-    }      
-        if  (txtNomeTela.isEmpty()) {          
-            JOptionPane.showMessageDialog(null," Campos inválidos/não preenchidos na Tela!!!");
-        }else {            
-            String sql = "insert INTO T_USUARIO(nm_usuario, dt_nascimento, ds_email, ds_senha, id_permissao) values(?, ?, ?, ?, ?)";
+        String dataFormatada = "";
+        try {
+            String dataDigitada = txtDataNasc.getText(); 
+            java.text.SimpleDateFormat formatoEntrada = new java.text.SimpleDateFormat("dd/MM/yyyy");
+            java.text.SimpleDateFormat formatoSaida = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date data = formatoEntrada.parse(dataDigitada);
+            dataFormatada = formatoSaida.format(data);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Formato de data inválido! Use DD/MM/AAAA");
+            return; 
+        }      
+            if  (txtNomeTela.isEmpty()) {          
+                JOptionPane.showMessageDialog(null," Campos inválidos/não preenchidos na Tela!!!");
+            }else {            
+                String sql = "insert INTO T_USUARIO(nm_usuario, dt_nascimento, ds_email, ds_senha, id_permissao) values(?, ?, ?, ?, ?)";
          
-            try {                
-                pst = conexao.prepareStatement(sql);
+                try {                
+                    pst = conexao.prepareStatement(sql);
 
-    pst.setString(1, txtNome.getText());       
-    pst.setString(2, dataFormatada);         
-    pst.setString(3, txtEmail.getText());      
-        String senha1 = txtSenha1.getText();
-        String senha2 = txtSenha2.getText();
+        pst.setString(1, txtNome.getText());       
+        pst.setString(2, dataFormatada);         
+        pst.setString(3, txtEmail.getText());      
+            String senha1 = txtSenha1.getText();
+            String senha2 = txtSenha2.getText();
 
-        String chaveAdmin = JOptionPane.showInputDialog(null, "Se você for Administrador, digite a Chave de Ativação (ou deixe em branco para Usuário Comum):", "Validação de Administrador", JOptionPane.QUESTION_MESSAGE);
+            String chaveAdmin = JOptionPane.showInputDialog(null, "Se você for Administrador, digite a Chave de Ativação (ou deixe em branco para Usuário Comum):", "Validação de Administrador", JOptionPane.QUESTION_MESSAGE);
 
-        if (chaveAdmin != null && chaveAdmin.equals("adm123")) { 
-            pst.setInt(5, idPermissao = 1);
-            JOptionPane.showMessageDialog(null, "Acesso de Administrador confirmado!");
-        }else{
-            pst.setInt(5, idPermissao = 2);
+            if (chaveAdmin != null && chaveAdmin.equals("adm123")) { 
+                pst.setInt(5, idPermissao = 1);
+                JOptionPane.showMessageDialog(null, "Acesso de Administrador confirmado!");
+            }else{
+                pst.setInt(5, idPermissao = 2);
+            }
+            if (senha1.isEmpty() || senha2.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos de senha!");
+            }else if (senha1.equals(senha2)) {
+                    pst.setString(4, senha1);
+            int fgInsOK = pst.executeUpdate();
+            if (fgInsOK > 0) {
+                JOptionPane.showMessageDialog(null, "Registro incluído com sucesso!!!");
+                    fazLimpar();
         }
-        if (senha1.isEmpty() || senha2.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos de senha!");
-        }else if (senha1.equals(senha2)) {
-                pst.setString(4, senha1);
-        int fgInsOK = pst.executeUpdate();
-        if (fgInsOK > 0) {
-            JOptionPane.showMessageDialog(null, "Registro incluído com sucesso!!!");
-                fazLimpar();
+    } 
+            else {
+                JOptionPane.showMessageDialog(null, "ERRO: As senhas digitadas não são iguais! Favor verificar.");
     }
-} 
-        else {
-            JOptionPane.showMessageDialog(null, "ERRO: As senhas digitadas não são iguais! Favor verificar.");
-}
-            } catch (Exception e) {
-    JOptionPane.showMessageDialog(null, "Erro real: " + e.getMessage());
-}        
-        }           
-    }
+                } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro real: " + e.getMessage());
+    }        
+            }           
+        }
     
     public TelaCadastro() {
         initComponents();
-        lblMensagens.setVisible(false);
         conexao = ModuloDbConecta.connector();
-       
     }
 
     @SuppressWarnings("unchecked")
@@ -102,7 +99,6 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblUsuario1 = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
         lblUsuario2 = new javax.swing.JLabel();
-        lblMensagens = new javax.swing.JLabel();
         txtDataNasc = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -165,13 +161,6 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblUsuario2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblUsuario2.setText("Data de Nascimento:");
 
-        lblMensagens.setText("Mensagem...");
-        lblMensagens.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentHidden(java.awt.event.ComponentEvent evt) {
-                lblMensagensComponentHidden(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -212,10 +201,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                         .addGap(229, 229, 229))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnVoltar)
-                        .addGap(353, 353, 353))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblMensagens, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(216, 216, 216))))
+                        .addGap(353, 353, 353))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,7 +212,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addComponent(lblLogin)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblBemVindo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsuario1)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -250,9 +236,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addComponent(btncadastro)
                 .addGap(18, 18, 18)
                 .addComponent(btnVoltar)
-                .addGap(54, 54, 54)
-                .addComponent(lblMensagens)
-                .addGap(94, 94, 94))
+                .addGap(162, 162, 162))
         );
 
         setSize(new java.awt.Dimension(821, 718));
@@ -269,10 +253,6 @@ public class TelaCadastro extends javax.swing.JFrame {
         TelaLogin tlLogin = new TelaLogin();
         tlLogin.setVisible(true);   
     }//GEN-LAST:event_btnVoltarActionPerformed
-
-    private void lblMensagensComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_lblMensagensComponentHidden
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblMensagensComponentHidden
 
     private void txtSenha2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenha2ActionPerformed
         // TODO add your handling code here:
@@ -297,7 +277,6 @@ public class TelaCadastro extends javax.swing.JFrame {
     private javax.swing.JLabel lblBemVindo;
     private javax.swing.JLabel lblLogin;
     private javax.swing.JLabel lblLogin2;
-    private javax.swing.JLabel lblMensagens;
     private javax.swing.JLabel lblSenha;
     private javax.swing.JLabel lblSenha1;
     private javax.swing.JLabel lblUsuario;

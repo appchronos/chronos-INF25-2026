@@ -76,10 +76,6 @@
                       <Component id="btnVoltar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="353" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="lblMensagens" min="-2" pref="281" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="216" max="-2" attributes="0"/>
-                  </Group>
               </Group>
           </Group>
       </Group>
@@ -93,7 +89,7 @@
               <Component id="lblLogin" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="lblBemVindo" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="56" max="32767" attributes="0"/>
+              <EmptySpace pref="36" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblUsuario1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtNome" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -122,9 +118,7 @@
               <Component id="btncadastro" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnVoltar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
-              <Component id="lblMensagens" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="162" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -241,14 +235,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Data de Nascimento:"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblMensagens">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Mensagem..."/>
-      </Properties>
-      <Events>
-        <EventHandler event="componentHidden" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="lblMensagensComponentHidden"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtDataNasc">
     </Component>

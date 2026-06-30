@@ -1,25 +1,17 @@
 
 package Telas;
 import javax.swing.JOptionPane;
-
-// 1 - Importar as bibliotecas
 import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
 
-/**
- *
- * @author ALUNO
- */
 public class TelaLogin extends javax.swing.JFrame {
-    // 2 - criar as variáveis necessárias à conexão
-    Connection conexao = null;  // É a variável que retorna a conexao
-    PreparedStatement pst = null; // É variável com o comando SQL
-    ResultSet rs = null; // Variável com o resultado do comando executado
+    Connection conexao = null;  
+    PreparedStatement pst = null; 
+    ResultSet rs = null;
     
-    // 4 - Criar o método/rotina "logar()"
 public void logar() {
-        // 1. Busca simplificada apenas na tabela t_usuario
+      
         String sqlUsuario = "select * from t_usuario where ds_email = ? and ds_senha = ?";
         
         try {
@@ -27,20 +19,17 @@ public void logar() {
             pst.setString(1, txtUsuario.getText()); 
             pst.setString(2, txtSenha.getText());   
             rs = pst.executeQuery();
-            
             String sql = "SELECT id_usuario, nm_usuario FROM t_usuario WHERE ds_email = ? AND ds_senha = ?";
             pst = conexao.prepareStatement(sql);
             pst.setString(1, txtUsuario.getText());
             pst.setString(2, txtSenha.getText());
-
-            ResultSet rs = pst.executeQuery();           
+            ResultSet rs = pst.executeQuery();            
             
             if (rs.next()) {
                 String nomeUsuario = rs.getString("nm_usuario");
                 SessaoUsuario.getInstance().setIdUsuario(rs.getInt("id_usuario"));
                 SessaoUsuario.getInstance().setNomeUsuario(rs.getString("nm_usuario"));
                 
-                // Tenta pegar o ID da permissão testando variações de nome
                 int idPermissao = 0;
                 try {
                     idPermissao = rs.getInt("T_PERMISSAO_id_permissao");
@@ -56,10 +45,8 @@ public void logar() {
                     }
                 }
                 
-                // 2. Busca o nome da permissão usando o ID encontrado
                 String perfil = "Usuário Comum"; 
-                String sqlPermissao = "select ds_permissao from t_permissao where id_permissao = ?";
-                
+                String sqlPermissao = "select ds_permissao from t_permissao where id_permissao = ?";               
                 try (PreparedStatement pstP = conexao.prepareStatement(sqlPermissao)) {
                     pstP.setInt(1, idPermissao);
                     try (ResultSet rsP = pstP.executeQuery()) {
@@ -68,19 +55,17 @@ public void logar() {
                         }
                     }
                 } catch (Exception e) {
-                    // Mantém como Usuário Comum se falhar
+                  
                 }
                 
-                JOptionPane.showMessageDialog(this, "Bem-vindo ao Chronos, " + nomeUsuario + "!");
-                
-                TelaTarefa tlPrincipal = new TelaTarefa();
-                
+                JOptionPane.showMessageDialog(this, "Bem-vindo ao Chronos, " + nomeUsuario + "!");               
+               TelaTarefa tlPrincipal = new TelaTarefa();
+               
                 if (perfil.equalsIgnoreCase("Administrador")) {
                     System.out.println("Acesso como: Administrador");
                 } else {
                     System.out.println("Acesso como: Usuário Comum");
-                }
-                
+                }                
                 tlPrincipal.setVisible(true);
                 this.dispose();
                 
@@ -94,14 +79,9 @@ public void logar() {
         }
     }
 
-    public TelaLogin() {  // Método construtor da TelaLogin
-        // Aqui, no "initComponents" inicializa/pinta a TelaLogin na Tela do PC!
+    public TelaLogin() {        
         initComponents();
-        // 3 - Fazer/executar a conexão ao banco de Dados com 
-        // o retorno na variável "conexao"
-        conexao = ModuloDbConecta.connector();
-       
-        
+        conexao = ModuloDbConecta.connector();     
     }
 
     /**

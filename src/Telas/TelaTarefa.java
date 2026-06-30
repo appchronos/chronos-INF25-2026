@@ -11,58 +11,42 @@ import java.awt.Color;
 
 
 public class TelaTarefa extends javax.swing.JFrame {
-    // Única variável de conexão mantida na classe para ser compartilhada com os cards
     private Connection conexao = null;
-    
-    // Controla qual o tópico selecionado no momento (Padrão: Tópico 1)
     private int idTopicoAtual = 1;
     
-    // Método responsável por buscar no banco e renderizar os cards dinamicamente
     public void carregarTarefasDoBanco(int idTopico) {
         this.idTopicoAtual = idTopico;
-    
-        // 1. Limpa todos os cards antigos que estão na tela
         pnlListaTarefas.removeAll();
-    
-        // 2. Query filtrando pelo Usuário Logado na Sessão e pelo Tópico clicado
         String sql = "SELECT * FROM t_tarefa WHERE id_usuario = ? AND id_topico = ?";
-    
-        try (PreparedStatement pstLocal = conexao.prepareStatement(sql)) {
         
+        try (PreparedStatement pstLocal = conexao.prepareStatement(sql)) {
             pstLocal.setInt(1, SessaoUsuario.getInstance().getIdUsuario());
             pstLocal.setInt(2, idTopico);
-        
             boolean encontrouTarefas = false;
-        
-            try (ResultSet rsLocal = pstLocal.executeQuery()) {
-                // 3. Varre o banco criando o objeto CardTarefa
+            
+            try (ResultSet rsLocal = pstLocal.executeQuery()) {  
+                
                 while (rsLocal.next()) {
                     encontrouTarefas = true;
                     int id = rsLocal.getInt("id_tarefa");
                     String nome = rsLocal.getString("nm_tarefa");
                     String desc = rsLocal.getString("ds_tarefa");
                     double valor = rsLocal.getDouble("vl_tarefa");
-                
                     CardTarefa card = new CardTarefa(this.conexao, id);
-                    card.setExibirDados(nome, desc, valor);
-                
+                    card.setExibirDados(nome, desc, valor);               
                     pnlListaTarefas.add(card);
                 }
             }
         
-            // NOVO: Se não houver tarefas no tópico, mostra um aviso amigável
             if (!encontrouTarefas) {
                 javax.swing.JLabel lblAvisoVazio = new javax.swing.JLabel("Você não tem tarefas aqui. Clique em 'Criar Tarefa' para começar!");
                 lblAvisoVazio.setFont(new java.awt.Font("Segoe UI", java.awt.Font.ITALIC, 14));
                 lblAvisoVazio.setForeground(java.awt.Color.GRAY);
-                lblAvisoVazio.setAlignmentX(Component.CENTER_ALIGNMENT); // Centraliza no BoxLayout
-            
-                // Espaçamento para não colar no topo
+                lblAvisoVazio.setAlignmentX(Component.CENTER_ALIGNMENT);            
                 pnlListaTarefas.add(javax.swing.Box.createVerticalStrut(20)); 
                 pnlListaTarefas.add(lblAvisoVazio);
             }
-        
-            // 4. Força o Java Swing a recalcular o layout e redesenhar
+            
             pnlListaTarefas.revalidate();
             pnlListaTarefas.repaint();
         
@@ -71,30 +55,20 @@ public class TelaTarefa extends javax.swing.JFrame {
         }
     }
     
-    // Método auxiliar associado aos eventos de clique dos 9 botões de tópicos
     public void selecionarTopico(int numeroTopico) {
         this.idTopicoAtual = numeroTopico;
         carregarTarefasDoBanco(numeroTopico);
     }
     
-
     public TelaTarefa() {
         initComponents();
         
-        // RECUPERAÇÃO DA SESSÃO: Seta o nome do usuário logado na Label correspondente
         if (SessaoUsuario.getInstance().getNomeUsuario() != null) {
             nomeUsuario.setText(SessaoUsuario.getInstance().getNomeUsuario());
         }
         
-        // Inicializa a conexão APENAS UMA VEZ aqui no início
-        conexao = ModuloDbConecta.connector();
-        
-        // Garante que o painel de tarefas use o BoxLayout vertical via código por segurança
-        pnlListaTarefas.setLayout(new BoxLayout(pnlListaTarefas, BoxLayout.Y_AXIS));
-        
-      
-        
-        // Carrega as tarefas do Tópico 1 assim que o programa abre
+        conexao = ModuloDbConecta.connector();            
+        pnlListaTarefas.setLayout(new BoxLayout(pnlListaTarefas, BoxLayout.Y_AXIS));                        
         carregarTarefasDoBanco(idTopicoAtual);
     }
 

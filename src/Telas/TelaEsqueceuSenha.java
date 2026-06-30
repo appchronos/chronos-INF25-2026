@@ -2,65 +2,48 @@
 package Telas;
 
 import javax.swing.JOptionPane;
-
-// 1 - Importar as bibliotecas
 import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
 
 public class TelaEsqueceuSenha extends javax.swing.JFrame {
-
-    // 2 - criar as variáveis necessárias à conexão
-    Connection conexao = null;  // É a variável que retorna a conexao
-    PreparedStatement pst = null; // É variável com o comando SQL
-    ResultSet rs = null; // Variável com o resultado do comando executado
+    Connection conexao = null;  
+    PreparedStatement pst = null; 
+    ResultSet rs = null; 
     
     public void fazLimpar() {
         txtSeuEmail.setText("");
         txtNovaSenha.setText("");
         txtSenhaRepetida.setText("");        
     }
-    
+   
     public void fazAlterar(){
  
-        // Fazer a validação das informações da Tela
+        
         String txtDescPerTela = txtSeuEmail.getText();
-        // Validando...
-        // 2. Verifica se as duas senhas são IGUAIS
-
         if  (txtDescPerTela.isEmpty()) {
-            // Faz critica
+         
             JOptionPane.showMessageDialog(null," Campos inválidos/não preenchidos na Tela!!!");
         }else {
-            // 4 - Definição da String com o comando SQL de Alteração = UPDATE!
             String sql = "update t_usuario set ds_senha = ? where ds_email = ?";
-
-            // 5 - Fazer acesso ao banco de dados com a consulta/chave informada!
             try {
-                // Bloco de comandos OK
-                // 6 - Associar o comando SQL na conexão do banco
                 pst = conexao.prepareStatement(sql);
-                // Substituir a "?" pela informação do campo Chave da Tela
                     String senha1 = txtNovaSenha.getText();
                     String senha2 = txtSenhaRepetida.getText();
                 if (senha1.isEmpty() || senha2.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos de senha!");
-     
-                    //3. Verifica se a senha digitada é IGUAL à confirmação
                 }
+                
                 if (senha1.equals(senha2)) {
-                // Se forem iguais, associa a senha ao parâmetro correto do banco de dados
                 pst.setString(1, senha1);
                 }else{
                     JOptionPane.showMessageDialog(null, "ERRO: As senhas digitadas não são iguais! Favor verificar.");
                     return;
                 }
-                
+               
                 pst.setString(2,txtSeuEmail.getText());
-                // 7 - Executar o comando UPDATE na Conexão do banco
-                int fgAltOK = pst.executeUpdate();  //Faz a Altualização
-                // 8 - Testar se consultou OK, se achou!?
-                if ( fgAltOK > 0 ) { // Se Alterou OK
+                int fgAltOK = pst.executeUpdate(); 
+                if ( fgAltOK > 0 ) { 
                     JOptionPane.showMessageDialog(null," Campos alterados com sucesso!!!");
                     txtSeuEmail.setText("");
                     txtNovaSenha.setText("");
@@ -72,9 +55,9 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null," ERRO na alteração, favor verificar email!!!!");   
                 }
 
-            } catch ( Exception varERRO ) { // Fazer o tratamento da Exceção/ERRO
+            } catch ( Exception varERRO ) { 
                 JOptionPane.showMessageDialog(null," Erro na Alteração Tabela - t_usuario!");
-                System.out.println("O ERRO é: " + varERRO.toString());  // Exibe na console o erro!
+                System.out.println("O ERRO é: " + varERRO.toString()); 
         }
     }    
         
@@ -84,7 +67,6 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
  
     }
     
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
