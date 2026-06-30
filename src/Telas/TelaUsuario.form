@@ -113,8 +113,11 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtUsuEmail">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Alterar Email"/>
+        <Property name="text" type="java.lang.String" value=" Email"/>
       </Properties>
+      <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtUsuEmailFocusGained"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnExcluir">
       <Properties>
@@ -132,10 +135,10 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtUsuNome">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Alterar Nome"/>
+        <Property name="text" type="java.lang.String" value=" Nome"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtUsuNomeActionPerformed"/>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtUsuNomeFocusGained"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnAlterar">

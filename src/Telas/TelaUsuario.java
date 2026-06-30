@@ -13,72 +13,70 @@ public class TelaUsuario extends javax.swing.JFrame {
     }
 
     // 3. Método alterar independente e fora do construtor
-    public void alterar() {
-        String sql = "UPDATE tb_usuarios SET nome_usuario=?, ds_email=? WHERE id_usuario=?";
-        // SQL simples alterando apenas o nome e o email baseado no ID
-      
-        
+    public void excluir() {
+    // 1. SQL para apagar primeiro os tópicos vinculados ao usuário
+    String sqlTarefas = "DELETE FROM t_tarefa WHERE id_usuario=?";
+    // 2. SQL para apagar o usuário depois
+    String sqlUsuario = "DELETE FROM t_usuario WHERE id_usuario=?";
+
+    int confirma = javax.swing.JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover este usuário e todas as suas tarefas?", "Atenção", javax.swing.JOptionPane.YES_NO_OPTION);
+
+    if (confirma == javax.swing.JOptionPane.YES_OPTION) {
         try {
             con = AcessoDB.ModuloDbConecta.connector();
-            if (con == null) {
-                javax.swing.JOptionPane.showMessageDialog(null, "Erro: Conexão falhou!");
-                return;
+
+            // Primeiro: Apaga as tarefas (Filhos)
+            pst = con.prepareStatement(sqlTarefas);
+            pst.setInt(1, idUsuarioLogado); // Sempre 1 porque só tem um '?' na query
+            pst.executeUpdate();
+            pst.close(); // Fecha o pst anterior para poder reutilizar
+
+            // Segundo: Apaga o usuário (Pai)
+            pst = con.prepareStatement(sqlUsuario);
+            pst.setInt(1, idUsuarioLogado);
+            int apagado = pst.executeUpdate();
+
+            if (apagado > 0) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Usuário e tarefas excluídos com sucesso!");
+                
+                // Limpa os campos da tela
+                txtUsuNome.setText("");
+                txtUsuEmail.setText("");
             }
 
+            pst.close();
+            if (con != null) con.close(); // Fecha a conexão com o banco
+
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Erro ao excluir: " + e.getMessage());
+        }
+    }
+}
+    public void alterar() {
+    String sql = "UPDATE t_usuario SET nm_usuario=?, ds_email=? WHERE id_usuario=?";
+    
+        try {
+            con = AcessoDB.ModuloDbConecta.connector();
             pst = con.prepareStatement(sql);
-            
-            // Pega os textos exatamente dos dois únicos campos da sua tela
+        
+            // Defina os parâmetros (?) aqui
             pst.setString(1, txtUsuNome.getText());
             pst.setString(2, txtUsuEmail.getText());
-            pst.setInt(3, idUsuarioLogado); // ID de referência
-
-            int atualizado = pst.executeUpdate();
-            if (atualizado > 0) {
-                javax.swing.JOptionPane.showMessageDialog(null, "Dados alterados com sucesso!");
-            }
+            pst.setInt(3, idUsuarioLogado);
             
-            pst.close();
-            con.close();
-        } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Erro ao alterar: " + e.getMessage());
-        }
-    }
-    public void excluir() {
-        // 1. SQL para apagar primeiro os tópicos vinculados ao usuário
-        String sqlTopicos = "DELETE FROM t_topico WHERE T_USUARIO_id_usuario=?";
-        // 2. SQL para apagar o usuário depois
-        String sqlUsuario = "DELETE FROM t_usuario WHERE id_usuario=?";
+            int adicionado = pst.executeUpdate();
         
-        int confirma = javax.swing.JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover este usuário e todos os seus tópicos?", "Atenção", javax.swing.JOptionPane.YES_NO_OPTION);
-        
-        if (confirma == javax.swing.JOptionPane.YES_OPTION) {
-            try {
-                con = AcessoDB.ModuloDbConecta.connector();
-                
-                // Primeiro: Apaga os tópicos (Filhos)
-                pst = con.prepareStatement(sqlTopicos);
-                pst.setInt(1, idUsuarioLogado);
-                pst.executeUpdate();
-                pst.close();
-                
-                // Segundo: Apaga o usuário (Pai)
-                pst = con.prepareStatement(sqlUsuario);
-                pst.setInt(1, idUsuarioLogado);
-                
-                int apagado = pst.executeUpdate();
-                if (apagado > 0) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "Usuário removido com sucesso!");
-                    txtUsuNome.setText(null);
-                    txtUsuEmail.setText(null);
-                }
-                
-                pst.close();
-                con.close();
-            } catch (Exception e) {
-                javax.swing.JOptionPane.showMessageDialog(null, "Erro ao excluir: " + e.getMessage());
+            if (adicionado > 0) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Dados do usuário alterados com sucesso!");
             }
+        
+            pst.close();
+            if (con != null) con.close();
+        
+        } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(null, "Erro ao alterar: " + e.getMessage());
         }
-    }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -109,7 +107,12 @@ public class TelaUsuario extends javax.swing.JFrame {
         lblDescNome.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblDescNome.setText("Nome:");
 
-        txtUsuEmail.setText("Alterar Email");
+        txtUsuEmail.setText(" Email");
+        txtUsuEmail.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtUsuEmailFocusGained(evt);
+            }
+        });
 
         btnExcluir.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnExcluir.setForeground(new java.awt.Color(0, 153, 255));
@@ -120,10 +123,10 @@ public class TelaUsuario extends javax.swing.JFrame {
             }
         });
 
-        txtUsuNome.setText("Alterar Nome");
-        txtUsuNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUsuNomeActionPerformed(evt);
+        txtUsuNome.setText(" Nome");
+        txtUsuNome.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtUsuNomeFocusGained(evt);
             }
         });
 
@@ -198,9 +201,17 @@ public class TelaUsuario extends javax.swing.JFrame {
         alterar();
     }//GEN-LAST:event_btnAlterarActionPerformed
 
-    private void txtUsuNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuNomeActionPerformed
+    private void txtUsuNomeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsuNomeFocusGained
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsuNomeActionPerformed
+        // Limpa o campo de texto quando recebe o clique (foco)
+    txtUsuNome.setText("");
+    }//GEN-LAST:event_txtUsuNomeFocusGained
+
+    private void txtUsuEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsuEmailFocusGained
+        // TODO add your handling code here:
+        // Limpa o campo de texto quando recebe o clique (foco)
+    txtUsuEmail.setText("");
+    }//GEN-LAST:event_txtUsuEmailFocusGained
 
     /**
      * @param args the command line arguments
