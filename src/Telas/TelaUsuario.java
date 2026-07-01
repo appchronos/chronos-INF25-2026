@@ -5,12 +5,13 @@ public class TelaUsuario extends javax.swing.JFrame {
     // 1. Variáveis de conexão declaradas corretamente
     java.sql.Connection con = null;
     java.sql.PreparedStatement pst = null;
-    private int idUsuarioLogado = 6
+    private int idUsuarioLogado 
             ; // ID padrão para teste
 
     // 2. Construtor padrão da tela limpando e inicializando os componentes
     public TelaUsuario() {
         initComponents();
+        this.idUsuarioLogado = SessaoUsuario.getInstance().getIdUsuario();
     }
 
     // 3. Método alterar independente e fora do construtor
