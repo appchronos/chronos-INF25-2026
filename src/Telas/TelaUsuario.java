@@ -5,7 +5,7 @@ public class TelaUsuario extends javax.swing.JFrame {
     // 1. Variáveis de conexão declaradas corretamente
     java.sql.Connection con = null;
     java.sql.PreparedStatement pst = null;
-    private int idUsuarioLogado = 1; // ID padrão para teste
+    private int idUsuarioLogado = 5; // ID padrão para teste
 
     // 2. Construtor padrão da tela limpando e inicializando os componentes
     public TelaUsuario() {
@@ -13,11 +13,11 @@ public class TelaUsuario extends javax.swing.JFrame {
     }
 
     // 3. Método alterar independente e fora do construtor
-    public void excluir() {
-    // 1. SQL para apagar primeiro os tópicos vinculados ao usuário
-    String sqlTarefas = "DELETE FROM t_tarefa WHERE id_usuario=?";
-    // 2. SQL para apagar o usuário depois
-    String sqlUsuario = "DELETE FROM t_usuario WHERE id_usuario=?";
+   public void excluir() {
+    // 1. Query para apagar as ações primeiro (usando uma subquery para achar as tarefas do usuário)
+    String sqlAcoes = "DELETE t_acao FROM t_acao INNER JOIN t_tarefa ON t_acao.id_tarefa = t_tarefa.id_tarefa WHERE t_tarefa.id_usuario = ?";
+    String sqlTarefas = "DELETE FROM t_tarefa WHERE id_usuario = ?";
+    String sqlUsuario = "DELETE FROM t_usuario WHERE id_usuario = ?";
 
     int confirma = javax.swing.JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover este usuário e todas as suas tarefas?", "Atenção", javax.swing.JOptionPane.YES_NO_OPTION);
 
@@ -25,27 +25,31 @@ public class TelaUsuario extends javax.swing.JFrame {
         try {
             con = AcessoDB.ModuloDbConecta.connector();
 
-            // Primeiro: Apaga as tarefas (Filhos)
-            pst = con.prepareStatement(sqlTarefas);
-            pst.setInt(1, idUsuarioLogado); // Sempre 1 porque só tem um '?' na query
+            // 1º PASSO: Executar a exclusão das ações no banco
+            pst = con.prepareStatement(sqlAcoes);
+            pst.setInt(1, idUsuarioLogado);
             pst.executeUpdate();
-            pst.close(); // Fecha o pst anterior para poder reutilizar
+            pst.close(); // Fecha o pst para poder reutilizá-lo abaixo
 
-            // Segundo: Apaga o usuário (Pai)
+            // 2º PASSO: Apagar as tarefas (código que você já tem)
+            pst = con.prepareStatement(sqlTarefas);
+            pst.setInt(1, idUsuarioLogado);
+            pst.executeUpdate();
+            pst.close();
+
+            // 3º PASSO: Apagar o usuário (código que você já tem)
             pst = con.prepareStatement(sqlUsuario);
             pst.setInt(1, idUsuarioLogado);
             int apagado = pst.executeUpdate();
 
             if (apagado > 0) {
-                javax.swing.JOptionPane.showMessageDialog(null, "Usuário e tarefas excluídos com sucesso!");
-                
-                // Limpa os campos da tela
+                javax.swing.JOptionPane.showMessageDialog(null, "Usuário excluído com sucesso!");
                 txtUsuNome.setText("");
                 txtUsuEmail.setText("");
             }
 
             pst.close();
-            if (con != null) con.close(); // Fecha a conexão com o banco
+            if (con != null) con.close();
 
         } catch (Exception e) {
             javax.swing.JOptionPane.showMessageDialog(null, "Erro ao excluir: " + e.getMessage());
