@@ -5,7 +5,8 @@ public class TelaUsuario extends javax.swing.JFrame {
     // 1. Variáveis de conexão declaradas corretamente
     java.sql.Connection con = null;
     java.sql.PreparedStatement pst = null;
-    private int idUsuarioLogado = 5; // ID padrão para teste
+    private int idUsuarioLogado = 6
+            ; // ID padrão para teste
 
     // 2. Construtor padrão da tela limpando e inicializando os componentes
     public TelaUsuario() {
@@ -44,6 +45,12 @@ public class TelaUsuario extends javax.swing.JFrame {
 
             if (apagado > 0) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Usuário excluído com sucesso!");
+                TelaLogin telaLogin = new TelaLogin();
+                telaLogin.setVisible(true);
+    
+                // Fecha a tela atual
+                this.dispose();
+
                 txtUsuNome.setText("");
                 txtUsuEmail.setText("");
             }
@@ -71,8 +78,19 @@ public class TelaUsuario extends javax.swing.JFrame {
             int adicionado = pst.executeUpdate();
         
             if (adicionado > 0) {
+             // 2. Fecha as conexões do banco de dados ANTES de mexer nas telas
+            pst.close();
+            if (con != null) con.close();
+        
+            // 3. Mostra a mensagem de sucesso
+            javax.swing.JOptionPane.showMessageDialog(null, "Dados do usuário alterados com sucesso!");   
             javax.swing.JOptionPane.showMessageDialog(null, "Dados do usuário alterados com sucesso!");
-            }
+            TelaLogin telaLogin = new TelaLogin();
+            telaLogin.setVisible(true); // Abre a tela de login
+    
+    // 2. Fecha a tela atual (TelaUsuario)
+    this.dispose(); 
+}
         
             pst.close();
             if (con != null) con.close();
