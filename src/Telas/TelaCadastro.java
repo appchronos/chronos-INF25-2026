@@ -65,6 +65,8 @@ public class TelaCadastro extends javax.swing.JFrame {
             if (fgInsOK > 0) {
                 JOptionPane.showMessageDialog(null, "Registro incluído com sucesso!!!");
                     fazLimpar();
+                    new TelaLogin().setVisible(true);
+            this.dispose();
         }
     } 
             else {
