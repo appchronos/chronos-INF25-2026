@@ -30,7 +30,7 @@ CREATE TABLE `t_acao` (
   PRIMARY KEY (`id_acao`),
   KEY `fk_T_ACAO_T_TAREFA1_idx` (`id_tarefa`),
   CONSTRAINT `fk_T_ACAO_T_TAREFA1` FOREIGN KEY (`id_tarefa`) REFERENCES `t_tarefa` (`id_tarefa`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `t_acao` (
 
 LOCK TABLES `t_acao` WRITE;
 /*!40000 ALTER TABLE `t_acao` DISABLE KEYS */;
-INSERT INTO `t_acao` VALUES (1,1,'Iniciada','2026-06-03 21:00:00'),(2,2,'Iniciada','2026-06-03 21:01:00'),(3,3,'Iniciada','2026-06-03 21:02:00'),(4,4,'Iniciada','2026-06-03 21:03:00'),(5,5,'Iniciada','2026-06-03 21:04:00'),(6,6,'Iniciada','2026-06-03 21:05:00'),(7,7,'Iniciada','2026-06-03 21:06:00'),(8,8,'Iniciada','2026-06-03 21:07:00'),(9,9,'Iniciada','2026-06-03 21:08:00'),(10,1,'Finalizada','2026-06-03 21:30:00'),(11,2,'Finalizada','2026-06-03 21:31:00'),(12,3,'Finalizada','2026-06-03 21:32:00'),(13,4,'Finalizada','2026-06-03 21:33:00'),(14,5,'Finalizada','2026-06-03 21:34:00'),(15,6,'Finalizada','2026-06-03 21:35:00'),(16,7,'Finalizada','2026-06-03 21:36:00'),(17,8,'Finalizada','2026-06-03 21:37:00'),(18,9,'Finalizada','2026-06-03 21:38:00');
+INSERT INTO `t_acao` VALUES (1,1,'Iniciada','2026-06-03 21:00:00'),(2,2,'Iniciada','2026-06-03 21:01:00'),(3,3,'Iniciada','2026-06-03 21:02:00'),(4,4,'Iniciada','2026-06-03 21:03:00'),(5,5,'Iniciada','2026-06-03 21:04:00'),(6,6,'Iniciada','2026-06-03 21:05:00'),(7,7,'Iniciada','2026-06-03 21:06:00'),(8,8,'Iniciada','2026-06-03 21:07:00'),(9,9,'Iniciada','2026-06-03 21:08:00'),(10,1,'Finalizada','2026-06-03 21:30:00'),(11,2,'Finalizada','2026-06-03 21:31:00'),(12,3,'Finalizada','2026-06-03 21:32:00'),(13,4,'Finalizada','2026-06-03 21:33:00'),(14,5,'Finalizada','2026-06-03 21:34:00'),(15,6,'Finalizada','2026-06-03 21:35:00'),(16,7,'Finalizada','2026-06-03 21:36:00'),(17,8,'Finalizada','2026-06-03 21:37:00'),(18,9,'Finalizada','2026-06-03 21:38:00'),(19,10,'Iniciada','2026-07-02 09:55:05'),(20,12,'Iniciada','2026-07-02 09:57:47'),(21,10,'Finalizada','2026-07-02 09:57:56'),(22,14,'Iniciada','2026-07-02 14:38:10'),(23,14,'Iniciada','2026-07-02 14:39:01'),(24,14,'Finalizada','2026-07-02 15:00:56'),(25,12,'Finalizada','2026-07-03 06:05:00'),(26,15,'Iniciada','2026-07-03 06:05:40'),(33,15,'Finalizada','2026-07-03 07:28:22'),(34,15,'Iniciada','2026-07-03 07:28:31'),(35,15,'Finalizada','2026-07-03 09:07:35'),(36,15,'Iniciada','2026-07-03 09:07:43'),(37,11,'Iniciada','2026-07-03 09:08:01'),(38,19,'Iniciada','2026-07-03 09:29:27'),(39,20,'Iniciada','2026-07-03 09:41:00'),(40,21,'Iniciada','2026-07-03 09:41:49'),(41,21,'Finalizada','2026-07-03 10:01:35'),(42,19,'Finalizada','2026-07-03 10:01:47'),(43,20,'Finalizada','2026-07-03 10:29:30'),(44,20,'Iniciada','2026-07-03 11:13:21'),(45,20,'Finalizada','2026-07-03 11:13:30'),(48,19,'Iniciada','2026-07-03 13:04:45'),(49,20,'Iniciada','2026-07-03 13:04:48'),(50,21,'Iniciada','2026-07-03 13:04:49'),(51,21,'Finalizada','2026-07-03 13:04:59'),(52,20,'Finalizada','2026-07-03 13:05:01'),(53,19,'Finalizada','2026-07-03 13:05:02'),(54,19,'Iniciada','2026-07-03 13:23:22'),(55,20,'Iniciada','2026-07-03 13:23:22'),(56,21,'Iniciada','2026-07-03 13:23:23'),(57,19,'Finalizada','2026-07-03 13:23:32'),(58,20,'Finalizada','2026-07-03 13:23:32'),(59,21,'Finalizada','2026-07-03 13:23:33'),(60,15,'Finalizada','2026-07-03 13:40:53'),(61,12,'Iniciada','2026-07-03 13:40:58'),(62,12,'Finalizada','2026-07-03 14:23:04'),(63,23,'Iniciada','2026-07-03 14:23:57'),(64,11,'Finalizada','2026-07-03 14:24:10'),(65,11,'Iniciada','2026-07-03 14:24:13'),(66,24,'Iniciada','2026-07-03 14:25:10'),(67,25,'Iniciada','2026-07-03 14:26:58'),(68,23,'Finalizada','2026-07-03 15:06:29'),(69,24,'Finalizada','2026-07-03 15:06:32'),(70,25,'Finalizada','2026-07-03 15:06:36');
 /*!40000 ALTER TABLE `t_acao` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,7 +88,7 @@ CREATE TABLE `t_tarefa` (
   KEY `fk_T_TAREFA_T_USUARIO1_idx` (`id_usuario`),
   CONSTRAINT `fk_T_TAREFA_T_TOPICO1` FOREIGN KEY (`id_topico`) REFERENCES `t_topico` (`id_topico`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_T_TAREFA_T_USUARIO1` FOREIGN KEY (`id_usuario`) REFERENCES `t_usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +97,7 @@ CREATE TABLE `t_tarefa` (
 
 LOCK TABLES `t_tarefa` WRITE;
 /*!40000 ALTER TABLE `t_tarefa` DISABLE KEYS */;
-INSERT INTO `t_tarefa` VALUES (1,1,1,'Revisar Prova de Linguagem',NULL,NULL,'2026-06-02','2026-06-03'),(2,1,2,'Cortar Grama',NULL,NULL,'2026-06-02','2026-06-03'),(3,1,3,'Programar Tela Esqueceu a Senha','Projeto Integrador',NULL,'2026-06-02','2026-06-03'),(4,2,4,'Dormir',NULL,NULL,'2026-06-02','2026-06-03'),(5,2,5,'Vetorizar camisa dos Corujas','Rudolph',100.00,'2026-06-02','2026-06-03'),(6,2,6,'Comprar Escova','Item da Viagem',NULL,'2026-06-02','2026-06-03'),(7,3,7,'Ler Capitulo 2','Tecnologias de Redes de Comunicação e Computadores',NULL,'2026-06-02','2026-06-03'),(8,3,8,'O que é tabela intermediária','Modelagem de Dados',NULL,'2026-06-02','2026-06-03'),(9,3,9,'Comprar Casaco',NULL,NULL,'2026-06-02','2026-06-03');
+INSERT INTO `t_tarefa` VALUES (1,1,1,'Revisar Prova de Linguagem',NULL,NULL,'2026-06-02','2026-06-03'),(2,1,2,'Cortar Grama',NULL,NULL,'2026-06-02','2026-06-03'),(3,1,3,'Programar Tela Esqueceu a Senha','Projeto Integrador',NULL,'2026-06-02','2026-06-03'),(4,2,4,'Dormir',NULL,NULL,'2026-06-02','2026-06-03'),(5,2,5,'Vetorizar camisa dos Corujas','Rudolph',100.00,'2026-06-02','2026-06-03'),(6,2,6,'Comprar Escova','Item da Viagem',NULL,'2026-06-02','2026-06-03'),(7,3,7,'Ler Capitulo 2','Tecnologias de Redes de Comunicação e Computadores',NULL,'2026-06-02','2026-06-03'),(8,3,8,'O que é tabela intermediária','Modelagem de Dados',NULL,'2026-06-02','2026-06-03'),(9,3,9,'Comprar Casaco',NULL,NULL,'2026-06-02','2026-06-03'),(10,5,4,'Rudolph Usinados','Dom á Sex',0.00,'2026-07-02',NULL),(11,5,4,'Dormir','',0.00,'2026-07-02',NULL),(12,5,3,'Programar Tela Tarefas','Projeto Integrador',0.00,'2026-07-02',NULL),(14,2,4,'Cedup','Curso',0.00,'2026-07-02',NULL),(15,5,3,'Programar tela Indicadores','Projeto Integrador',0.00,'2026-07-03',NULL),(19,5,1,'Enviar Relatório para os clientes','Google Ads',0.00,'2026-07-03',NULL),(20,5,1,'Como criar um objeto na tela Netbeans','Programação Java',0.00,'2026-07-03',NULL),(21,5,1,'Como criar  views no MySQL','Banco de dados',0.00,'2026-07-03',NULL),(23,5,3,'Programar Tela Adicionar Tarefa','Projeto Integrador',0.00,'2026-07-03',NULL),(24,5,3,'Programar Tutorial nas telas','Projeto Integrador',0.00,'2026-07-03',NULL),(25,5,3,'Criar Views para Tela Indicadores no MySQL','Projeto Integrador',0.00,'2026-07-03',NULL),(26,5,4,'Cedup','Estudando',0.00,'2026-07-03',NULL);
 /*!40000 ALTER TABLE `t_tarefa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -144,7 +144,7 @@ CREATE TABLE `t_usuario` (
   UNIQUE KEY `UN_USUARIO_EMAIL` (`ds_email`),
   KEY `id_permissaofK` (`id_permissao`),
   CONSTRAINT `id_permissaofK` FOREIGN KEY (`id_permissao`) REFERENCES `t_permissao` (`id_permissao`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,9 +153,138 @@ CREATE TABLE `t_usuario` (
 
 LOCK TABLES `t_usuario` WRITE;
 /*!40000 ALTER TABLE `t_usuario` DISABLE KEYS */;
-INSERT INTO `t_usuario` VALUES (1,'Kalyson','2000-08-17','4555854224@estudante.sed.sc.gov.br','1234',2),(2,'Gabriel','1999-02-28','4544039745@estudante.sed.sc.gov.br','1234',2),(3,'Jose','1967-10-18','4555854518@estudante.sed.sc.gov.br','1234',2),(4,'Admin','2026-06-21','Admin','adm123',1);
+INSERT INTO `t_usuario` VALUES (1,'Kalyson','2000-08-17','4555854224@estudante.sed.sc.gov.br','1234',2),(2,'Gabriel','1999-02-28','4544039745@estudante.sed.sc.gov.br','1234',2),(3,'Jose','1967-10-18','4555854518@estudante.sed.sc.gov.br','1234',2),(4,'Admin','2026-06-21','Admin','adm123',1),(5,'Gabriel Gomes','1999-02-28','tarefa@gmail.com','123',2),(6,'teste','1998-03-21','teste','123',2),(7,'teste','1998-02-10','teste@gmail.com','123',2),(8,'Pedro','2000-02-27','pedro@gmail.com','123',2),(9,'lucas','1999-01-01','lucas@gmail.com','123',2);
 /*!40000 ALTER TABLE `t_usuario` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary view structure for view `v_tempo_medio`
+--
+
+DROP TABLE IF EXISTS `v_tempo_medio`;
+/*!50001 DROP VIEW IF EXISTS `v_tempo_medio`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `v_tempo_medio` AS SELECT 
+ 1 AS `id_usuario`,
+ 1 AS `Tempo_Medio`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `v_tempo_tarefa`
+--
+
+DROP TABLE IF EXISTS `v_tempo_tarefa`;
+/*!50001 DROP VIEW IF EXISTS `v_tempo_tarefa`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `v_tempo_tarefa` AS SELECT 
+ 1 AS `id_usuario`,
+ 1 AS `Tarefa`,
+ 1 AS `Tempo_Total`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `v_tempo_total`
+--
+
+DROP TABLE IF EXISTS `v_tempo_total`;
+/*!50001 DROP VIEW IF EXISTS `v_tempo_total`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `v_tempo_total` AS SELECT 
+ 1 AS `id_usuario`,
+ 1 AS `Tempo_Total`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `v_visao_historico`
+--
+
+DROP TABLE IF EXISTS `v_visao_historico`;
+/*!50001 DROP VIEW IF EXISTS `v_visao_historico`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `v_visao_historico` AS SELECT 
+ 1 AS `id_usuario`,
+ 1 AS `F_Topico`,
+ 1 AS `Tarefa`,
+ 1 AS `Repetida`,
+ 1 AS `Tempo_Total_Min`,
+ 1 AS `Media_Min`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Final view structure for view `v_tempo_medio`
+--
+
+/*!50001 DROP VIEW IF EXISTS `v_tempo_medio`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `v_tempo_medio` AS select `v_tempo_tarefa`.`id_usuario` AS `id_usuario`,avg(`v_tempo_tarefa`.`Tempo_Total`) AS `Tempo_Medio` from `v_tempo_tarefa` group by `v_tempo_tarefa`.`id_usuario` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `v_tempo_tarefa`
+--
+
+/*!50001 DROP VIEW IF EXISTS `v_tempo_tarefa`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `v_tempo_tarefa` AS select `t`.`id_usuario` AS `id_usuario`,`t`.`nm_tarefa` AS `Tarefa`,coalesce(sum(timestampdiff(MINUTE,(select `a2`.`dt_registro_acao` from `t_acao` `a2` where `a2`.`id_tarefa` = `a`.`id_tarefa` and `a2`.`tp_acao` = 'Iniciada' and `a2`.`dt_registro_acao` < `a`.`dt_registro_acao` order by `a2`.`dt_registro_acao` desc limit 1),`a`.`dt_registro_acao`)),0) AS `Tempo_Total` from (`t_acao` `a` join `t_tarefa` `t` on(`a`.`id_tarefa` = `t`.`id_tarefa`)) where `a`.`tp_acao` = 'Finalizada' group by `t`.`id_usuario`,`t`.`id_tarefa`,`t`.`nm_tarefa` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `v_tempo_total`
+--
+
+/*!50001 DROP VIEW IF EXISTS `v_tempo_total`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `v_tempo_total` AS select `t`.`id_usuario` AS `id_usuario`,coalesce(sum(timestampdiff(MINUTE,(select `a2`.`dt_registro_acao` from `t_acao` `a2` where `a2`.`id_tarefa` = `a`.`id_tarefa` and `a2`.`tp_acao` = 'Iniciada' and `a2`.`dt_registro_acao` < `a`.`dt_registro_acao` order by `a2`.`dt_registro_acao` desc limit 1),`a`.`dt_registro_acao`)),0) AS `Tempo_Total` from (`t_acao` `a` join `t_tarefa` `t` on(`a`.`id_tarefa` = `t`.`id_tarefa`)) where `a`.`tp_acao` = 'Finalizada' group by `t`.`id_usuario` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `v_visao_historico`
+--
+
+/*!50001 DROP VIEW IF EXISTS `v_visao_historico`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `v_visao_historico` AS select `t`.`id_usuario` AS `id_usuario`,`tp`.`nm_topico` AS `F_Topico`,`t`.`nm_tarefa` AS `Tarefa`,count(`a`.`id_acao`) AS `Repetida`,coalesce(sum(timestampdiff(MINUTE,(select `a2`.`dt_registro_acao` from `t_acao` `a2` where `a2`.`id_tarefa` = `a`.`id_tarefa` and `a2`.`tp_acao` = 'Iniciada' and `a2`.`dt_registro_acao` < `a`.`dt_registro_acao` order by `a2`.`dt_registro_acao` desc limit 1),`a`.`dt_registro_acao`)),0) AS `Tempo_Total_Min`,coalesce(avg(timestampdiff(MINUTE,(select `a2`.`dt_registro_acao` from `t_acao` `a2` where `a2`.`id_tarefa` = `a`.`id_tarefa` and `a2`.`tp_acao` = 'Iniciada' and `a2`.`dt_registro_acao` < `a`.`dt_registro_acao` order by `a2`.`dt_registro_acao` desc limit 1),`a`.`dt_registro_acao`)),0) AS `Media_Min` from ((`t_acao` `a` join `t_tarefa` `t` on(`a`.`id_tarefa` = `t`.`id_tarefa`)) join `t_topico` `tp` on(`t`.`id_topico` = `tp`.`id_topico`)) where `a`.`tp_acao` = 'Finalizada' group by `t`.`id_usuario`,`t`.`id_tarefa`,`tp`.`nm_topico`,`t`.`nm_tarefa` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -166,4 +295,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-21  5:45:56
+-- Dump completed on 2026-07-03 16:54:50
