@@ -27,7 +27,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace pref="86" max="32767" attributes="0"/>
+              <EmptySpace pref="94" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
@@ -36,10 +36,10 @@
                           <Component id="lblSeuEmail" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="txtNovaSenha" min="-2" pref="195" max="-2" attributes="0"/>
-                          <Component id="txtSeuEmail" min="-2" pref="195" max="-2" attributes="0"/>
-                          <Component id="txtSenhaRepetida" min="-2" pref="195" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="txtSeuEmail" pref="195" max="32767" attributes="0"/>
+                          <Component id="txtNovaSenha" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtSenhaRepetida" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="150" max="-2" attributes="0"/>
                   </Group>
@@ -88,7 +88,7 @@
               <Component id="btnAlterarSenha" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
               <Component id="btnVoltar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="81" max="32767" attributes="0"/>
+              <EmptySpace pref="117" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -116,11 +116,6 @@
           <Font name="Tahoma" size="14" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Nova Senha:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtNovaSenha">
-      <Properties>
-        <Property name="toolTipText" type="java.lang.String" value="Digite sua nova senha"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnAlterarSenha">
@@ -151,14 +146,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVoltarActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtSenhaRepetida">
-      <Properties>
-        <Property name="toolTipText" type="java.lang.String" value="Confirme sua senha"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtSenhaRepetidaActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JLabel" name="lblSenhaRepetida">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -185,6 +172,13 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Voc&#xea; n&#xe3;o lembra a senha?"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="txtNovaSenha">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNovaSenhaActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="txtSenhaRepetida">
     </Component>
   </SubComponents>
 </Form>

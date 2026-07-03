@@ -27,25 +27,26 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="lblNome" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="137" max="32767" attributes="0"/>
+                      <EmptySpace pref="136" max="32767" attributes="0"/>
                       <Component id="lblValor" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="79" max="-2" attributes="0"/>
                   </Group>
               </Group>
+              <Component id="lblCronometro" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
                       <Component id="btnAlterar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Component id="btnExcluir" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="lblCronometro" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
                       <Component id="btnIniciar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="btnFinalizar" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -60,6 +61,7 @@
                       <Component id="lblCronometro" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lblNome" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lblValor" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnFinalizar" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -125,6 +127,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Valor da Tarefa"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnFinalizar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Finalizar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFinalizarActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

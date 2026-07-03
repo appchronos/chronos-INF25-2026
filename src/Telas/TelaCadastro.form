@@ -33,48 +33,41 @@
               <EmptySpace max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="175" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="130" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="lblUsuario2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblUsuario1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblLogin" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblBemVindo" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblLogin2" alignment="1" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                                      <Component id="txtNome" min="-2" pref="196" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                      <Component id="txtDataNasc" min="-2" pref="114" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <Group type="102" attributes="0">
+                      <Component id="btnVoltar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="353" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="lblSenha" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblUsuario" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblSenha1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblUsuario2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblUsuario1" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="txtEmail" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="txtSenha2" alignment="0" pref="195" max="32767" attributes="0"/>
-                                  <Component id="txtSenha1" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="lblLogin" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblBemVindo" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblLogin2" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
+                              <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="229" pref="229" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="btnVoltar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="353" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="txtSenha1" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtSenha2" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtNome" min="-2" pref="239" max="-2" attributes="0"/>
+                          <Component id="dataSelecionada" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtEmail" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="194" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -89,15 +82,15 @@
               <Component id="lblLogin" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="lblBemVindo" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="36" max="32767" attributes="0"/>
+              <EmptySpace pref="64" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblUsuario1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtNome" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblUsuario2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtDataNasc" alignment="3" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="dataSelecionada" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblUsuario2" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -118,7 +111,7 @@
               <Component id="btncadastro" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnVoltar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="162" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="164" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -172,8 +165,6 @@
         <Property name="text" type="java.lang.String" value="Senha:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtSenha1">
-    </Component>
     <Component class="javax.swing.JButton" name="btncadastro">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -200,11 +191,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVoltarActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtSenha2">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtSenha2ActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblSenha1">
@@ -236,7 +222,14 @@
         <Property name="text" type="java.lang.String" value="Data de Nascimento:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtDataNasc">
+    <Component class="javax.swing.JPasswordField" name="txtSenha1">
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="txtSenha2">
+    </Component>
+    <Component class="com.toedter.calendar.JDateChooser" name="dataSelecionada">
+      <Properties>
+        <Property name="doubleBuffered" type="boolean" value="false"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

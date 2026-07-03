@@ -6,6 +6,7 @@ import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
 import java.awt.HeadlessException;
+import java.text.SimpleDateFormat;
 
 public class TelaCadastro extends javax.swing.JFrame {
     Connection conexao = null;  
@@ -13,73 +14,82 @@ public class TelaCadastro extends javax.swing.JFrame {
     ResultSet rs = null; 
 
     public void fazLimpar() {
-        txtNome.setText(""); 
-        txtDataNasc.setText("");
+        txtNome.setText("");
+        dataSelecionada.setDate(null);
         txtEmail.setText("");
         txtSenha1.setText("");
         txtSenha2.setText("");
-        txtNome.requestFocus();    
+        txtNome.requestFocus();
     }
     
     public void cadastro() {
-        String txtNomeTela = txtNome.getText();
-        int idPermissao = 2; 
+        String txtNomeTela = txtNome.getText().trim();
+        String txtEmailTela = txtEmail.getText().trim();
+        int idPermissao = 2;
         String dataFormatada = "";
+        if (dataSelecionada.getDate() != null) {
+            java.util.Date dataSelecionadaDoc = dataSelecionada.getDate();
+            SimpleDateFormat formatoSaida = new SimpleDateFormat("yyyy-MM-dd");
+            dataFormatada = formatoSaida.format(dataSelecionadaDoc);
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, selecione sua Data de Nascimento!");
+            return;
+        }
+        if (txtNomeTela.isEmpty() || txtEmailTela.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campos inválidos/não preenchidos na Tela!!!");
+            return;
+        }
+        String senha1 = new String(txtSenha1.getPassword());
+        String senha2 = new String(txtSenha2.getPassword());
+        if (senha1.isEmpty() || senha2.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos de senha!");
+            return;
+        }
+        if (!senha1.equals(senha2)) {
+            JOptionPane.showMessageDialog(null, "ERRO: As senhas digitadas não são iguais! Favor verificar.");
+            return;
+        }
+        String sql = "INSERT INTO T_USUARIO(nm_usuario, dt_nascimento, ds_email, ds_senha, id_permissao) values(?, ?, ?, ?, ?)";
         try {
-            String dataDigitada = txtDataNasc.getText(); 
-            java.text.SimpleDateFormat formatoEntrada = new java.text.SimpleDateFormat("dd/MM/yyyy");
-            java.text.SimpleDateFormat formatoSaida = new java.text.SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date data = formatoEntrada.parse(dataDigitada);
-            dataFormatada = formatoSaida.format(data);
-        } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Formato de data inválido! Use DD/MM/AAAA");
-            return; 
-        }      
-            if  (txtNomeTela.isEmpty()) {          
-                JOptionPane.showMessageDialog(null," Campos inválidos/não preenchidos na Tela!!!");
-            }else {            
-                String sql = "insert INTO T_USUARIO(nm_usuario, dt_nascimento, ds_email, ds_senha, id_permissao) values(?, ?, ?, ?, ?)";
-         
-                try {                
-                    pst = conexao.prepareStatement(sql);
-
-        pst.setString(1, txtNome.getText());       
-        pst.setString(2, dataFormatada);         
-        pst.setString(3, txtEmail.getText());      
-            String senha1 = txtSenha1.getText();
-            String senha2 = txtSenha2.getText();
-
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtNomeTela);
+            pst.setString(2, dataFormatada);
+            pst.setString(3, txtEmailTela);
+            pst.setString(4, senha1);
             String chaveAdmin = JOptionPane.showInputDialog(null, "Se você for Administrador, digite a Chave de Ativação (ou deixe em branco para Usuário Comum):", "Validação de Administrador", JOptionPane.QUESTION_MESSAGE);
-
-            if (chaveAdmin != null && chaveAdmin.equals("adm123")) { 
-                pst.setInt(5, idPermissao = 1);
+            if (chaveAdmin != null && chaveAdmin.equals("adm123")) {
+                idPermissao = 1;
                 JOptionPane.showMessageDialog(null, "Acesso de Administrador confirmado!");
-            }else{
-                pst.setInt(5, idPermissao = 2);
+            } else {
+                idPermissao = 2;
             }
-            if (senha1.isEmpty() || senha2.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos de senha!");
-            }else if (senha1.equals(senha2)) {
-                    pst.setString(4, senha1);
+            pst.setInt(5, idPermissao);
             int fgInsOK = pst.executeUpdate();
             if (fgInsOK > 0) {
-                JOptionPane.showMessageDialog(null, "Registro incluído com sucesso!!!");
-                    fazLimpar();
-                    new TelaLogin().setVisible(true);
-            this.dispose();
+                JOptionPane.showMessageDialog(this, "Registro incluído com sucesso!!!");
+                fazLimpar();
+                TelaLogin tlLogin = new TelaLogin();
+                tlLogin.setVisible(true);
+                dispose();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao salvar no banco: " + e.getMessage());
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println("Erro ao fechar statement: " + ex.getMessage());
+            }
         }
-    } 
-            else {
-                JOptionPane.showMessageDialog(null, "ERRO: As senhas digitadas não são iguais! Favor verificar.");
     }
-                } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Erro real: " + e.getMessage());
-    }        
-            }           
-        }
     
     public TelaCadastro() {
         initComponents();
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.set(2000, java.util.Calendar.JANUARY, 1);
+        dataSelecionada.setCalendar(cal);
         conexao = ModuloDbConecta.connector();
     }
 
@@ -93,15 +103,15 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblUsuario = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         lblSenha = new javax.swing.JLabel();
-        txtSenha1 = new javax.swing.JTextField();
         btncadastro = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
-        txtSenha2 = new javax.swing.JTextField();
         lblSenha1 = new javax.swing.JLabel();
         lblUsuario1 = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
         lblUsuario2 = new javax.swing.JLabel();
-        txtDataNasc = new javax.swing.JTextField();
+        txtSenha1 = new javax.swing.JPasswordField();
+        txtSenha2 = new javax.swing.JPasswordField();
+        dataSelecionada = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tela Cadastro");
@@ -142,12 +152,6 @@ public class TelaCadastro extends javax.swing.JFrame {
             }
         });
 
-        txtSenha2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSenha2ActionPerformed(evt);
-            }
-        });
-
         lblSenha1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha1.setText("Repitir Senha:");
 
@@ -163,6 +167,8 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblUsuario2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblUsuario2.setText("Data de Nascimento:");
 
+        dataSelecionada.setDoubleBuffered(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -172,38 +178,34 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addComponent(btncadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(175, Short.MAX_VALUE)
+                .addGap(130, 130, 130)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblUsuario2)
-                                    .addComponent(lblUsuario1)
-                                    .addComponent(lblLogin)
-                                    .addComponent(lblBemVindo)
-                                    .addComponent(lblLogin2))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(25, 25, 25)
-                                        .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(26, 26, 26)
-                                        .addComponent(txtDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnVoltar)
+                        .addGap(353, 353, 353))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(lblSenha)
                                     .addComponent(lblUsuario)
-                                    .addComponent(lblSenha1))
-                                .addGap(26, 26, 26)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtEmail)
-                                    .addComponent(txtSenha2, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
-                                    .addComponent(txtSenha1))))
-                        .addGap(229, 229, 229))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnVoltar)
-                        .addGap(353, 353, 353))))
+                                    .addComponent(lblSenha1)
+                                    .addComponent(lblUsuario2)
+                                    .addComponent(lblUsuario1))
+                                .addGap(26, 26, 26))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblLogin)
+                                    .addComponent(lblBemVindo)
+                                    .addComponent(lblLogin2))
+                                .addGap(70, 70, 70)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtSenha1)
+                            .addComponent(txtSenha2)
+                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dataSelecionada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtEmail))
+                        .addGap(194, 194, 194))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,14 +216,14 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addComponent(lblLogin)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblBemVindo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsuario1)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblUsuario2)
-                    .addComponent(txtDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dataSelecionada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblUsuario2))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsuario)
@@ -238,7 +240,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addComponent(btncadastro)
                 .addGap(18, 18, 18)
                 .addComponent(btnVoltar)
-                .addGap(162, 162, 162))
+                .addGap(164, 164, 164))
         );
 
         setSize(new java.awt.Dimension(821, 718));
@@ -253,12 +255,9 @@ public class TelaCadastro extends javax.swing.JFrame {
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         // TODO add your handling code here:
         TelaLogin tlLogin = new TelaLogin();
-        tlLogin.setVisible(true);   
+        tlLogin.setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
-
-    private void txtSenha2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenha2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSenha2ActionPerformed
 
     private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
         // TODO add your handling code here:
@@ -276,6 +275,7 @@ public class TelaCadastro extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVoltar;
     private javax.swing.JButton btncadastro;
+    private com.toedter.calendar.JDateChooser dataSelecionada;
     private javax.swing.JLabel lblBemVindo;
     private javax.swing.JLabel lblLogin;
     private javax.swing.JLabel lblLogin2;
@@ -284,10 +284,9 @@ public class TelaCadastro extends javax.swing.JFrame {
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JLabel lblUsuario1;
     private javax.swing.JLabel lblUsuario2;
-    private javax.swing.JTextField txtDataNasc;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtNome;
-    private javax.swing.JTextField txtSenha1;
-    private javax.swing.JTextField txtSenha2;
+    private javax.swing.JPasswordField txtSenha1;
+    private javax.swing.JPasswordField txtSenha2;
     // End of variables declaration//GEN-END:variables
 }
