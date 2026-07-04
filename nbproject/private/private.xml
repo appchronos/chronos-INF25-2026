@@ -4,16 +4,18 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Telas/CardTarefa.java</file>
+            <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Telas/TelaVisaoGeral.java</file>
+            <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Telas/TelaTarefa.java</file>
+            <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Telas/TelaEsqueceuSenha.java</file>
+            <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Modelos/SessaoUsuario.java</file>
+            <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Telas/TelaLogin.java</file>
             <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Telas/TelaCadastro.java</file>
             <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Modelos/GerenciadorLocal.java</file>
             <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Telas/TelaAdicionarTarefa.java</file>
             <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Modelos/ComponenteBarraGrafico.java</file>
             <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Telas/TelaUsuario.java</file>
-            <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Telas/TelaEsqueceuSenha.java</file>
             <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Modelos/Topico.java</file>
             <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/AcessoDB/ModuloDbConecta.java</file>
-            <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Modelos/SessaoUsuario.java</file>
-            <file>file:/C:/Users/goget/Documents/chronos-INF25-2026-main/src/Telas/TelaLogin.java</file>
         </group>
     </open-files>
 </project-private>
