@@ -26,9 +26,7 @@ public class Topico {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
-    // O JComboBox usa o método toString() para saber o que vai desenhar na tela.
-    // Sobrescrevendo ele, o combo vai mostrar o texto do nome do tópico!
+    
     @Override
     public String toString() {
         return this.nome; 
