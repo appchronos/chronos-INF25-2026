@@ -8,13 +8,18 @@ import javax.swing.JOptionPane;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Component;
 
+
 public class TelaTarefa extends javax.swing.JFrame {
+
     private Connection conexao = null;
+    
     private int idTopicoAtual = 1;
     
-    private void tutorial() {      
+    private void tutorial() {
+        
         TelaAdicionarTarefa telaCadastroAberta = null;
         TelaVisaoGeral telaVisaoGeralAberta = null;
+
         for (javax.swing.JInternalFrame frame : desktopPane.getAllFrames()) {
             if (frame.isVisible()) {
                 if (frame instanceof TelaAdicionarTarefa) {
@@ -26,19 +31,23 @@ public class TelaTarefa extends javax.swing.JFrame {
                 }
             }
         }
+
         if (telaCadastroAberta != null) {
             telaCadastroAberta.exibirTutorialTela();
         } else if (telaVisaoGeralAberta != null) {
             telaVisaoGeralAberta.exibirTutorialTela();
         } else {
             boolean possuiTarefas = false;
+
             for (java.awt.Component comp : pnlListaTarefas.getComponents()) {
-                if (comp instanceof CardTarefa) { // Assumindo que o nome da sua classe de card é CardTarefa
+                if (comp instanceof CardTarefa) { 
                     possuiTarefas = true;
                     break;
                 }
             }
+
             String textoTutorial = "<html><body style='width: 360px; font-family: Segoe UI, sans-serif;'>";
+
             if (possuiTarefas) {
                 textoTutorial += "<h2 style='color: #107C41; margin-bottom: 5px;'>Guia de Gerenciamento de Tarefas</h2>"
                         + "<p>Muito bem! Você já tem tarefas listadas. Veja como interagir com elas:</p>"
@@ -60,18 +69,22 @@ public class TelaTarefa extends javax.swing.JFrame {
                         + "<li><b>Atalho Útil:</b> Pressione <b>Ctrl + T</b> em qualquer janela para ver a ajuda correspondente!</li>"
                         + "</ol>";
             }
+
             textoTutorial += "</body></html>";
+
             JOptionPane.showMessageDialog(this, textoTutorial, "Tutorial do Usuário", JOptionPane.INFORMATION_MESSAGE);
         }
     }
     
      public void carregarTarefasDoBanco(int idTopico) {
         this.idTopicoAtual = idTopico;
+
         for (Component comp : pnlListaTarefas.getComponents()) {
             comp.setVisible(false);
         }
         pnlListaTarefas.removeAll();
         pnlListaTarefas.revalidate(); 
+
         try {
             if (conexao == null || conexao.isClosed()) {
                 conexao = ModuloDbConecta.connector();
@@ -79,12 +92,15 @@ public class TelaTarefa extends javax.swing.JFrame {
         } catch (SQLException ex) {
             System.out.println("Erro ao checar conexão: " + ex.getMessage());
         }
+
         String sql = "SELECT * FROM t_tarefa WHERE id_usuario = ? AND id_topico = ?";
+
         try {
             PreparedStatement pstLocal = conexao.prepareStatement(sql);
             pstLocal.setInt(1, SessaoUsuario.getInstance().getIdUsuario());
             pstLocal.setInt(2, idTopico);
             boolean encontrouTarefas = false;
+
             ResultSet rsLocal = pstLocal.executeQuery();
             while (rsLocal.next()) {
                 encontrouTarefas = true;
@@ -92,16 +108,19 @@ public class TelaTarefa extends javax.swing.JFrame {
                 String nome = rsLocal.getString("nm_tarefa");
                 String desc = rsLocal.getString("ds_tarefa");
                 double valor = rsLocal.getDouble("vl_tarefa");
+
                 CardTarefa card = new CardTarefa(this.getConexao(), id);
                 card.setExibirDados(nome, desc, valor);
+
                 card.setOnTarefaIniciadaListener(new CardTarefa.OnTarefaIniciadaListener() {
                     @Override
-                    
                     public void onTarefaIniciada(CardTarefa cardIniciado) {
+
                         pnlListaTarefas.remove(cardIniciado);
                         pnlListaTarefas.add(cardIniciado, 0);
                         pnlListaTarefas.revalidate();
                         pnlListaTarefas.repaint();
+
                         for (javax.swing.JInternalFrame frame : desktopPane.getAllFrames()) {
                             if (frame instanceof TelaVisaoGeral && frame.isVisible()) {
                                 ((TelaVisaoGeral) frame).atualizarDashboard();
@@ -113,8 +132,10 @@ public class TelaTarefa extends javax.swing.JFrame {
                 card.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, card.getPreferredSize().height));
                 pnlListaTarefas.add(card);
             }
+
             rsLocal.close();
             pstLocal.close();
+
             if (!encontrouTarefas) {
                 javax.swing.JLabel lblAvisoVazio = new javax.swing.JLabel("Você não tem tarefas aqui. Clique em 'Criar Tarefa' para começar!");
                 lblAvisoVazio.setFont(new java.awt.Font("Segoe UI", java.awt.Font.ITALIC, 14));
@@ -125,10 +146,12 @@ public class TelaTarefa extends javax.swing.JFrame {
             } else {
                 pnlListaTarefas.add(javax.swing.Box.createVerticalGlue());
             }
+
             pnlListaTarefas.revalidate();
             pnlListaTarefas.repaint();
             scrollPainelCards.revalidate();
             scrollPainelCards.repaint();
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar tarefas do tópico: " + e.getMessage());
         }
@@ -152,11 +175,15 @@ public class TelaTarefa extends javax.swing.JFrame {
 
     public TelaTarefa() {
         initComponents();
+
         lblMensagem.setText("Dica: Use Ctrl + T para abrir o tutorial desta lista. Ele muda quando você tem tarefas criadas!");
+        
         if (SessaoUsuario.getInstance().getNomeUsuario() != null) {
             nomeUsuario.setText(SessaoUsuario.getInstance().getNomeUsuario());
         }
+        
         conexao = ModuloDbConecta.connector();
+            
         carregarTarefasDoBanco(idTopicoAtual);
     }
 
@@ -460,10 +487,8 @@ public class TelaTarefa extends javax.swing.JFrame {
 
     private void mnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnSairActionPerformed
         // TODO add your handling code here:
-                // Verificar se realmente deseja sair e Encerrar o sistema.
         int sairOK = JOptionPane.showConfirmDialog(null,"Você deseja realmente Sair?","ATENÇÂO !!!",JOptionPane.YES_NO_OPTION);
         if (sairOK == JOptionPane.YES_OPTION) {
-            // Se sair for YES
             System.exit(0);
         }
     }//GEN-LAST:event_mnSairActionPerformed
@@ -474,7 +499,6 @@ public class TelaTarefa extends javax.swing.JFrame {
 
     private void mnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnUsuarioActionPerformed
         // TODO add your handling code here:
-        // CORREÇÃO: Garante o foco se já estiver aberta (ajuste caso TelaUsuario mude no futuro)
         TelaUsuario tlUsuario = new TelaUsuario();
         tlUsuario.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE); // Garante que não fecha o app todo ao fechar essa tela
         tlUsuario.setLocationRelativeTo(this); // Centraliza em relação à tela principal
@@ -493,7 +517,6 @@ public class TelaTarefa extends javax.swing.JFrame {
         }
 
         if (telaCadastro == null) {
-            // Envia o "this" permitindo que a tela filha use o método getConexao()
             telaCadastro = new TelaAdicionarTarefa(this);
             desktopPane.add(telaCadastro);
         }
@@ -559,7 +582,6 @@ public class TelaTarefa extends javax.swing.JFrame {
 
     private void mnIndicadorVGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnIndicadorVGActionPerformed
         // TODO add your handling code here:
-        // CORREÇÃO: Procura se a TelaVisaoGeral já está aberta dentro do desktopPane
         TelaVisaoGeral tlVisao = null;
 
         for (javax.swing.JInternalFrame frame : desktopPane.getAllFrames()) {
@@ -569,26 +591,23 @@ public class TelaTarefa extends javax.swing.JFrame {
             }
         }
 
-        // Se não estiver aberta, cria a instância e adiciona ao painel interno
         if (tlVisao == null) {
             tlVisao = new TelaVisaoGeral();
             desktopPane.add(tlVisao);
 
-            // Centraliza o JInternalFrame dentro do desktopPane dinamicamente
             int x = (desktopPane.getWidth() - tlVisao.getWidth()) / 2;
             int y = (desktopPane.getHeight() - tlVisao.getHeight()) / 2;
             tlVisao.setLocation(x, y);
         }
 
-        tlVisao.atualizarDashboard(); // Dispara o carregamento atualizado dos dados
+        tlVisao.atualizarDashboard(); 
         tlVisao.setVisible(true);
 
         try {
-            tlVisao.setSelected(true); // Traz a janela para a frente com foco
+            tlVisao.setSelected(true); 
         } catch (java.beans.PropertyVetoException e) {
             e.printStackTrace();
         }
-  
     }//GEN-LAST:event_mnIndicadorVGActionPerformed
 
     public static void main(String args[]) {

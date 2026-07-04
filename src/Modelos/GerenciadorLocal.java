@@ -6,9 +6,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class GerenciadorLocal {
+
     private static final Set<Integer> tarefasConcluidasLocalmente = Collections.synchronizedSet(new HashSet<>());
+
     private static String ultimoUsuarioLogado = "";
-    
+
     public static void marcarComoConcluida(int idTarefa) {
         tarefasConcluidasLocalmente.add(idTarefa);
     }
@@ -32,6 +34,7 @@ public class GerenciadorLocal {
             limparCache();
             return;
         }
+
         if (!usuarioAtual.equals(ultimoUsuarioLogado)) {
             tarefasConcluidasLocalmente.clear();
             ultimoUsuarioLogado = usuarioAtual;

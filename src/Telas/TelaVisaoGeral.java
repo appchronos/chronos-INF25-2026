@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 public class TelaVisaoGeral extends javax.swing.JInternalFrame {
 
     public void atualizarDashboard() {
+        
         int idUsuario = SessaoUsuario.getInstance().getIdUsuario();
         carregarTempoTotal(idUsuario);
         carregarTarefaRecordista(idUsuario);
@@ -38,6 +39,7 @@ public class TelaVisaoGeral extends javax.swing.JInternalFrame {
     
     private void carregarTempoMedio(int idUsuario) {
         String sql = "SELECT Tempo_Medio FROM v_tempo_medio WHERE id_usuario = ?";
+
         try (Connection conexao = ModuloDbConecta.connector(); PreparedStatement pst = conexao.prepareStatement(sql)) {
             pst.setInt(1, idUsuario);
             try (ResultSet rs = pst.executeQuery()) {
@@ -58,6 +60,7 @@ public class TelaVisaoGeral extends javax.swing.JInternalFrame {
     
     private void carregarTempoTotal(int idUsuario) {
         String sql = "SELECT Tempo_Total FROM v_tempo_total WHERE id_usuario = ?";
+
         try (Connection conexao = ModuloDbConecta.connector(); PreparedStatement pst = conexao.prepareStatement(sql)) {
             pst.setInt(1, idUsuario);
             try (ResultSet rs = pst.executeQuery()) {
@@ -75,6 +78,7 @@ public class TelaVisaoGeral extends javax.swing.JInternalFrame {
     
     private void carregarTarefaRecordista(int idUsuario) {
         String sql = "SELECT Tarefa FROM v_tempo_tarefa WHERE id_usuario = ? ORDER BY Tempo_Total DESC LIMIT 1";
+
         try (Connection conexao = ModuloDbConecta.connector(); PreparedStatement pst = conexao.prepareStatement(sql)) {
             pst.setInt(1, idUsuario);
             try (ResultSet rs = pst.executeQuery()) {
@@ -92,7 +96,9 @@ public class TelaVisaoGeral extends javax.swing.JInternalFrame {
     private void carregarTabelaHistorico(int idUsuario) {
         DefaultTableModel modelo = (DefaultTableModel) tblHistorico.getModel();
         modelo.setRowCount(0);
+
         String sql = "SELECT F_Topico, Tarefa, Repetida, Tempo_Total_Min, Media_Min FROM v_visao_historico WHERE id_usuario = ? ORDER BY F_Topico ASC, Tarefa ASC";
+
         try (Connection conexao = ModuloDbConecta.connector(); PreparedStatement pst = conexao.prepareStatement(sql)) {
             pst.setInt(1, idUsuario);
             try (ResultSet rs = pst.executeQuery()) {
@@ -102,6 +108,7 @@ public class TelaVisaoGeral extends javax.swing.JInternalFrame {
                     int rep = rs.getInt("Repetida");
                     int tempoMin = rs.getInt("Tempo_Total_Min");
                     double media = rs.getDouble("Media_Min");
+
                     String tempoFormatado = String.format("%dh %02dm", tempoMin / 60, tempoMin % 60);
                     modelo.addRow(new Object[]{top, tar, rep, tempoFormatado, String.format("%.1f min", media)});
                 }
@@ -113,12 +120,16 @@ public class TelaVisaoGeral extends javax.swing.JInternalFrame {
     
     private void carregarGrafico(int idUsuario) {
         pnlGrafico.removeAll();
+
         String sql = "SELECT Tarefa, Tempo_Total FROM v_tempo_tarefa WHERE id_usuario = ? ORDER BY Tempo_Total DESC LIMIT 5";
+
         try (Connection conexao = ModuloDbConecta.connector(); PreparedStatement pst = conexao.prepareStatement(sql)) {
             pst.setInt(1, idUsuario);
             try (ResultSet rs = pst.executeQuery()) {
+
                 java.util.List<Object[]> dadosGrafico = new java.util.ArrayList<>();
                 int tempoMaximo = 0;
+
                 while (rs.next()) {
                     String nome = rs.getString("Tarefa");
                     int tempo = rs.getInt("Tempo_Total");
@@ -127,31 +138,39 @@ public class TelaVisaoGeral extends javax.swing.JInternalFrame {
                     }
                     dadosGrafico.add(new Object[]{nome, tempo});
                 }
+
                 for (Object[] dado : dadosGrafico) {
                     String nome = (String) dado[0];
                     int tempo = (int) dado[1];
                     double proporcao = tempoMaximo > 0 ? (double) tempo / tempoMaximo : 0;
+
                     Modelos.ComponenteBarraGrafico barra = new Modelos.ComponenteBarraGrafico(nome, tempo, proporcao);
                     pnlGrafico.add(barra);
                 }
             }
+
             pnlGrafico.revalidate();
             pnlGrafico.repaint();
             this.getContentPane().revalidate();
             this.getContentPane().repaint();
+
         } catch (Exception e) {
             System.err.println("Erro ao carregar gráfico: " + e.getMessage());
         }
     }
+
     
     public TelaVisaoGeral() {
         initComponents();
         lblMensagem.setText("Dica: Pressione Ctrl + T para entender como os gráficos e o Tempo Médio são calculados.");
+    
         pnlGrafico.setMinimumSize(new java.awt.Dimension(275, 250));
         pnlGrafico.setPreferredSize(new java.awt.Dimension(275, 350));
+
         this.pack();
         this.revalidate();
         this.repaint();
+
         atualizarDashboard();
     }
     

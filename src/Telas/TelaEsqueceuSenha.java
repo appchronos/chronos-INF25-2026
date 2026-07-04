@@ -2,7 +2,6 @@
 package Telas;
 
 import javax.swing.JOptionPane;
-
 import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
@@ -20,7 +19,9 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
     }
     
     public void fazAlterar(){
+ 
         String txtDescPerTela = txtSeuEmail.getText();
+
         if  (txtDescPerTela.isEmpty()) {
             JOptionPane.showMessageDialog(null," Campos inválidos/não preenchidos na Tela!!!");
         }else {
@@ -31,33 +32,39 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
                     String senha2 = txtSenhaRepetida.getText();
                 if (senha1.isEmpty() || senha2.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos de senha!");
+
                 }
                 if (senha1.equals(senha2)) {
                 pst.setString(1, senha1);
                 }else{
                     JOptionPane.showMessageDialog(null, "ERRO: As senhas digitadas não são iguais! Favor verificar.");
                     return;
-                }  
+                }
+                
                 pst.setString(2,txtSeuEmail.getText());
-                int fgAltOK = pst.executeUpdate();
-                if ( fgAltOK > 0 ) {
+                int fgAltOK = pst.executeUpdate();  
+                
+                if ( fgAltOK > 0 ) { 
                     JOptionPane.showMessageDialog(this, "\"Senha alterada com sucesso!!!\"");
                     TelaLogin tlLogin = new TelaLogin();
                     tlLogin.setVisible(true);
                     dispose();
-                }                      
+                }
+                        
                 else{
                     JOptionPane.showMessageDialog(null," ERRO na alteração, favor verificar email!!!!");   
                 }
+
             } catch ( Exception varERRO ) { 
                 JOptionPane.showMessageDialog(null," Erro na Alteração Tabela - t_usuario!");
-                System.out.println("O ERRO é: " + varERRO.toString()); 
+                System.out.println("O ERRO é: " + varERRO.toString());  
         }
     }    
         
 }
     public TelaEsqueceuSenha() {
         initComponents();
+        
         conexao = ModuloDbConecta.connector();  
     }
     
@@ -132,7 +139,7 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(94, Short.MAX_VALUE)
+                .addContainerGap(198, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -141,49 +148,50 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
                             .addComponent(lblSeuEmail))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtSeuEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+                            .addComponent(txtSeuEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                             .addComponent(txtNovaSenha)
                             .addComponent(txtSenhaRepetida))
-                        .addGap(150, 150, 150))
+                        .addGap(218, 218, 218))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblEsqueceuSenha)
-                            .addComponent(lblLogin2))
-                        .addGap(362, 362, 362))
+                        .addComponent(lblLogin2)
+                        .addGap(304, 304, 304))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnAlterarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(217, 217, 217))
+                        .addGap(310, 310, 310))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnVoltar)
-                        .addGap(265, 265, 265))))
+                        .addGap(365, 365, 365))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblEsqueceuSenha)
+                        .addGap(274, 274, 274))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(80, 80, 80)
                 .addComponent(lblLogin2)
-                .addGap(18, 18, 18)
+                .addGap(35, 35, 35)
                 .addComponent(lblEsqueceuSenha)
-                .addGap(34, 34, 34)
+                .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSeuEmail)
                     .addComponent(txtSeuEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
+                .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNovaSenha)
                     .addComponent(txtNovaSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSenhaRepetida)
                     .addComponent(txtSenhaRepetida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addComponent(btnAlterarSenha)
-                .addGap(28, 28, 28)
+                .addGap(37, 37, 37)
+                .addComponent(btnAlterarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
                 .addComponent(btnVoltar)
-                .addContainerGap(117, Short.MAX_VALUE))
+                .addContainerGap(230, Short.MAX_VALUE))
         );
 
-        setSize(new java.awt.Dimension(701, 471));
+        setSize(new java.awt.Dimension(834, 707));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -207,7 +215,9 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNovaSenhaActionPerformed
 
+    
     public static void main(String args[]) {
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new TelaEsqueceuSenha().setVisible(true);

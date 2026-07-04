@@ -7,23 +7,25 @@ import java.awt.Color;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class CardTarefa extends javax.swing.JPanel {  
+public class CardTarefa extends javax.swing.JPanel {
+    
     private Connection conexao = null; 
     private int segundos = 0, minutos = 0, horas = 0;
     private javax.swing.Timer cronometro;
     private int idTarefa;
     
     public interface OnTarefaIniciadaListener {
+
         void onTarefaIniciada(CardTarefa card);
     }
-    
     private OnTarefaIniciadaListener listener;
-    
+
     public void setOnTarefaIniciadaListener(OnTarefaIniciadaListener listener) {
         this.listener = listener;
     }
     
-    private void verificarEConfigurarEstadoAtual() {   
+    private void verificarEConfigurarEstadoAtual() {
+
         if (Modelos.GerenciadorLocal.tarefaConcluidaLocalmente(this.idTarefa)) {
             chkConcluido.setSelected(true);
             btnIniciar.setEnabled(true);
@@ -31,6 +33,8 @@ public class CardTarefa extends javax.swing.JPanel {
             lblCronometro.setText("00:00:00");
             return;
         }
+
+        // Se não estiver no cache local, busca o estado padrão no banco
         String sql = "SELECT tp_acao, dt_registro_acao FROM t_acao WHERE id_tarefa = ? ORDER BY id_acao DESC LIMIT 1";
         try (PreparedStatement pst = conexao.prepareStatement(sql)) {
             pst.setInt(1, this.idTarefa);
@@ -38,22 +42,28 @@ public class CardTarefa extends javax.swing.JPanel {
                 if (rs.next()) {
                     String ultimaAcao = rs.getString("tp_acao");
                     Timestamp dataRegistro = rs.getTimestamp("dt_registro_acao");
+
                     if ("Iniciada".equals(ultimaAcao) && dataRegistro != null) {
                         java.time.LocalDateTime inicio = dataRegistro.toLocalDateTime();
                         java.time.LocalDateTime agora = java.time.LocalDateTime.now();
                         java.time.Duration diferenca = java.time.Duration.between(inicio, agora);
+
                         long totalSegundos = diferenca.getSeconds();
                         if (totalSegundos < 0) {
                             totalSegundos = 0;
                         }
+
                         this.horas = (int) (totalSegundos / 3600);
                         this.minutos = (int) ((totalSegundos % 3600) / 60);
                         this.segundos = (int) (totalSegundos % 60);
+
                         lblCronometro.setText(String.format("%02d:%02d:%02d", horas, minutos, segundos));
+
                         cronometro.start();
                         btnIniciar.setEnabled(false);
                         btnFinalizar.setEnabled(true);
                         chkConcluido.setSelected(false);
+
                     } else if ("Finalizada".equals(ultimaAcao)) {
                         cronometro.stop();
                         lblCronometro.setText("00:00:00");
@@ -72,16 +82,19 @@ public class CardTarefa extends javax.swing.JPanel {
         }
     } 
     
-    public void IniciarTarefa() {       
+    public void IniciarTarefa() {
         this.segundos = 0;
         this.minutos = 0;
         this.horas = 0;
         lblCronometro.setText("00:00:00");
+
         Modelos.GerenciadorLocal.desmarcarComoConcluida(this.idTarefa);
         chkConcluido.setSelected(false);
         cronometro.start();
+
         btnIniciar.setEnabled(false);
         btnFinalizar.setEnabled(true);
+
         String sql = "INSERT INTO t_acao (id_tarefa, tp_acao, dt_registro_acao) VALUES (?, 'Iniciada', NOW())";
         try (PreparedStatement pst = conexao.prepareStatement(sql)) {
             pst.setInt(1, this.idTarefa);
@@ -89,19 +102,22 @@ public class CardTarefa extends javax.swing.JPanel {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao registrar início no banco: " + e.getMessage());
         }
+
         if (this.listener != null) {
             this.listener.onTarefaIniciada(this);
         }
     }
     
-    public void FinalizarTarefa() {      
+    public void FinalizarTarefa() {
         if (cronometro.isRunning()) {
             cronometro.stop();
         }
+
         Modelos.GerenciadorLocal.marcarComoConcluida(this.idTarefa); 
         chkConcluido.setSelected(true);
         btnIniciar.setEnabled(true);
         btnFinalizar.setEnabled(false);
+
         String sql = "INSERT INTO t_acao (id_tarefa, tp_acao, dt_registro_acao) VALUES (?, 'Finalizada', NOW())";
         try (PreparedStatement pst = conexao.prepareStatement(sql)) {
             pst.setInt(1, this.idTarefa);
@@ -110,15 +126,17 @@ public class CardTarefa extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Erro ao registrar a conclusão no banco: " + e.getMessage());
         }
     }
- 
-    private void TarefaConcluida() {    
+    
+    private void TarefaConcluida() {
         if (chkConcluido.isSelected()) {
+            
             if (cronometro.isRunning()) {
                 cronometro.stop();
             }
             Modelos.GerenciadorLocal.marcarComoConcluida(this.idTarefa);
             btnIniciar.setEnabled(true);
             btnFinalizar.setEnabled(false);
+
             String sql = "INSERT INTO t_acao (id_tarefa, tp_acao, dt_registro_acao) VALUES (?, 'Finalizada', NOW())";
             try (PreparedStatement pst = conexao.prepareStatement(sql)) {
                 pst.setInt(1, this.idTarefa);
@@ -127,6 +145,7 @@ public class CardTarefa extends javax.swing.JPanel {
                 System.out.println("Erro ao registrar conclusão automática: " + e.getMessage());
             }
         } else {
+            
             Modelos.GerenciadorLocal.desmarcarComoConcluida(this.idTarefa);
             lblCronometro.setText("00:00:00");
             this.segundos = 0;
@@ -134,25 +153,31 @@ public class CardTarefa extends javax.swing.JPanel {
             this.horas = 0;
             btnIniciar.setEnabled(true);
             btnFinalizar.setEnabled(false);
+
         }
     }
     
     private void AlterarTarefa() {
         String nomeAtual = lblNome.getText();
         String descAtual = lblDescricao.getText();
+
         String valorTexto = lblValor.getText().replace("R$", "").replace(".", "").replace(",", ".").trim();
+
         String novoNome = JOptionPane.showInputDialog(this, "Digite o novo nome da tarefa:", nomeAtual);
         if (novoNome == null || novoNome.trim().isEmpty()) {
             return;
         }
+
         String novaDescricao = JOptionPane.showInputDialog(this, "Digite a nova descrição (ou deixe vazio):", descAtual);
         if (novaDescricao == null) {
             return;
         }
+
         String novoValorStr = JOptionPane.showInputDialog(this, "Digite o novo valor (ou deixe vazio):", valorTexto);
         if (novoValorStr == null) {
             return;
         }
+
         double novoValor = 0.0;
         try {
             if (!novoValorStr.trim().isEmpty()) {
@@ -162,38 +187,50 @@ public class CardTarefa extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Formato de valor inválido! Use apenas números, ponto ou vírgula.");
             return;
         }
+
         String sql = "UPDATE t_tarefa SET nm_tarefa = ?, ds_tarefa = ?, vl_tarefa = ? WHERE id_tarefa = ?";
+
         try (PreparedStatement pst = conexao.prepareStatement(sql)) {
             pst.setString(1, novoNome);
             pst.setString(2, novaDescricao);
             pst.setDouble(3, novoValor);
             pst.setInt(4, this.idTarefa);
+
             pst.executeUpdate();
+
             lblNome.setText(novoNome);
             lblDescricao.setText(novaDescricao);
             lblValor.setText("R$ " + String.format("%.2f", novoValor));
+
             JOptionPane.showMessageDialog(this, "Tarefa atualizada com sucesso!");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao atualizar a tarefa: " + e.getMessage());
         }
     }
-  
+     
     private void ExcluirTarefa() {                                            
         int resposta = JOptionPane.showConfirmDialog(this, 
-            "Tem certeza que deseja excluir esta tarefa de forma permanente? Está ação vai apagar também o histórioco dessa tarefa em Indicadores", 
+            "Tem certeza que deseja excluir esta tarefa de forma permanente? ATENÇÃO Essa ação vai remover todo o histórico de tempo!", 
             "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
         if (resposta == JOptionPane.YES_OPTION) {
             String sqlAcoes = "DELETE FROM t_acao WHERE id_tarefa = ?";
             String sqlTarefa = "DELETE FROM t_tarefa WHERE id_tarefa = ?";
+
             try {
                 conexao.setAutoCommit(false); 
+
                 try (PreparedStatement stmtAcoes = conexao.prepareStatement(sqlAcoes);
                      PreparedStatement stmtTarefa = conexao.prepareStatement(sqlTarefa)) {
+
                     stmtAcoes.setInt(1, this.idTarefa);
                     stmtAcoes.executeUpdate();
+
                     stmtTarefa.setInt(1, this.idTarefa);
                     stmtTarefa.executeUpdate();
+
                     conexao.commit();
+
                     java.awt.Container painelPai = this.getParent(); 
                     if (painelPai != null) {
                         painelPai.remove(this);     
@@ -209,6 +246,7 @@ public class CardTarefa extends javax.swing.JPanel {
                 } finally {
                     conexao.setAutoCommit(true); 
                 }
+
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Erro ao excluir do banco de dados: " + e.getMessage());
             }
@@ -223,9 +261,12 @@ public class CardTarefa extends javax.swing.JPanel {
     
     public CardTarefa(Connection conexaoPai, int idTarefa) {
         initComponents(); 
+    
         this.conexao = conexaoPai;
         this.idTarefa = idTarefa;
-        chkConcluido.setEnabled(true);  
+    
+        chkConcluido.setEnabled(true); 
+    
         cronometro = new javax.swing.Timer(1000, new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 segundos++;

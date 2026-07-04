@@ -15,7 +15,7 @@ public class TelaCadastro extends javax.swing.JFrame {
 
     public void fazLimpar() {
         txtNome.setText("");
-        dataSelecionada.setDate(null);
+        dataSelecionada.setDate(null); 
         txtEmail.setText("");
         txtSenha1.setText("");
         txtSenha2.setText("");
@@ -26,7 +26,9 @@ public class TelaCadastro extends javax.swing.JFrame {
         String txtNomeTela = txtNome.getText().trim();
         String txtEmailTela = txtEmail.getText().trim();
         int idPermissao = 2;
+
         String dataFormatada = "";
+        
         if (dataSelecionada.getDate() != null) {
             java.util.Date dataSelecionadaDoc = dataSelecionada.getDate();
             SimpleDateFormat formatoSaida = new SimpleDateFormat("yyyy-MM-dd");
@@ -35,28 +37,36 @@ public class TelaCadastro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Por favor, selecione sua Data de Nascimento!");
             return;
         }
+
         if (txtNomeTela.isEmpty() || txtEmailTela.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Campos inválidos/não preenchidos na Tela!!!");
             return;
         }
+
         String senha1 = new String(txtSenha1.getPassword());
         String senha2 = new String(txtSenha2.getPassword());
+
         if (senha1.isEmpty() || senha2.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos de senha!");
             return;
         }
+
         if (!senha1.equals(senha2)) {
             JOptionPane.showMessageDialog(null, "ERRO: As senhas digitadas não são iguais! Favor verificar.");
             return;
         }
+
         String sql = "INSERT INTO T_USUARIO(nm_usuario, dt_nascimento, ds_email, ds_senha, id_permissao) values(?, ?, ?, ?, ?)";
+
         try {
             pst = conexao.prepareStatement(sql);
             pst.setString(1, txtNomeTela);
             pst.setString(2, dataFormatada);
             pst.setString(3, txtEmailTela);
             pst.setString(4, senha1);
+
             String chaveAdmin = JOptionPane.showInputDialog(null, "Se você for Administrador, digite a Chave de Ativação (ou deixe em branco para Usuário Comum):", "Validação de Administrador", JOptionPane.QUESTION_MESSAGE);
+
             if (chaveAdmin != null && chaveAdmin.equals("adm123")) {
                 idPermissao = 1;
                 JOptionPane.showMessageDialog(null, "Acesso de Administrador confirmado!");
@@ -64,6 +74,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 idPermissao = 2;
             }
             pst.setInt(5, idPermissao);
+
             int fgInsOK = pst.executeUpdate();
             if (fgInsOK > 0) {
                 JOptionPane.showMessageDialog(this, "Registro incluído com sucesso!!!");
@@ -73,14 +84,15 @@ public class TelaCadastro extends javax.swing.JFrame {
                 dispose();
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao salvar no banco: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao salvar o cadastro: " + e.getMessage());
         } finally {
+            
             try {
                 if (pst != null) {
                     pst.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar statement: " + ex.getMessage());
+                System.out.println("Erro ao fechar declaração: " + ex.getMessage());
             }
         }
     }
@@ -90,6 +102,7 @@ public class TelaCadastro extends javax.swing.JFrame {
         java.util.Calendar cal = java.util.Calendar.getInstance();
         cal.set(2000, java.util.Calendar.JANUARY, 1);
         dataSelecionada.setCalendar(cal);
+
         conexao = ModuloDbConecta.connector();
     }
 
@@ -216,7 +229,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addComponent(lblLogin)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblBemVindo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsuario1)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -243,7 +256,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addGap(164, 164, 164))
         );
 
-        setSize(new java.awt.Dimension(821, 718));
+        setSize(new java.awt.Dimension(821, 720));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

@@ -7,16 +7,22 @@ import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
 
-public class TelaAdicionarTarefa extends javax.swing.JInternalFrame { 
+public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
+    
     private TelaTarefa telaPrincipal;
     private Connection conexao = null;
 
     private void preencherComboTopicos() {
         String sql = "SELECT id_topico, nm_topico FROM t_topico ORDER BY id_topico ASC";
+
         cbTopico.setModel(new javax.swing.DefaultComboBoxModel<>());
+
         try (PreparedStatement pstLocal = conexao.prepareStatement(sql); ResultSet rsLocal = pstLocal.executeQuery()) {
+
             cbTopico.removeAllItems();
+
             while (rsLocal.next()) {
+                
                 Modelos.Topico topico = new Modelos.Topico(rsLocal.getInt("id_topico"), rsLocal.getString("nm_topico"));
                 ((javax.swing.DefaultComboBoxModel) cbTopico.getModel()).addElement(topico);
             }
@@ -30,8 +36,10 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Por favor, preencha o Nome da tarefa e selecione um Tópico!");
             return;
         }
+
         Modelos.Topico topicoSelecionado = (Modelos.Topico) cbTopico.getSelectedItem();
         int idTopico = topicoSelecionado.getId();
+
         double valor = 0.0;
         String valorTexto = txtValor.getText().trim();
         if (!valorTexto.isEmpty()) {
@@ -43,22 +51,30 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 return;
             }
         }
+
         String sql = "INSERT INTO t_tarefa (id_usuario, id_topico, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao) VALUES (?, ?, ?, ?, ?, CURDATE())";
+
         try (PreparedStatement pstLocal = conexao.prepareStatement(sql)) {
             int idLogado = SessaoUsuario.getInstance().getIdUsuario();
             String nome = txtNome.getText().trim();
             String descricao = txtDescricao.getText().trim();
+
             pstLocal.setInt(1, idLogado);
             pstLocal.setInt(2, idTopico);
             pstLocal.setString(3, nome);
             pstLocal.setString(4, descricao);
             pstLocal.setDouble(5, valor);
+
             pstLocal.executeUpdate();
+
             JOptionPane.showMessageDialog(this, "Tarefa adicionada com sucesso!");
+
             if (telaPrincipal != null) {
                 telaPrincipal.carregarTarefasDoBanco(idTopico);
             }
+
             this.dispose();
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao salvar tarefa no banco de dados: " + e.getMessage());
         }
@@ -91,21 +107,27 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 + "</ol>"
                 + "</body>"
                 + "</html>";
+
         JOptionPane.showMessageDialog(this, textoTutorial, "Tutorial - Criar Tarefa", JOptionPane.INFORMATION_MESSAGE);
     }
-    
+
     public TelaAdicionarTarefa(TelaTarefa telaPrincipal) {
         initComponents();
-        lblMensagem.setText("Dica: Dúvidas sobre os campos? Pressione Ctrl + T para ver o guia de cadastro.");       
+
+        lblMensagem.setText("Dica: Dúvidas sobre os campos? Pressione Ctrl + T para ver o guia de cadastro.");
+        
         this.telaPrincipal = telaPrincipal;
+
         if (this.telaPrincipal != null) {
             this.conexao = this.telaPrincipal.getConexao();
         } else {
             this.conexao = ModuloDbConecta.connector();
         }
+
         preencherComboTopicos();
     }
-  
+
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -240,7 +262,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
 
     private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
         // TODO add your handling code here:
-        this.dispose();
+        this.dispose();  
     }//GEN-LAST:event_btnFecharActionPerformed
 
 
