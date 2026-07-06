@@ -131,14 +131,14 @@ public class TelaCadastro extends javax.swing.JFrame {
         setResizable(false);
 
         lblLogin2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        lblLogin2.setForeground(new java.awt.Color(255, 153, 51));
+        lblLogin2.setForeground(new java.awt.Color(255, 102, 0));
         lblLogin2.setText("Chrono$");
 
         lblLogin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblLogin.setText("Faça o seu Cadastro");
 
         lblBemVindo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblBemVindo.setForeground(new java.awt.Color(51, 102, 255));
+        lblBemVindo.setForeground(new java.awt.Color(0, 51, 255));
         lblBemVindo.setText("Seja bem vindo!");
 
         lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -147,8 +147,9 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha.setText("Senha:");
 
-        btncadastro.setBackground(new java.awt.Color(51, 102, 255));
+        btncadastro.setBackground(new java.awt.Color(0, 51, 255));
         btncadastro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btncadastro.setForeground(new java.awt.Color(255, 255, 255));
         btncadastro.setText("Cadastrar");
         btncadastro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -187,49 +188,49 @@ public class TelaCadastro extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(340, 340, 340)
-                .addComponent(btncadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(130, 130, 130)
+                .addGap(337, 337, 337)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnVoltar)
-                        .addGap(353, 353, 353))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblSenha)
-                                    .addComponent(lblUsuario)
-                                    .addComponent(lblSenha1)
-                                    .addComponent(lblUsuario2)
-                                    .addComponent(lblUsuario1))
-                                .addGap(26, 26, 26))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblLogin)
-                                    .addComponent(lblBemVindo)
-                                    .addComponent(lblLogin2))
-                                .addGap(70, 70, 70)))
+                    .addComponent(lblLogin2)
+                    .addComponent(lblLogin))
+                .addGap(0, 339, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(211, 211, 211)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblSenha)
+                            .addComponent(lblUsuario)
+                            .addComponent(lblSenha1)
+                            .addComponent(lblUsuario2)
+                            .addComponent(lblUsuario1))
+                        .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(txtSenha1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(dataSelecionada, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtNome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                            .addComponent(txtSenha2))
-                        .addContainerGap(245, Short.MAX_VALUE))))
+                            .addComponent(txtSenha2)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(371, 371, 371)
+                        .addComponent(lblBemVindo)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btncadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(292, 292, 292))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(lblLogin2)
                 .addGap(37, 37, 37)
+                .addComponent(lblLogin2)
+                .addGap(33, 33, 33)
                 .addComponent(lblLogin)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(lblBemVindo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsuario1)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -249,11 +250,11 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSenha1)
                     .addComponent(txtSenha2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(71, 71, 71)
+                .addGap(59, 59, 59)
                 .addComponent(btncadastro)
-                .addGap(18, 18, 18)
+                .addGap(39, 39, 39)
                 .addComponent(btnVoltar)
-                .addGap(164, 164, 164))
+                .addGap(155, 155, 155))
         );
 
         setSize(new java.awt.Dimension(872, 720));

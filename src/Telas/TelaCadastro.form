@@ -28,38 +28,25 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="340" max="-2" attributes="0"/>
-              <Component id="btncadastro" min="-2" pref="170" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="-2" pref="130" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="337" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="btnVoltar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="353" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="lblSenha" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblUsuario" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblSenha1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblUsuario2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblUsuario1" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="lblLogin" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblBemVindo" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblLogin2" alignment="1" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
-                          </Group>
+                  <Component id="lblLogin2" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblLogin" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="0" pref="339" max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="211" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="lblSenha" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblUsuario" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblSenha1" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblUsuario2" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblUsuario1" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="txtSenha1" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtEmail" alignment="0" max="32767" attributes="0"/>
@@ -67,22 +54,34 @@
                           <Component id="txtNome" alignment="0" pref="239" max="32767" attributes="0"/>
                           <Component id="txtSenha2" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="245" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="371" max="-2" attributes="0"/>
+                      <Component id="lblBemVindo" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="btnVoltar" min="-2" pref="170" max="-2" attributes="0"/>
+                  <Component id="btncadastro" min="-2" pref="170" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="292" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-              <Component id="lblLogin2" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+              <Component id="lblLogin2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
               <Component id="lblLogin" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="lblBemVindo" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="66" max="32767" attributes="0"/>
+              <EmptySpace pref="40" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblUsuario1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtNome" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -107,11 +106,11 @@
                   <Component id="lblSenha1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtSenha2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
               <Component id="btncadastro" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
               <Component id="btnVoltar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="164" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="155" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -123,7 +122,7 @@
           <Font name="Tahoma" size="36" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="33" green="99" red="ff" type="rgb"/>
+          <Color blue="0" green="66" red="ff" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Chrono$"/>
       </Properties>
@@ -142,7 +141,7 @@
           <Font name="Tahoma" size="14" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="66" red="33" type="rgb"/>
+          <Color blue="ff" green="33" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Seja bem vindo!"/>
       </Properties>
@@ -168,10 +167,13 @@
     <Component class="javax.swing.JButton" name="btncadastro">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="66" red="33" type="rgb"/>
+          <Color blue="ff" green="33" red="0" type="rgb"/>
         </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Cadastrar"/>
       </Properties>

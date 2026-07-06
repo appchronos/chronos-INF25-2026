@@ -152,6 +152,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
         lblAdicionarTarefa.setText("(*)Adicionar Tarefa:");
 
         btnAdicionarTarefa.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnAdicionarTarefa.setForeground(new java.awt.Color(0, 51, 255));
         btnAdicionarTarefa.setText("Adicionar Tarefa");
         btnAdicionarTarefa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -163,6 +164,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
         lblDescricaoTarefa.setText("Descrição da Tarefa:");
 
         lblCadPermissoes.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblCadPermissoes.setForeground(new java.awt.Color(0, 51, 255));
         lblCadPermissoes.setText("Nova Tarefa");
 
         lblValor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
