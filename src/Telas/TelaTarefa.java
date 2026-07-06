@@ -406,11 +406,11 @@ public class TelaTarefa extends javax.swing.JFrame {
 
         btnNovaTarefa.getAccessibleContext().setAccessibleName("Clique aqui para Criar Tarefa");
 
-        MnConfiguracao.setForeground(new java.awt.Color(0, 0, 204));
+        MnConfiguracao.setForeground(new java.awt.Color(0, 51, 255));
         MnConfiguracao.setText("Configurações");
         MnConfiguracao.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
-        mnUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        mnUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
         mnUsuario.setText("Conta");
         mnUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -419,7 +419,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         });
         MnConfiguracao.add(mnUsuario);
 
-        mnTutorial.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        mnTutorial.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
         mnTutorial.setText("Tutorial");
         mnTutorial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -435,7 +435,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         mnIndicadorTempo.setText("Indicadores de Tempo");
         mnIndicadorTempo.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
-        mnIndicadorVG.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        mnIndicadorVG.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
         mnIndicadorVG.setText("Visão Geral");
         mnIndicadorVG.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -454,7 +454,7 @@ public class TelaTarefa extends javax.swing.JFrame {
             }
         });
 
-        mnSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_DOWN_MASK));
+        mnSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         mnSair.setText("Exit");
         mnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
