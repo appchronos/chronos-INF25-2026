@@ -98,8 +98,9 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
         lblNovaSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblNovaSenha.setText("Nova Senha:");
 
-        btnAlterarSenha.setBackground(new java.awt.Color(51, 102, 255));
+        btnAlterarSenha.setBackground(new java.awt.Color(0, 51, 255));
         btnAlterarSenha.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnAlterarSenha.setForeground(new java.awt.Color(255, 255, 255));
         btnAlterarSenha.setText("Alterar Senha");
         btnAlterarSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,7 +121,7 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
         lblSenhaRepetida.setText("Repitir Senha:");
 
         lblLogin2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        lblLogin2.setForeground(new java.awt.Color(255, 153, 51));
+        lblLogin2.setForeground(new java.awt.Color(255, 102, 0));
         lblLogin2.setText("Chrono$");
 
         lblEsqueceuSenha.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -137,7 +138,7 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(198, Short.MAX_VALUE)
+                .addContainerGap(190, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -154,14 +155,13 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
                         .addComponent(lblLogin2)
                         .addGap(304, 304, 304))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnAlterarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(310, 310, 310))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnVoltar)
-                        .addGap(365, 365, 365))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(lblEsqueceuSenha)
-                        .addGap(274, 274, 274))))
+                        .addGap(274, 274, 274))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btnAlterarSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                            .addComponent(btnVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(310, 310, 310))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
