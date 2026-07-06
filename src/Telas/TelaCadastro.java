@@ -130,7 +130,7 @@ public class TelaCadastro extends javax.swing.JFrame {
         setTitle("Tela Cadastro");
         setResizable(false);
 
-        lblLogin2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        lblLogin2.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         lblLogin2.setForeground(new java.awt.Color(255, 102, 0));
         lblLogin2.setText("Chrono$");
 
@@ -192,7 +192,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblLogin2)
                     .addComponent(lblLogin))
-                .addGap(0, 339, Short.MAX_VALUE))
+                .addGap(0, 321, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -230,7 +230,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addComponent(lblLogin)
                 .addGap(18, 18, 18)
                 .addComponent(lblBemVindo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsuario1)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -257,7 +257,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addGap(155, 155, 155))
         );
 
-        setSize(new java.awt.Dimension(872, 720));
+        setSize(new java.awt.Dimension(880, 633));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
