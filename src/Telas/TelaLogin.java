@@ -131,7 +131,7 @@ import javax.swing.JFrame;
         setResizable(false);
 
         lblLogin.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        lblLogin.setText("Entrar");
+        lblLogin.setText("Login");
 
         lblBemVindo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblBemVindo.setForeground(new java.awt.Color(0, 51, 255));
@@ -174,6 +174,7 @@ import javax.swing.JFrame;
 
         btnCadastro.setBackground(new java.awt.Color(255, 102, 0));
         btnCadastro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnCadastro.setForeground(new java.awt.Color(5, 0, 0));
         btnCadastro.setText("Cadastrar");
         btnCadastro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
