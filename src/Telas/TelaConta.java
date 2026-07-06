@@ -169,7 +169,7 @@ public class TelaConta extends javax.swing.JInternalFrame {
         bntVoltar = new javax.swing.JButton();
 
         lblCadPermissoes.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lblCadPermissoes.setForeground(new java.awt.Color(0, 153, 255));
+        lblCadPermissoes.setForeground(new java.awt.Color(0, 51, 255));
         lblCadPermissoes.setText("Minha Conta");
 
         lblCodEmail.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -179,7 +179,6 @@ public class TelaConta extends javax.swing.JInternalFrame {
         lblDescNome.setText("Nome:");
 
         btnExcluir.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnExcluir.setForeground(new java.awt.Color(0, 153, 255));
         btnExcluir.setText("Excluir conta");
         btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -208,7 +207,7 @@ public class TelaConta extends javax.swing.JInternalFrame {
         });
 
         bntVoltar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        bntVoltar.setForeground(new java.awt.Color(0, 153, 204));
+        bntVoltar.setForeground(new java.awt.Color(0, 51, 255));
         bntVoltar.setText("Voltar");
         bntVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -221,26 +220,22 @@ public class TelaConta extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(287, 287, 287)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblCodEmail)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(287, 287, 287)
+                        .addComponent(lblDescNome)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCodEmail)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblDescNome)
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblCadPermissoes)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(btnAlterarNome)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(btnExcluir)
-                                            .addComponent(btnAlterarEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(txtUsuNome)
-                                        .addComponent(txtUsuEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(358, 358, 358)
-                        .addComponent(bntVoltar)))
+                            .addComponent(lblCadPermissoes)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnAlterarNome)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(btnExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnAlterarEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(bntVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(txtUsuNome)
+                                .addComponent(txtUsuEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(307, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
