@@ -168,7 +168,7 @@ public class TelaConta extends javax.swing.JInternalFrame {
         btnAlterarEmail = new javax.swing.JButton();
         bntVoltar = new javax.swing.JButton();
 
-        lblCadPermissoes.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblCadPermissoes.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         lblCadPermissoes.setForeground(new java.awt.Color(0, 51, 255));
         lblCadPermissoes.setText("Minha Conta");
 
@@ -186,7 +186,7 @@ public class TelaConta extends javax.swing.JInternalFrame {
             }
         });
 
-        btnAlterarNome.setBackground(new java.awt.Color(0, 153, 204));
+        btnAlterarNome.setBackground(new java.awt.Color(0, 51, 255));
         btnAlterarNome.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnAlterarNome.setForeground(new java.awt.Color(255, 255, 255));
         btnAlterarNome.setText("Alterar nome");
@@ -196,7 +196,7 @@ public class TelaConta extends javax.swing.JInternalFrame {
             }
         });
 
-        btnAlterarEmail.setBackground(new java.awt.Color(0, 153, 204));
+        btnAlterarEmail.setBackground(new java.awt.Color(0, 51, 255));
         btnAlterarEmail.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnAlterarEmail.setForeground(new java.awt.Color(255, 255, 255));
         btnAlterarEmail.setText("Alterar email");
@@ -230,13 +230,12 @@ public class TelaConta extends javax.swing.JInternalFrame {
                             .addComponent(lblCadPermissoes)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(btnAlterarNome)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(btnExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnAlterarEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(bntVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(btnExcluir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnAlterarEmail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bntVoltar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(txtUsuNome)
                                 .addComponent(txtUsuEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(307, Short.MAX_VALUE))
+                .addContainerGap(300, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
