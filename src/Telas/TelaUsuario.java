@@ -86,7 +86,7 @@ public class TelaUsuario extends javax.swing.JFrame {
         setResizable(false);
 
         lblCadPermissoes.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lblCadPermissoes.setForeground(new java.awt.Color(0, 153, 255));
+        lblCadPermissoes.setForeground(new java.awt.Color(0, 51, 255));
         lblCadPermissoes.setText("Conta Usuario");
 
         lblCodEmail.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -103,8 +103,7 @@ public class TelaUsuario extends javax.swing.JFrame {
         });
 
         btnExcluir.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnExcluir.setForeground(new java.awt.Color(0, 153, 255));
-        btnExcluir.setText("Excluir");
+        btnExcluir.setText("Excluir Conta");
         btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExcluirActionPerformed(evt);
@@ -118,7 +117,7 @@ public class TelaUsuario extends javax.swing.JFrame {
             }
         });
 
-        btnAlterar.setBackground(new java.awt.Color(0, 153, 255));
+        btnAlterar.setBackground(new java.awt.Color(0, 51, 255));
         btnAlterar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnAlterar.setForeground(new java.awt.Color(255, 255, 255));
         btnAlterar.setText("Alterar");

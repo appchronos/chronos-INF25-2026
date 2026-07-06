@@ -194,7 +194,7 @@ public class TelaVisaoGeral extends javax.swing.JInternalFrame {
         lblTempoMedioGeral = new javax.swing.JLabel();
         lblMensagem = new javax.swing.JLabel();
 
-        pnlTempoTotal.setBackground(new java.awt.Color(102, 153, 255));
+        pnlTempoTotal.setBackground(new java.awt.Color(0, 51, 255));
 
         lblTituloTempo.setForeground(new java.awt.Color(255, 255, 255));
         lblTituloTempo.setText("Tempo Total das Tarefas");
@@ -226,7 +226,7 @@ public class TelaVisaoGeral extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        pnlRecordista.setBackground(new java.awt.Color(255, 153, 51));
+        pnlRecordista.setBackground(new java.awt.Color(255, 102, 0));
 
         lblTituloRecordista.setForeground(new java.awt.Color(255, 255, 255));
         lblTituloRecordista.setText("Tarefa com mais Tempo");
@@ -287,7 +287,7 @@ public class TelaVisaoGeral extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("Tabela Historico das Tarefas");
 
-        pnlTempoMedio.setBackground(new java.awt.Color(102, 153, 255));
+        pnlTempoMedio.setBackground(new java.awt.Color(0, 51, 255));
 
         lblTituloMedio.setForeground(new java.awt.Color(255, 255, 255));
         lblTituloMedio.setText("Tempo Médio das Tarefas");

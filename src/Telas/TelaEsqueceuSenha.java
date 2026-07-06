@@ -100,8 +100,9 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
         lblNovaSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblNovaSenha.setText("Nova Senha:");
 
-        btnAlterarSenha.setBackground(new java.awt.Color(51, 102, 255));
+        btnAlterarSenha.setBackground(new java.awt.Color(0, 51, 255));
         btnAlterarSenha.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnAlterarSenha.setForeground(new java.awt.Color(255, 255, 255));
         btnAlterarSenha.setText("Alterar Senha");
         btnAlterarSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -122,7 +123,7 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
         lblSenhaRepetida.setText("Repitir Senha:");
 
         lblLogin2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        lblLogin2.setForeground(new java.awt.Color(255, 153, 51));
+        lblLogin2.setForeground(new java.awt.Color(255, 102, 0));
         lblLogin2.setText("Chrono$");
 
         lblEsqueceuSenha.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N

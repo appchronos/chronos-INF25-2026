@@ -131,14 +131,14 @@ public class TelaCadastro extends javax.swing.JFrame {
         setResizable(false);
 
         lblLogin2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        lblLogin2.setForeground(new java.awt.Color(255, 153, 51));
+        lblLogin2.setForeground(new java.awt.Color(255, 102, 0));
         lblLogin2.setText("Chrono$");
 
         lblLogin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblLogin.setText("Faça o seu Cadastro");
 
         lblBemVindo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblBemVindo.setForeground(new java.awt.Color(51, 102, 255));
+        lblBemVindo.setForeground(new java.awt.Color(0, 51, 255));
         lblBemVindo.setText("Seja bem vindo!");
 
         lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -147,8 +147,9 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha.setText("Senha:");
 
-        btncadastro.setBackground(new java.awt.Color(51, 102, 255));
+        btncadastro.setBackground(new java.awt.Color(0, 51, 255));
         btncadastro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btncadastro.setForeground(new java.awt.Color(255, 255, 255));
         btncadastro.setText("Cadastrar");
         btncadastro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

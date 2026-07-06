@@ -134,7 +134,7 @@ import javax.swing.JFrame;
         lblLogin.setText("Entrar");
 
         lblBemVindo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblBemVindo.setForeground(new java.awt.Color(51, 102, 255));
+        lblBemVindo.setForeground(new java.awt.Color(0, 51, 255));
         lblBemVindo.setText("Olá bem vindo de volta!");
 
         lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -143,8 +143,9 @@ import javax.swing.JFrame;
         lblSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha.setText("Senha:");
 
-        btnLogin.setBackground(new java.awt.Color(51, 102, 255));
+        btnLogin.setBackground(new java.awt.Color(0, 51, 255));
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnLogin.setText("Acessar");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -162,7 +163,7 @@ import javax.swing.JFrame;
         });
 
         lblAplicativo.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        lblAplicativo.setForeground(new java.awt.Color(255, 153, 51));
+        lblAplicativo.setForeground(new java.awt.Color(255, 102, 0));
         lblAplicativo.setText("Chrono$");
 
         mnEsqueceuSenha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
