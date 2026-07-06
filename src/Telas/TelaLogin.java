@@ -1,9 +1,9 @@
 
 package Telas;
+
 import Modelos.SessaoUsuario;
 import javax.swing.JOptionPane;
 
-// 1 - Importar as bibliotecas
 import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
@@ -11,103 +11,97 @@ import javax.swing.JFrame;
 
 
     public class TelaLogin extends javax.swing.JFrame {
-        // 2 - criar as variáveis necessárias à conexão
-        Connection conexao = null;  // É a variável que retorna a conexao
-        PreparedStatement pst = null; // É variável com o comando SQL
-        ResultSet rs = null; // Variável com o resultado do comando executado
+        Connection conexao = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
     
-    // 4 - Criar o método/rotina "logar()"
-    public void logar() {
-        // Query unificada trazendo todos os dados necessários de forma limpa
-        String sql = "SELECT id_usuario, nm_usuario, id_permissao FROM t_usuario WHERE ds_email = ? AND ds_senha = ?";
+        public void logar() {
+            String sql = "SELECT id_usuario, nm_usuario, ds_email, id_permissao FROM t_usuario WHERE ds_email = ? AND ds_senha = ?";
 
-        try {
-            pst = conexao.prepareStatement(sql);
-            pst.setString(1, txtUsuario.getText());
-            pst.setString(2, txtSenha.getText());
-
-            // CORREÇÃO: Usa a variável global 'rs' em vez de redeclarar uma local
-            rs = pst.executeQuery();
-
-            if (rs.next()) {
-                String nomeUsuario = rs.getString("nm_usuario");
-                SessaoUsuario.getInstance().setIdUsuario(rs.getInt("id_usuario"));
-                SessaoUsuario.getInstance().setNomeUsuario(nomeUsuario);
-
-                // Tenta pegar o ID da permissão tratando possíveis variações estruturais
-                int idPermissao = 0;
-                try {
-                    idPermissao = rs.getInt("id_permissao");
-                } catch (Exception e) {
+            try {
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, txtUsuario.getText().trim());
+                pst.setString(2, new String(txtSenha.getPassword()));
+                rs = pst.executeQuery();
+                if (rs.next()) {
+                    String nomeUsuario = rs.getString("nm_usuario");
+                    SessaoUsuario.getInstance().setIdUsuario(rs.getInt("id_usuario"));
+                    SessaoUsuario.getInstance().setNomeUsuario(nomeUsuario);
+                    SessaoUsuario.getInstance().setEmailUsuario(rs.getString("ds_email"));
+                    int idPermissao = 0;
                     try {
-                        idPermissao = rs.getInt("T_PERMISSAO_id_permissao");
-                    } catch (Exception e2) {
+                        idPermissao = rs.getInt("id_permissao");
+                    } catch (Exception e) {
                         try {
-                            idPermissao = rs.getInt("t_permissao_id_permissao");
-                        } catch (Exception e3) {
-                            System.out.println("Não foi possível encontrar a coluna de permissão.");
+                            idPermissao = rs.getInt("T_PERMISSAO_id_permissao");
+                        } catch (Exception e2) {
+                            try {
+                                idPermissao = rs.getInt("t_permissao_id_permissao");
+                            } catch (Exception e3) {
+                                System.out.println("Não foi possível encontrar a coluna de permissão.");
+                            }
                         }
                     }
-                }
 
-                // Busca o nome da permissão usando o ID encontrado
-                String perfil = "Usuário Comum";
-                String sqlPermissao = "select ds_permissao from t_permissao where id_permissao = ?";
+                    String perfil = "Usuário Comum";
+                    String sqlPermissao = "select ds_permissao from t_permissao where id_permissao = ?";
 
-                try (PreparedStatement pstP = conexao.prepareStatement(sqlPermissao)) {
-                    pstP.setInt(1, idPermissao);
-                    try (ResultSet rsP = pstP.executeQuery()) {
-                        if (rsP.next()) {
-                            perfil = rsP.getString("ds_permissao");
+                    try (PreparedStatement pstP = conexao.prepareStatement(sqlPermissao)) {
+                        pstP.setInt(1, idPermissao);
+                        try (ResultSet rsP = pstP.executeQuery()) {
+                            if (rsP.next()) {
+                                perfil = rsP.getString("ds_permissao");
+                            }
                         }
+                    } catch (Exception e) {
+                    }
+
+                    String usuarioDigitado = txtUsuario.getText();
+                    Modelos.GerenciadorLocal.verificarEMudarUsuario(usuarioDigitado);
+
+                    JOptionPane.showMessageDialog(this, "Bem-vindo ao Chronos, " + nomeUsuario + "!");
+
+                    TelaTarefa tlPrincipal = new TelaTarefa();
+
+                    if (perfil.equalsIgnoreCase("Administrador")) {
+                        System.out.println("Acesso como: Administrador");
+                    } else {
+                        System.out.println("Acesso como: Usuário Comum");
+                    }
+
+                    tlPrincipal.setVisible(true);
+                    this.dispose();
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Usuário/Senha INVÁLIDOS!!! Tente outra Vez!");
+                    txtUsuario.setText("");
+                    txtSenha.setText("");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erro ao conectar: " + e.getMessage());
+            } finally {
+                try {
+                    if (rs != null) {
+                        rs.close();
                     }
                 } catch (Exception e) {
-                    // Mantém como Usuário Comum se falhar
                 }
-
-                // Gerenciador local de cache de Checkboxes:
-                // Se mudou o usuário digitado na máquina, limpa o cache local
-                String usuarioDigitado = txtUsuario.getText();
-                Modelos.GerenciadorLocal.verificarEMudarUsuario(usuarioDigitado);
-
-                JOptionPane.showMessageDialog(this, "Bem-vindo ao Chronos, " + nomeUsuario + "!");
-
-                TelaTarefa tlPrincipal = new TelaTarefa();
-
-                if (perfil.equalsIgnoreCase("Administrador")) {
-                    System.out.println("Acesso como: Administrador");
-                } else {
-                    System.out.println("Acesso como: Usuário Comum");
+                try {
+                    if (pst != null) {
+                        pst.close();
+                    }
+                } catch (Exception e) {
                 }
-
-                tlPrincipal.setVisible(true);
-                this.dispose();
-
-            } else {
-                JOptionPane.showMessageDialog(this, "Usuário/Senha INVÁLIDOS!!! Tente outra Vez!");
-                txtUsuario.setText("");
-                txtSenha.setText("");
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao conectar: " + e.getMessage());
         }
-    }
 
-    public TelaLogin() {  // Método construtor da TelaLogin
-        // Aqui, no "initComponents" inicializa/pinta a TelaLogin na Tela do PC!
+    public TelaLogin() {  
         initComponents();
-
-        // 3 - Fazer/executar a conexão ao banco de Dados com 
-        // o retorno na variável "conexao"
+        
         conexao = ModuloDbConecta.connector();
         
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -131,10 +125,10 @@ import javax.swing.JFrame;
         setResizable(false);
 
         lblLogin.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        lblLogin.setText("Login");
+        lblLogin.setText("Entrar");
 
         lblBemVindo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblBemVindo.setForeground(new java.awt.Color(0, 51, 255));
+        lblBemVindo.setForeground(new java.awt.Color(51, 102, 255));
         lblBemVindo.setText("Olá bem vindo de volta!");
 
         lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -143,9 +137,8 @@ import javax.swing.JFrame;
         lblSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha.setText("Senha:");
 
-        btnLogin.setBackground(new java.awt.Color(0, 51, 255));
+        btnLogin.setBackground(new java.awt.Color(51, 102, 255));
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnLogin.setText("Acessar");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -163,7 +156,7 @@ import javax.swing.JFrame;
         });
 
         lblAplicativo.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        lblAplicativo.setForeground(new java.awt.Color(255, 102, 0));
+        lblAplicativo.setForeground(new java.awt.Color(255, 153, 51));
         lblAplicativo.setText("Chrono$");
 
         mnEsqueceuSenha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -174,7 +167,6 @@ import javax.swing.JFrame;
 
         btnCadastro.setBackground(new java.awt.Color(255, 102, 0));
         btnCadastro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnCadastro.setForeground(new java.awt.Color(5, 0, 0));
         btnCadastro.setText("Cadastrar");
         btnCadastro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -194,14 +186,14 @@ import javax.swing.JFrame;
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(263, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(291, 291, 291)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblSenha)
                     .addComponent(lblUsuario))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(layout.createSequentialGroup()
@@ -211,30 +203,29 @@ import javax.swing.JFrame;
                                     .addComponent(mnEsqueceuSenha)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(btnMudarSenha)))
-                            .addGap(264, 264, 264))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblBemVindo)
-                                    .addComponent(lblLogin)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblBemVindo2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnCadastro))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(39, 39, 39)
-                                        .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGap(219, 219, 219)))
+                            .addGap(45, 45, 45))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblBemVindo)
+                                .addComponent(lblLogin)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(lblBemVindo2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnCadastro))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(39, 39, 39)
+                                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblAplicativo)
-                        .addGap(173, 173, 173))))
+                        .addGap(126, 126, 126)))
+                .addContainerGap(302, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(67, 67, 67)
+                .addGap(93, 93, 93)
                 .addComponent(lblAplicativo)
                 .addGap(57, 57, 57)
                 .addComponent(lblLogin)
@@ -260,16 +251,15 @@ import javax.swing.JFrame;
                     .addComponent(btnCadastro))
                 .addGap(18, 18, 18)
                 .addComponent(btnSair)
-                .addContainerGap(247, Short.MAX_VALUE))
+                .addContainerGap(227, Short.MAX_VALUE))
         );
 
-        setSize(new java.awt.Dimension(823, 720));
+        setSize(new java.awt.Dimension(934, 726));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-
         logar();
     }//GEN-LAST:event_btnLoginActionPerformed
 
@@ -281,7 +271,6 @@ import javax.swing.JFrame;
     private void btnCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastroActionPerformed
         // TODO add your handling code here:
         TelaCadastro tlCadastro = new TelaCadastro();
-        // Com a Classe/TelaPrincipal na memória, devemos fazê-la visível!
         tlCadastro.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCadastroActionPerformed
@@ -289,7 +278,6 @@ import javax.swing.JFrame;
     private void btnMudarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMudarSenhaActionPerformed
         // TODO add your handling code here:
         TelaEsqueceuSenha tlEsqueceuSenha = new TelaEsqueceuSenha();
-        // Com a Classe/TelaPrincipal na memória, devemos fazê-la visível!
         tlEsqueceuSenha.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnMudarSenhaActionPerformed

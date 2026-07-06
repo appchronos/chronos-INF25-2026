@@ -1,4 +1,3 @@
-
 package Telas;
 
 import javax.swing.JOptionPane;
@@ -8,64 +7,63 @@ import java.awt.Color;
 
 public class TelaEsqueceuSenha extends javax.swing.JFrame {
 
-    Connection conexao = null;  
-    PreparedStatement pst = null; 
-    ResultSet rs = null; 
-    
+    Connection conexao = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+
     public void fazLimpar() {
         txtSeuEmail.setText("");
         txtNovaSenha.setText("");
-        txtSenhaRepetida.setText("");        
+        txtSenhaRepetida.setText("");
     }
-    
-    public void fazAlterar(){
- 
+
+    public void fazAlterar() {
+
         String txtDescPerTela = txtSeuEmail.getText();
 
-        if  (txtDescPerTela.isEmpty()) {
-            JOptionPane.showMessageDialog(null," Campos inválidos/não preenchidos na Tela!!!");
-        }else {
+        if (txtDescPerTela.isEmpty()) {
+            JOptionPane.showMessageDialog(null, " Campos inválidos/não preenchidos na Tela!!!");
+        } else {
             String sql = "update t_usuario set ds_senha = ? where ds_email = ?";
             try {
                 pst = conexao.prepareStatement(sql);
-                    String senha1 = txtNovaSenha.getText();
-                    String senha2 = txtSenhaRepetida.getText();
+                String senha1 = new String(txtNovaSenha.getPassword());
+                String senha2 = new String(txtSenhaRepetida.getPassword());
+
                 if (senha1.isEmpty() || senha2.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos de senha!");
-
+                    return;
                 }
+
                 if (senha1.equals(senha2)) {
-                pst.setString(1, senha1);
-                }else{
+                    pst.setString(1, senha1);
+                } else {
                     JOptionPane.showMessageDialog(null, "ERRO: As senhas digitadas não são iguais! Favor verificar.");
                     return;
                 }
-                
-                pst.setString(2,txtSeuEmail.getText());
-                int fgAltOK = pst.executeUpdate();  
-                
-                if ( fgAltOK > 0 ) { 
+
+                pst.setString(2, txtSeuEmail.getText());
+                int fgAltOK = pst.executeUpdate();
+
+                if (fgAltOK > 0) {
                     JOptionPane.showMessageDialog(this, "\"Senha alterada com sucesso!!!\"");
                     TelaLogin tlLogin = new TelaLogin();
                     tlLogin.setVisible(true);
                     dispose();
-                }
-                        
-                else{
-                    JOptionPane.showMessageDialog(null," ERRO na alteração, favor verificar email!!!!");   
+                } else {
+                    JOptionPane.showMessageDialog(null, " ERRO na alteração, favor verificar email!!!!");
                 }
 
-            } catch ( Exception varERRO ) { 
-                JOptionPane.showMessageDialog(null," Erro na Alteração Tabela - t_usuario!");
-                System.out.println("O ERRO é: " + varERRO.toString());  
+            } catch (Exception varERRO) {
+                JOptionPane.showMessageDialog(null, " Erro na Alteração Tabela - t_usuario!");
+                System.out.println("O ERRO é: " + varERRO.toString());
+            }
         }
-    }    
-        
-}
+    }
+
     public TelaEsqueceuSenha() {
         initComponents();
-        
-        conexao = ModuloDbConecta.connector();  
+        conexao = ModuloDbConecta.connector();
     }
     
 
@@ -100,9 +98,8 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
         lblNovaSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblNovaSenha.setText("Nova Senha:");
 
-        btnAlterarSenha.setBackground(new java.awt.Color(0, 51, 255));
+        btnAlterarSenha.setBackground(new java.awt.Color(51, 102, 255));
         btnAlterarSenha.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnAlterarSenha.setForeground(new java.awt.Color(255, 255, 255));
         btnAlterarSenha.setText("Alterar Senha");
         btnAlterarSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -123,7 +120,7 @@ public class TelaEsqueceuSenha extends javax.swing.JFrame {
         lblSenhaRepetida.setText("Repitir Senha:");
 
         lblLogin2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        lblLogin2.setForeground(new java.awt.Color(255, 102, 0));
+        lblLogin2.setForeground(new java.awt.Color(255, 153, 51));
         lblLogin2.setText("Chrono$");
 
         lblEsqueceuSenha.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N

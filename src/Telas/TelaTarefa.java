@@ -11,9 +11,12 @@ import java.awt.Component;
 
 public class TelaTarefa extends javax.swing.JFrame {
 
-    private Connection conexao = null;
-    
+    private Connection conexao = null;  
     private int idTopicoAtual = 1;
+    
+    public void atualizarNomeUsuario() {
+        nomeUsuario.setText(SessaoUsuario.getInstance().getNomeUsuario());
+    }
     
     private void tutorial() {
         
@@ -498,11 +501,34 @@ public class TelaTarefa extends javax.swing.JFrame {
     }//GEN-LAST:event_SairActionPerformed
 
     private void mnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnUsuarioActionPerformed
-        // TODO add your handling code here:
-        TelaUsuario tlUsuario = new TelaUsuario();
-        tlUsuario.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE); // Garante que não fecha o app todo ao fechar essa tela
-        tlUsuario.setLocationRelativeTo(this); // Centraliza em relação à tela principal
-        tlUsuario.setVisible(true);  
+        TelaConta tlUsuario = null;
+
+        // Verifica se a tela de Conta já está aberta no desktopPane
+        for (javax.swing.JInternalFrame frame : desktopPane.getAllFrames()) {
+            if (frame instanceof TelaConta) {
+                tlUsuario = (TelaConta) frame;
+                break;
+            }
+        }
+
+        // Se não estiver aberta, cria uma nova instância e adiciona ao desktopPane
+        if (tlUsuario == null) {
+            tlUsuario = new TelaConta(this); // Passando 'this' caso seu construtor precise do parent
+            desktopPane.add(tlUsuario);
+
+            // Centraliza a janela interna no desktopPane
+            int x = (desktopPane.getWidth() - tlUsuario.getWidth()) / 2;
+            int y = (desktopPane.getHeight() - tlUsuario.getHeight()) / 2;
+            tlUsuario.setLocation(x, y);
+        }
+
+        // Exibe e traz a tela para a frente
+        tlUsuario.setVisible(true);
+        try {
+            tlUsuario.setSelected(true);
+        } catch (java.beans.PropertyVetoException e) {
+            e.printStackTrace();
+        }  
     }//GEN-LAST:event_mnUsuarioActionPerformed
 
     private void btnNovaTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaTarefaActionPerformed

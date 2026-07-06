@@ -131,14 +131,14 @@ public class TelaCadastro extends javax.swing.JFrame {
         setResizable(false);
 
         lblLogin2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        lblLogin2.setForeground(new java.awt.Color(255, 102, 0));
+        lblLogin2.setForeground(new java.awt.Color(255, 153, 51));
         lblLogin2.setText("Chrono$");
 
         lblLogin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblLogin.setText("Faça o seu Cadastro");
 
         lblBemVindo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblBemVindo.setForeground(new java.awt.Color(0, 51, 255));
+        lblBemVindo.setForeground(new java.awt.Color(51, 102, 255));
         lblBemVindo.setText("Seja bem vindo!");
 
         lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -147,9 +147,8 @@ public class TelaCadastro extends javax.swing.JFrame {
         lblSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha.setText("Senha:");
 
-        btncadastro.setBackground(new java.awt.Color(0, 51, 255));
+        btncadastro.setBackground(new java.awt.Color(51, 102, 255));
         btncadastro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btncadastro.setForeground(new java.awt.Color(255, 255, 255));
         btncadastro.setText("Cadastrar");
         btncadastro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -213,13 +212,13 @@ public class TelaCadastro extends javax.swing.JFrame {
                                     .addComponent(lblBemVindo)
                                     .addComponent(lblLogin2))
                                 .addGap(70, 70, 70)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtSenha1)
-                            .addComponent(txtSenha2)
-                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dataSelecionada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtEmail))
-                        .addGap(194, 194, 194))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtSenha1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dataSelecionada, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtNome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                            .addComponent(txtSenha2))
+                        .addContainerGap(245, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,7 +256,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addGap(164, 164, 164))
         );
 
-        setSize(new java.awt.Dimension(821, 720));
+        setSize(new java.awt.Dimension(872, 720));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
