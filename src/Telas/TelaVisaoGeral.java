@@ -279,7 +279,7 @@ public class TelaVisaoGeral extends javax.swing.JInternalFrame {
             }
         });
 
-        pnlGrafico.setBackground(new java.awt.Color(153, 153, 153));
+        pnlGrafico.setBackground(new java.awt.Color(255, 255, 255));
         pnlGrafico.setLayout(new javax.swing.BoxLayout(pnlGrafico, javax.swing.BoxLayout.Y_AXIS));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
