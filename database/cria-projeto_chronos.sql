@@ -30,7 +30,7 @@ CREATE TABLE `t_acao` (
   PRIMARY KEY (`id_acao`),
   KEY `fk_T_ACAO_T_TAREFA1_idx` (`id_tarefa`),
   CONSTRAINT `fk_T_ACAO_T_TAREFA1` FOREIGN KEY (`id_tarefa`) REFERENCES `t_tarefa` (`id_tarefa`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `t_acao` (
 
 LOCK TABLES `t_acao` WRITE;
 /*!40000 ALTER TABLE `t_acao` DISABLE KEYS */;
-INSERT INTO `t_acao` VALUES (1,1,'Iniciada','2026-07-06 20:37:38'),(2,4,'Iniciada','2026-07-06 20:38:44'),(3,3,'Iniciada','2026-07-06 20:38:54'),(4,5,'Iniciada','2026-07-06 20:39:46'),(5,2,'Iniciada','2026-07-06 20:39:51'),(6,6,'Iniciada','2026-07-06 20:40:10'),(7,1,'Finalizada','2026-07-06 20:41:48'),(8,2,'Finalizada','2026-07-06 20:41:53'),(9,3,'Finalizada','2026-07-06 20:41:55'),(10,6,'Finalizada','2026-07-06 20:42:33'),(11,5,'Finalizada','2026-07-06 20:42:48'),(12,9,'Iniciada','2026-07-06 20:45:44'),(13,7,'Iniciada','2026-07-06 20:45:44'),(14,8,'Iniciada','2026-07-06 20:45:46'),(15,7,'Finalizada','2026-07-06 20:54:54'),(16,8,'Finalizada','2026-07-06 20:54:55'),(17,9,'Finalizada','2026-07-06 20:54:55'),(18,4,'Finalizada','2026-07-06 20:55:45'),(19,10,'Iniciada','2026-07-06 20:56:42');
+INSERT INTO `t_acao` VALUES (1,1,'Iniciada','2026-07-06 20:37:38'),(2,4,'Iniciada','2026-07-06 20:38:44'),(3,3,'Iniciada','2026-07-06 20:38:54'),(4,5,'Iniciada','2026-07-06 20:39:46'),(5,2,'Iniciada','2026-07-06 20:39:51'),(6,6,'Iniciada','2026-07-06 20:40:10'),(7,1,'Finalizada','2026-07-06 20:41:48'),(8,2,'Finalizada','2026-07-06 20:41:53'),(9,3,'Finalizada','2026-07-06 20:41:55'),(10,6,'Finalizada','2026-07-06 20:42:33'),(11,5,'Finalizada','2026-07-06 20:42:48'),(12,9,'Iniciada','2026-07-06 20:45:44'),(13,7,'Iniciada','2026-07-06 20:45:44'),(14,8,'Iniciada','2026-07-06 20:45:46'),(15,7,'Finalizada','2026-07-06 20:54:54'),(16,8,'Finalizada','2026-07-06 20:54:55'),(17,9,'Finalizada','2026-07-06 20:54:55'),(18,4,'Finalizada','2026-07-06 20:55:45'),(19,10,'Iniciada','2026-07-06 20:56:42'),(20,10,'Finalizada','2026-07-07 20:27:25');
 /*!40000 ALTER TABLE `t_acao` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,6 +82,7 @@ CREATE TABLE `t_tarefa` (
   `ds_tarefa` varchar(200) DEFAULT NULL,
   `vl_tarefa` decimal(9,2) DEFAULT NULL,
   `dt_criacao` date NOT NULL,
+  `dt_previsao` datetime DEFAULT NULL,
   PRIMARY KEY (`id_tarefa`),
   KEY `fk_T_TAREFA_T_TOPICO1_idx` (`id_topico`),
   KEY `fk_T_TAREFA_T_USUARIO1_idx` (`id_usuario`),
@@ -97,7 +98,7 @@ CREATE TABLE `t_tarefa` (
 
 LOCK TABLES `t_tarefa` WRITE;
 /*!40000 ALTER TABLE `t_tarefa` DISABLE KEYS */;
-INSERT INTO `t_tarefa` VALUES (1,1,4,'tarefa 1','',0.00,'2026-07-06'),(2,1,4,'tarefa 2','',0.00,'2026-07-06'),(3,1,4,'tarefa 3','',0.00,'2026-07-06'),(4,1,8,'pesquisa 1','',0.00,'2026-07-06'),(5,1,8,'pesquisa 2','',0.00,'2026-07-06'),(6,1,8,'pesquisa 3','',0.00,'2026-07-06'),(7,1,5,'trabalho 1','',0.00,'2026-07-06'),(8,1,5,'trabalho 2','',0.00,'2026-07-06'),(9,1,5,'trabalho 3','',0.00,'2026-07-06'),(10,1,3,'Projeto Indicador','08/07',0.00,'2026-07-06');
+INSERT INTO `t_tarefa` VALUES (1,1,4,'tarefa 1','',0.00,'2026-07-06',NULL),(2,1,4,'tarefa 2','',0.00,'2026-07-06',NULL),(3,1,4,'tarefa 3','',0.00,'2026-07-06',NULL),(4,1,8,'pesquisa 1','',0.00,'2026-07-06',NULL),(5,1,8,'pesquisa 2','',0.00,'2026-07-06',NULL),(6,1,8,'pesquisa 3','',0.00,'2026-07-06',NULL),(7,1,5,'trabalho 1','',0.00,'2026-07-06',NULL),(8,1,5,'trabalho 2','',0.00,'2026-07-06',NULL),(9,1,5,'trabalho 3','',0.00,'2026-07-06',NULL),(10,1,3,'Projeto Indicador','08/07',0.00,'2026-07-06',NULL);
 /*!40000 ALTER TABLE `t_tarefa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -295,4 +296,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-07-06 20:57:38
+-- Dump completed on 2026-07-15 20:35:01
