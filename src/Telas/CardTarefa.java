@@ -292,11 +292,18 @@ public class CardTarefa extends javax.swing.JPanel {
         lblDescricao = new javax.swing.JLabel();
         lblValor = new javax.swing.JLabel();
         btnFinalizar = new javax.swing.JButton();
+        lblAcao = new javax.swing.JLabel();
+        lblTempo = new javax.swing.JLabel();
+        lblVlr = new javax.swing.JLabel();
+        lblVlr1 = new javax.swing.JLabel();
 
         lblCronometro.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblCronometro.setText("00:00:00");
 
-        btnIniciar.setText("Iniciar");
+        btnIniciar.setBackground(new java.awt.Color(0, 153, 255));
+        btnIniciar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnIniciar.setForeground(new java.awt.Color(255, 255, 255));
+        btnIniciar.setText(" Iniciar");
         btnIniciar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIniciarActionPerformed(evt);
@@ -309,6 +316,9 @@ public class CardTarefa extends javax.swing.JPanel {
             }
         });
 
+        btnAlterar.setBackground(new java.awt.Color(255, 153, 51));
+        btnAlterar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAlterar.setForeground(new java.awt.Color(255, 255, 255));
         btnAlterar.setText("Alterar");
         btnAlterar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -316,6 +326,9 @@ public class CardTarefa extends javax.swing.JPanel {
             }
         });
 
+        btnExcluir.setBackground(new java.awt.Color(255, 102, 102));
+        btnExcluir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnExcluir.setForeground(new java.awt.Color(255, 255, 255));
         btnExcluir.setText("Excluir");
         btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -329,12 +342,27 @@ public class CardTarefa extends javax.swing.JPanel {
 
         lblValor.setText("Valor da Tarefa");
 
+        btnFinalizar.setBackground(new java.awt.Color(0, 153, 102));
+        btnFinalizar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnFinalizar.setForeground(new java.awt.Color(255, 255, 255));
         btnFinalizar.setText("Finalizar");
         btnFinalizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFinalizarActionPerformed(evt);
             }
         });
+
+        lblAcao.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblAcao.setText("Ações");
+
+        lblTempo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblTempo.setText("Tempo decorrido");
+
+        lblVlr.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblVlr.setText("Valor");
+
+        lblVlr1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblVlr1.setText("Nome e Descrição");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -346,30 +374,50 @@ public class CardTarefa extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblDescricao)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblValor)
+                                .addGap(261, 261, 261))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblVlr1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblVlr)
+                                .addGap(79, 79, 79)
+                                .addComponent(lblTempo)
+                                .addGap(76, 76, 76)))
+                        .addComponent(lblAcao)
+                        .addGap(100, 100, 100))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblNome)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
-                        .addComponent(lblValor)
-                        .addGap(79, 79, 79)))
-                .addComponent(lblCronometro)
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAlterar)
-                        .addGap(10, 10, 10)
-                        .addComponent(btnExcluir))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnIniciar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnFinalizar)))
-                .addGap(40, 40, 40))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblDescricao)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 357, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblNome)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblCronometro)
+                                .addGap(68, 68, 68)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnAlterar)
+                                .addGap(10, 10, 10)
+                                .addComponent(btnExcluir))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnIniciar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnFinalizar)))
+                        .addGap(40, 40, 40))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAcao)
+                    .addComponent(lblTempo)
+                    .addComponent(lblVlr)
+                    .addComponent(lblVlr1))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chkConcluido)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -383,7 +431,7 @@ public class CardTarefa extends javax.swing.JPanel {
                     .addComponent(btnAlterar)
                     .addComponent(btnExcluir)
                     .addComponent(lblDescricao))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -423,10 +471,14 @@ public class CardTarefa extends javax.swing.JPanel {
     private javax.swing.JButton btnFinalizar;
     private javax.swing.JButton btnIniciar;
     private javax.swing.JCheckBox chkConcluido;
+    private javax.swing.JLabel lblAcao;
     private javax.swing.JLabel lblCronometro;
     private javax.swing.JLabel lblDescricao;
     private javax.swing.JLabel lblNome;
+    private javax.swing.JLabel lblTempo;
     private javax.swing.JLabel lblValor;
+    private javax.swing.JLabel lblVlr;
+    private javax.swing.JLabel lblVlr1;
     // End of variables declaration//GEN-END:variables
 
 }
