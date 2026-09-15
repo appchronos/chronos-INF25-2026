@@ -52,7 +52,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             }
         }
 
-        String sql = "INSERT INTO t_tarefa (id_usuario, id_topico, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao) VALUES (?, ?, ?, ?, ?, NOW())";
+        String sql = "INSERT INTO t_tarefa (id_usuario, id_topico, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao) VALUES (?, ?, ?, ?, ?, CURDATE())";
 
         try (PreparedStatement pstLocal = conexao.prepareStatement(sql)) {
             int idLogado = SessaoUsuario.getInstance().getIdUsuario();
@@ -68,12 +68,10 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             pstLocal.executeUpdate();
 
             JOptionPane.showMessageDialog(this, "Tarefa adicionada com sucesso!");
-            // Se a tela principal estiver aberta, força a atualização
-           // Atualiza a tela de tarefas que já está aberta
-if (telaPrincipal != null) {
-    telaPrincipal.verificarEColorirBotoesTopicos(); // Atualiza a cor verde dos botões
-    telaPrincipal.carregarTarefasDoBanco(idTopico); // Recarrega a lista de tarefas
-}
+
+            if (telaPrincipal != null) {
+                telaPrincipal.carregarTarefasDoBanco(idTopico);
+            }
 
             this.dispose();
 
@@ -115,7 +113,7 @@ if (telaPrincipal != null) {
 
     public TelaAdicionarTarefa(TelaTarefa telaPrincipal) {
         initComponents();
-      
+
         lblMensagem.setText("Dica: Dúvidas sobre os campos? Pressione Ctrl + T para ver o guia de cadastro.");
         
         this.telaPrincipal = telaPrincipal;
@@ -147,6 +145,8 @@ if (telaPrincipal != null) {
         btnFechar = new javax.swing.JButton();
         cbTopico = new javax.swing.JComboBox<>();
         lblMensagem = new javax.swing.JLabel();
+        lblValor1 = new javax.swing.JLabel();
+        programarTarefa = new com.github.lgooddatepicker.components.DateTimePicker();
 
         lblObservacao.setText("(*) = Campos Obrigatórios.");
 
@@ -188,32 +188,34 @@ if (telaPrincipal != null) {
         lblMensagem.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         lblMensagem.setText("Tutorial Mensagem");
 
+        lblValor1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblValor1.setText("Data/Hora Limite de Finalização:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(216, Short.MAX_VALUE)
+                .addContainerGap(147, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblObservacao)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(6, 6, 6)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(lblAdicionarTarefa)
-                                            .addComponent(lblDescricaoTarefa)
-                                            .addComponent(lblValor)))
-                                    .addComponent(lblSelecionarTopico, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(lblSelecionarTopico, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblValor1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblValor, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblDescricaoTarefa, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblAdicionarTarefa, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(cbTopico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAdicionarTarefa)))
+                                    .addComponent(btnAdicionarTarefa)
+                                    .addComponent(programarTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(lblMensagem))
                         .addGap(68, 68, 68))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -229,7 +231,7 @@ if (telaPrincipal != null) {
             .addGroup(layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addComponent(lblCadPermissoes, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
+                .addGap(65, 65, 65)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSelecionarTopico)
                     .addComponent(cbTopico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -245,11 +247,15 @@ if (telaPrincipal != null) {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblValor))
-                .addGap(48, 48, 48)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblValor1)
+                    .addComponent(programarTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
                 .addComponent(btnAdicionarTarefa)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(btnFechar)
-                .addGap(18, 18, 18)
+                .addGap(26, 26, 26)
                 .addComponent(lblObservacao)
                 .addGap(18, 18, 18)
                 .addComponent(lblMensagem)
@@ -281,6 +287,8 @@ if (telaPrincipal != null) {
     private javax.swing.JLabel lblObservacao;
     private javax.swing.JLabel lblSelecionarTopico;
     private javax.swing.JLabel lblValor;
+    private javax.swing.JLabel lblValor1;
+    private com.github.lgooddatepicker.components.DateTimePicker programarTarefa;
     private javax.swing.JTextField txtDescricao;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtValor;
