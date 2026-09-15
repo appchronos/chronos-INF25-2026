@@ -182,7 +182,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <EmptySpace min="-2" pref="291" max="-2" attributes="0"/>
-                                  <Component id="btnNovaTarefa" min="-2" pref="274" max="-2" attributes="0"/>
+                                  <Component id="btnCriarTarefa" min="-2" pref="274" max="-2" attributes="0"/>
                               </Group>
                               <Component id="scrollPainelCards" min="-2" pref="808" max="-2" attributes="0"/>
                               <Component id="lblMensagem" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -219,7 +219,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="scrollPainelCards" min="-2" pref="451" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnNovaTarefa" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="btnCriarTarefa" min="-2" pref="40" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="lblMensagem" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
@@ -323,7 +323,7 @@
             <Property name="text" type="java.lang.String" value="Selecione um T&#xf3;pico:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btnNovaTarefa">
+        <Component class="javax.swing.JButton" name="btnCriarTarefa">
           <Properties>
             <Property name="text" type="java.lang.String" value="Criar Tarefa"/>
           </Properties>
@@ -331,7 +331,7 @@
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Clique aqui para Criar Tarefa"/>
           </AccessibilityProperties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNovaTarefaActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCriarTarefaActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="lblFrase">

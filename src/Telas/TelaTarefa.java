@@ -1,4 +1,3 @@
-
 package Telas;
 
 import Modelos.SessaoUsuario;
@@ -7,19 +6,21 @@ import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Component;
-
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class TelaTarefa extends javax.swing.JFrame {
 
-    private Connection conexao = null;  
+    private Connection conexao = null;
     private int idTopicoAtual = 1;
-    
+    private int idUsuarioLogado;
+
     public void atualizarNomeUsuario() {
         nomeUsuario.setText(SessaoUsuario.getInstance().getNomeUsuario());
     }
-    
+
     private void tutorial() {
-        
+
         TelaAdicionarTarefa telaCadastroAberta = null;
         TelaVisaoGeral telaVisaoGeralAberta = null;
 
@@ -43,7 +44,7 @@ public class TelaTarefa extends javax.swing.JFrame {
             boolean possuiTarefas = false;
 
             for (java.awt.Component comp : pnlListaTarefas.getComponents()) {
-                if (comp instanceof CardTarefa) { 
+                if (comp instanceof CardTarefa) {
                     possuiTarefas = true;
                     break;
                 }
@@ -78,93 +79,55 @@ public class TelaTarefa extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, textoTutorial, "Tutorial do Usuário", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
-     public void carregarTarefasDoBanco(int idTopico) {
-        this.idTopicoAtual = idTopico;
 
-        for (Component comp : pnlListaTarefas.getComponents()) {
-            comp.setVisible(false);
+    public void carregarTarefasDoBanco(int idTopico) {
+    this.idTopicoAtual = idTopico;
+
+    // Limpa o painel onde os cards de tarefas são adicionados
+    pnlListaTarefas.removeAll();
+
+    int idUsuario = Modelos.SessaoUsuario.getInstance().getIdUsuario();
+    if (idUsuario == 0) idUsuario = 1;
+
+    String sql = "SELECT * FROM t_tarefa WHERE id_usuario = ? AND id_topico = ?";
+
+    try {
+        if (conexao == null || conexao.isClosed()) {
+            conexao = AcessoDB.ModuloDbConecta.connector();
         }
-        pnlListaTarefas.removeAll();
-        pnlListaTarefas.revalidate(); 
 
-        try {
-            if (conexao == null || conexao.isClosed()) {
-                conexao = ModuloDbConecta.connector();
-            }
-        } catch (SQLException ex) {
-            System.out.println("Erro ao checar conexão: " + ex.getMessage());
-        }
-
-        String sql = "SELECT * FROM t_tarefa WHERE id_usuario = ? AND id_topico = ?";
-
-        try {
-            PreparedStatement pstLocal = conexao.prepareStatement(sql);
-            pstLocal.setInt(1, SessaoUsuario.getInstance().getIdUsuario());
+        try (java.sql.PreparedStatement pstLocal = conexao.prepareStatement(sql)) {
+            pstLocal.setInt(1, idUsuario);
             pstLocal.setInt(2, idTopico);
-            boolean encontrouTarefas = false;
 
-            ResultSet rsLocal = pstLocal.executeQuery();
-            while (rsLocal.next()) {
-                encontrouTarefas = true;
-                int id = rsLocal.getInt("id_tarefa");
-                String nome = rsLocal.getString("nm_tarefa");
-                String desc = rsLocal.getString("ds_tarefa");
-                double valor = rsLocal.getDouble("vl_tarefa");
-
-                CardTarefa card = new CardTarefa(this.getConexao(), id);
-                card.setExibirDados(nome, desc, valor);
-
-                card.setOnTarefaIniciadaListener(new CardTarefa.OnTarefaIniciadaListener() {
-                    @Override
-                    public void onTarefaIniciada(CardTarefa cardIniciado) {
-
-                        pnlListaTarefas.remove(cardIniciado);
-                        pnlListaTarefas.add(cardIniciado, 0);
-                        pnlListaTarefas.revalidate();
-                        pnlListaTarefas.repaint();
-
-                        for (javax.swing.JInternalFrame frame : desktopPane.getAllFrames()) {
-                            if (frame instanceof TelaVisaoGeral && frame.isVisible()) {
-                                ((TelaVisaoGeral) frame).atualizarDashboard();
-                                break;
-                            }
-                        }
-                    }
-                });
-                card.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, card.getPreferredSize().height));
-                pnlListaTarefas.add(card);
+            try (java.sql.ResultSet rs = pstLocal.executeQuery()) {
+                while (rs.next()) {
+                    // Instancia o card visual com as informações do banco
+    CardTarefa card = new CardTarefa(
+    conexao,
+    rs.getInt("id_tarefa")
+);
+                    
+                    // Adiciona o card ao painel
+                    pnlListaTarefas.add(card);
+                }
             }
-
-            rsLocal.close();
-            pstLocal.close();
-
-            if (!encontrouTarefas) {
-                javax.swing.JLabel lblAvisoVazio = new javax.swing.JLabel("Você não tem tarefas aqui. Clique em 'Criar Tarefa' para começar!");
-                lblAvisoVazio.setFont(new java.awt.Font("Segoe UI", java.awt.Font.ITALIC, 14));
-                lblAvisoVazio.setForeground(java.awt.Color.GRAY);
-                lblAvisoVazio.setAlignmentX(Component.CENTER_ALIGNMENT);
-                pnlListaTarefas.add(javax.swing.Box.createVerticalStrut(20));
-                pnlListaTarefas.add(lblAvisoVazio);
-            } else {
-                pnlListaTarefas.add(javax.swing.Box.createVerticalGlue());
-            }
-
-            pnlListaTarefas.revalidate();
-            pnlListaTarefas.repaint();
-            scrollPainelCards.revalidate();
-            scrollPainelCards.repaint();
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar tarefas do tópico: " + e.getMessage());
         }
+    } catch (java.sql.SQLException ex) {
+        System.err.println("Erro ao carregar tarefas do banco: " + ex.getMessage());
     }
-    
-    public void selecionarTopico(int numeroTopico) {
-        this.idTopicoAtual = numeroTopico;
-        carregarTarefasDoBanco(numeroTopico);
-    }
-    
+
+    // Força o Java Swing a redesenhar a tela com os novos cards
+    pnlListaTarefas.revalidate();
+    pnlListaTarefas.repaint();
+}
+
+   public void selecionarTopico(int numeroTopico) {
+    this.idTopicoAtual = numeroTopico;
+    carregarTarefasDoBanco(numeroTopico);
+    verificarEColorirBotoesTopicos();
+}
+
     public Connection getConexao() {
         try {
             if (this.conexao == null || this.conexao.isClosed()) {
@@ -177,21 +140,23 @@ public class TelaTarefa extends javax.swing.JFrame {
     }
 
     public TelaTarefa() {
-        initComponents();
+    initComponents();
+    verificarEColorirBotoesTopicos();
+}
 
-        lblMensagem.setText("Dica: Use Ctrl + T para abrir o tutorial desta lista. Ele muda quando você tem tarefas criadas!");
-        
-        if (SessaoUsuario.getInstance().getNomeUsuario() != null) {
-            nomeUsuario.setText(SessaoUsuario.getInstance().getNomeUsuario());
-        }
-        
-        conexao = ModuloDbConecta.connector();
-            
-        carregarTarefasDoBanco(idTopicoAtual);
+   public TelaTarefa(int idUsuario) {
+    initComponents();
+    this.idUsuarioLogado = idUsuario;
+    conexao = ModuloDbConecta.connector();
+    verificarEColorirBotoesTopicos();
+
+    if (SessaoUsuario.getInstance().getNomeUsuario() != null) {
+        Usuario.setText(SessaoUsuario.getInstance().getNomeUsuario());
     }
 
-    
-    
+    carregarTarefasDoBanco(idTopicoAtual);
+}
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -209,7 +174,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         btnPesquisa = new javax.swing.JButton();
         btnOutro = new javax.swing.JButton();
         lblSelecionarTopico = new javax.swing.JLabel();
-        btnNovaTarefa = new javax.swing.JButton();
+        btnCriarTarefa = new javax.swing.JButton();
         lblFrase = new javax.swing.JLabel();
         nomeUsuario = new javax.swing.JLabel();
         lblMensagem = new javax.swing.JLabel();
@@ -296,10 +261,10 @@ public class TelaTarefa extends javax.swing.JFrame {
         lblSelecionarTopico.setForeground(new java.awt.Color(255, 255, 255));
         lblSelecionarTopico.setText("Selecione um Tópico:");
 
-        btnNovaTarefa.setText("Criar Tarefa");
-        btnNovaTarefa.addActionListener(new java.awt.event.ActionListener() {
+        btnCriarTarefa.setText("Criar Tarefa");
+        btnCriarTarefa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNovaTarefaActionPerformed(evt);
+                btnCriarTarefaActionPerformed(evt);
             }
         });
 
@@ -326,7 +291,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         desktopPane.setLayer(btnPesquisa, javax.swing.JLayeredPane.DEFAULT_LAYER);
         desktopPane.setLayer(btnOutro, javax.swing.JLayeredPane.DEFAULT_LAYER);
         desktopPane.setLayer(lblSelecionarTopico, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        desktopPane.setLayer(btnNovaTarefa, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        desktopPane.setLayer(btnCriarTarefa, javax.swing.JLayeredPane.DEFAULT_LAYER);
         desktopPane.setLayer(lblFrase, javax.swing.JLayeredPane.DEFAULT_LAYER);
         desktopPane.setLayer(nomeUsuario, javax.swing.JLayeredPane.DEFAULT_LAYER);
         desktopPane.setLayer(lblMensagem, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -370,7 +335,7 @@ public class TelaTarefa extends javax.swing.JFrame {
                         .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(desktopPaneLayout.createSequentialGroup()
                                 .addGap(291, 291, 291)
-                                .addComponent(btnNovaTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnCriarTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(scrollPainelCards, javax.swing.GroupLayout.PREFERRED_SIZE, 808, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblMensagem))))
                 .addContainerGap(65, Short.MAX_VALUE))
@@ -398,13 +363,13 @@ public class TelaTarefa extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrollPainelCards, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnNovaTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCriarTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblMensagem)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        btnNovaTarefa.getAccessibleContext().setAccessibleName("Clique aqui para Criar Tarefa");
+        btnCriarTarefa.getAccessibleContext().setAccessibleName("Clique aqui para Criar Tarefa");
 
         MnConfiguracao.setForeground(new java.awt.Color(0, 51, 255));
         MnConfiguracao.setText("Configurações");
@@ -490,7 +455,7 @@ public class TelaTarefa extends javax.swing.JFrame {
 
     private void mnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnSairActionPerformed
         // TODO add your handling code here:
-        int sairOK = JOptionPane.showConfirmDialog(null,"Você deseja realmente Sair?","ATENÇÂO !!!",JOptionPane.YES_NO_OPTION);
+        int sairOK = JOptionPane.showConfirmDialog(null, "Você deseja realmente Sair?", "ATENÇÂO !!!", JOptionPane.YES_NO_OPTION);
         if (sairOK == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
@@ -528,11 +493,10 @@ public class TelaTarefa extends javax.swing.JFrame {
             tlUsuario.setSelected(true);
         } catch (java.beans.PropertyVetoException e) {
             e.printStackTrace();
-        }  
+        }
     }//GEN-LAST:event_mnUsuarioActionPerformed
 
-    private void btnNovaTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaTarefaActionPerformed
-        // TODO add your handling code here:
+    private void btnCriarTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarTarefaActionPerformed
         TelaAdicionarTarefa telaCadastro = null;
 
         for (javax.swing.JInternalFrame frame : desktopPane.getAllFrames()) {
@@ -544,6 +508,16 @@ public class TelaTarefa extends javax.swing.JFrame {
 
         if (telaCadastro == null) {
             telaCadastro = new TelaAdicionarTarefa(this);
+
+            // Listener específico para JInternalFrame atualizar ao fechar
+            telaCadastro.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+                @Override
+                public void internalFrameClosed(javax.swing.event.InternalFrameEvent e) {
+                    atualizarCoresTopicos();
+                    carregarTarefasDoBanco(idTopicoAtual);
+                }
+            });
+
             desktopPane.add(telaCadastro);
         }
 
@@ -554,7 +528,8 @@ public class TelaTarefa extends javax.swing.JFrame {
         } catch (java.beans.PropertyVetoException e) {
             e.printStackTrace();
         }
-    }//GEN-LAST:event_btnNovaTarefaActionPerformed
+
+    }//GEN-LAST:event_btnCriarTarefaActionPerformed
 
     private void btnEstudoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstudoActionPerformed
         // TODO add your handling code here:
@@ -626,48 +601,48 @@ public class TelaTarefa extends javax.swing.JFrame {
             tlVisao.setLocation(x, y);
         }
 
-        tlVisao.atualizarDashboard(); 
+        tlVisao.atualizarDashboard();
         tlVisao.setVisible(true);
 
         try {
-            tlVisao.setSelected(true); 
+            tlVisao.setSelected(true);
         } catch (java.beans.PropertyVetoException e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_mnIndicadorVGActionPerformed
 
-    public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+        public static void main(String args[]) {
+            try {
+                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
                 }
+            } catch (ClassNotFoundException ex) {
+                java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+                java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaTarefa().setVisible(true);
-            }
-        });
-    }
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new TelaTarefa().setVisible(true);
+                }
+            });
+        }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu MnConfiguracao;
     private javax.swing.JMenu Sair;
     private javax.swing.JButton btnCasa;
+    private javax.swing.JButton btnCriarTarefa;
     private javax.swing.JButton btnEstudo;
     private javax.swing.JButton btnLivro;
-    private javax.swing.JButton btnNovaTarefa;
     private javax.swing.JButton btnOutro;
     private javax.swing.JButton btnPesquisa;
     private javax.swing.JButton btnProjeto;
@@ -688,4 +663,138 @@ public class TelaTarefa extends javax.swing.JFrame {
     private javax.swing.JPanel pnlListaTarefas;
     private javax.swing.JScrollPane scrollPainelCards;
     // End of variables declaration//GEN-END:variables
+private void atualizarCorBotao(javax.swing.JButton btn, String categoria) {
+    if (btn == null) return;
+
+    String sql = "SELECT COUNT(*) FROM t_tarefa WHERE ds_categoria = ?";
+
+    try (java.sql.Connection conexao = AcessoDB.ModuloDbConecta.connector()) {
+        if (conexao == null) return;
+
+        try (java.sql.PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setString(1, categoria);
+
+            try (java.sql.ResultSet rs = stmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    btn.putClientProperty("JButton.buttonType", "roundRect");
+                    btn.setBackground(new java.awt.Color(40, 167, 69));
+                    btn.setForeground(java.awt.Color.WHITE);
+                    btn.setOpaque(true);
+                    btn.setContentAreaFilled(true);
+                } else {
+                    btn.putClientProperty("JButton.buttonType", null);
+                    btn.setBackground(null);
+                    btn.setForeground(java.awt.Color.BLACK);
+                }
+            }
+        }
+    } catch (Exception e) {
+        System.err.println("Erro ao atualizar cor do botão: " + e.getMessage());
+    }
+}
+
+   public void verificarEColorirBotoesTopicos() {
+    int idUsuario = Modelos.SessaoUsuario.getInstance().getIdUsuario();
+    
+    // Se não houver usuário logado no teste direto, usa o id 1 padrão para testar
+    if (idUsuario == 0) {
+        idUsuario = 1; 
+    }
+
+    javax.swing.JButton[] botoes = {
+        btnEstudo, btnCasa, btnProjeto, btnRotina,
+        btnTrabalho, btnViagem, btnLivro, btnPesquisa, btnOutro
+    };
+
+    int[] idsTopicos = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    String sql = "SELECT COUNT(*) FROM t_tarefa WHERE id_topico = ? AND id_usuario = ?";
+
+    try (java.sql.Connection conexao = AcessoDB.ModuloDbConecta.connector()) {
+        if (conexao == null) return;
+
+        try (java.sql.PreparedStatement pst = conexao.prepareStatement(sql)) {
+            for (int i = 0; i < botoes.length; i++) {
+                javax.swing.JButton btn = botoes[i];
+                if (btn == null) continue;
+
+                pst.setInt(1, idsTopicos[i]);
+                pst.setInt(2, idUsuario);
+
+                try (java.sql.ResultSet rs = pst.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        btn.putClientProperty("JButton.buttonType", "roundRect");
+                        btn.setBackground(new java.awt.Color(40, 167, 69));
+                        btn.setForeground(java.awt.Color.WHITE);
+                        btn.setOpaque(true);
+                        btn.setContentAreaFilled(true);
+                    } else {
+                        btn.putClientProperty("JButton.buttonType", null);
+                        btn.setBackground(null);
+                        btn.setForeground(java.awt.Color.BLACK);
+                    }
+                }
+            }
+        }
+    } catch (Exception e) {
+        System.err.println("Erro ao colorir botões: " + e.getMessage());
+    }
+
+    this.revalidate();
+    this.repaint();
+}
+
+    private static class Usuario {
+
+        public static void setText(String nomeUsuario) {
+            // método vazio ou com a lógica desejada
+        }
+
+        public Usuario() {
+        }
+    }
+
+    public void atualizarCoresTopicos() {
+        javax.swing.JButton[] botoes = {btnEstudo, btnCasa, btnProjeto, btnRotina, btnTrabalho, btnViagem, btnPesquisa, btnLivro, btnOutro};
+        int[] idsTopicos = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        String sql = "SELECT COUNT(*) FROM t_tarefa WHERE id_topico = ? AND id_usuario = ?";
+
+        try (java.sql.Connection conn = AcessoDB.ModuloDbConecta.connector(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < botoes.length; i++) {
+                stmt.setInt(1, idsTopicos[i]);
+                stmt.setInt(2, this.idUsuarioLogado);
+
+                java.sql.ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    int qtdTarefas = rs.getInt(1);
+
+                    // Garante que o Swing pinte a cor de fundo customizada
+                    botoes[i].setOpaque(true);
+                    botoes[i].setBorderPainted(false);
+
+                    if (qtdTarefas > 0) {
+                        botoes[i].setBackground(new java.awt.Color(40, 167, 69)); // Verde
+                        botoes[i].setForeground(java.awt.Color.WHITE);
+                    } else {
+                        botoes[i].setBackground(new java.awt.Color(108, 117, 125)); // Cinza
+                        botoes[i].setForeground(java.awt.Color.WHITE);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao atualizar cores dos tópicos: " + e.getMessage());
+        }
+    } // Fecha o método atualizarCoresTopicos
+
+    public void verificarTodosTopicos() {
+        atualizarCorBotao(btnEstudo, "Estudo");
+        atualizarCorBotao(btnCasa, "Casa");
+        atualizarCorBotao(btnProjeto, "Projeto");
+        atualizarCorBotao(btnRotina, "Rotina");
+        atualizarCorBotao(btnTrabalho, "Trabalho");
+        atualizarCorBotao(btnViagem, "Viagem");
+        atualizarCorBotao(btnPesquisa, "Pesquisa");
+        atualizarCorBotao(btnLivro, "Livro");
+        atualizarCorBotao(btnOutro, "Outro");
+    }
 }
