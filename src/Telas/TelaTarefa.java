@@ -1,3 +1,4 @@
+
 package Telas;
 
 import Modelos.SessaoUsuario;
@@ -6,21 +7,21 @@ import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Component;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.awt.Color;
+import javax.swing.JButton;
+
 
 public class TelaTarefa extends javax.swing.JFrame {
 
-    private Connection conexao = null;
+    private Connection conexao = null;  
     private int idTopicoAtual = 1;
-    private int idUsuarioLogado;
-
+    
     public void atualizarNomeUsuario() {
         nomeUsuario.setText(SessaoUsuario.getInstance().getNomeUsuario());
     }
-
+    
     private void tutorial() {
-
+        
         TelaAdicionarTarefa telaCadastroAberta = null;
         TelaVisaoGeral telaVisaoGeralAberta = null;
 
@@ -44,7 +45,7 @@ public class TelaTarefa extends javax.swing.JFrame {
             boolean possuiTarefas = false;
 
             for (java.awt.Component comp : pnlListaTarefas.getComponents()) {
-                if (comp instanceof CardTarefa) {
+                if (comp instanceof CardTarefa) { 
                     possuiTarefas = true;
                     break;
                 }
@@ -79,55 +80,111 @@ public class TelaTarefa extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, textoTutorial, "Tutorial do Usuário", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+    
+     public void carregarTarefasDoBanco(int idTopico) {
+        this.idTopicoAtual = idTopico;
 
-    public void carregarTarefasDoBanco(int idTopico) {
-    this.idTopicoAtual = idTopico;
+        for (Component comp : pnlListaTarefas.getComponents()) {
+            comp.setVisible(false);
+        }
+        pnlListaTarefas.removeAll();
+        pnlListaTarefas.revalidate(); 
 
-    // Limpa o painel onde os cards de tarefas são adicionados
-    pnlListaTarefas.removeAll();
-
-    int idUsuario = Modelos.SessaoUsuario.getInstance().getIdUsuario();
-    if (idUsuario == 0) idUsuario = 1;
-
-    String sql = "SELECT * FROM t_tarefa WHERE id_usuario = ? AND id_topico = ?";
-
-    try {
-        if (conexao == null || conexao.isClosed()) {
-            conexao = AcessoDB.ModuloDbConecta.connector();
+        try {
+            if (conexao == null || conexao.isClosed()) {
+                conexao = ModuloDbConecta.connector();
+            }
+        } catch (SQLException ex) {
+            System.out.println("Erro ao checar conexão: " + ex.getMessage());
         }
 
-        try (java.sql.PreparedStatement pstLocal = conexao.prepareStatement(sql)) {
-            pstLocal.setInt(1, idUsuario);
-            pstLocal.setInt(2, idTopico);
+        String sql = "SELECT * FROM t_tarefa WHERE id_usuario = ? AND id_topico = ?";
 
-            try (java.sql.ResultSet rs = pstLocal.executeQuery()) {
-                while (rs.next()) {
-                    // Instancia o card visual com as informações do banco
-    CardTarefa card = new CardTarefa(
-    conexao,
-    rs.getInt("id_tarefa")
-);
-                    
-                    // Adiciona o card ao painel
-                    pnlListaTarefas.add(card);
-                }
+        try {
+            PreparedStatement pstLocal = conexao.prepareStatement(sql);
+            pstLocal.setInt(1, SessaoUsuario.getInstance().getIdUsuario());
+            pstLocal.setInt(2, idTopico);
+            boolean encontrouTarefas = false;
+
+            ResultSet rsLocal = pstLocal.executeQuery();
+            while (rsLocal.next()) {
+                encontrouTarefas = true;
+                int id = rsLocal.getInt("id_tarefa");
+                String nome = rsLocal.getString("nm_tarefa");
+                String desc = rsLocal.getString("ds_tarefa");
+                double valor = rsLocal.getDouble("vl_tarefa");
+
+                CardTarefa card = new CardTarefa(this.getConexao(), id);
+                card.setExibirDados(nome, desc, valor);
+
+                card.setOnTarefaIniciadaListener(new CardTarefa.OnTarefaIniciadaListener() {
+                    @Override
+                    public void onTarefaIniciada(CardTarefa cardIniciado) {
+
+                        pnlListaTarefas.remove(cardIniciado);
+                        pnlListaTarefas.add(cardIniciado, 0);
+                        pnlListaTarefas.revalidate();
+                        pnlListaTarefas.repaint();
+
+                        for (javax.swing.JInternalFrame frame : desktopPane.getAllFrames()) {
+                            if (frame instanceof TelaVisaoGeral && frame.isVisible()) {
+                                ((TelaVisaoGeral) frame).atualizarDashboard();
+                                break;
+                            }
+                        }
+                    }
+                });
+                card.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, card.getPreferredSize().height));
+                pnlListaTarefas.add(card);
+            }
+
+            rsLocal.close();
+            pstLocal.close();
+
+            if (!encontrouTarefas) {
+                javax.swing.JLabel lblAvisoVazio = new javax.swing.JLabel("Você não tem tarefas aqui. Clique em 'Criar Tarefa' para começar!");
+                lblAvisoVazio.setFont(new java.awt.Font("Segoe UI", java.awt.Font.ITALIC, 14));
+                lblAvisoVazio.setForeground(java.awt.Color.GRAY);
+                lblAvisoVazio.setAlignmentX(Component.CENTER_ALIGNMENT);
+                pnlListaTarefas.add(javax.swing.Box.createVerticalStrut(20));
+                pnlListaTarefas.add(lblAvisoVazio);
+            } else {
+                pnlListaTarefas.add(javax.swing.Box.createVerticalGlue());
+            }
+
+            pnlListaTarefas.revalidate();
+            pnlListaTarefas.repaint();
+            scrollPainelCards.revalidate();
+            scrollPainelCards.repaint();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar tarefas do tópico: " + e.getMessage());
+        }
+    }
+    
+    // Método para resetar a cor de todos e destacar apenas o clicado
+private void selecionarTopico(JButton botaoSelecionado) {
+        JButton[] botoes = {btnEstudo, btnCasa, btnProjeto, btnRotina, btnTrabalho, btnViagem, btnPesquisa, btnLivro, btnOutro};
+
+        Color corFundoPadrao = new Color(255, 255, 255); // Fundo branco/cinza claro dos botões
+        Color corLaranja = new Color(255, 140, 0);       // Cor laranja de destaque para a borda
+        Color corBordaPadrao = new Color(200, 200, 200);  // Borda suave para os não selecionados
+
+        for (JButton btn : botoes) {
+            btn.setFocusPainted(false);
+            btn.setBackground(corFundoPadrao);
+            btn.setForeground(Color.BLACK); // Texto escuro mantido em todos
+
+            if (btn == botaoSelecionado) {
+                // Aplica apenas a borda laranja com espessura de 2px
+                btn.setBorder(javax.swing.BorderFactory.createLineBorder(corLaranja, 2));
+            } else {
+                // Restaura a borda padrão fina dos botões desativados
+                btn.setBorder(javax.swing.BorderFactory.createLineBorder(corBordaPadrao, 1));
             }
         }
-    } catch (java.sql.SQLException ex) {
-        System.err.println("Erro ao carregar tarefas do banco: " + ex.getMessage());
     }
-
-    // Força o Java Swing a redesenhar a tela com os novos cards
-    pnlListaTarefas.revalidate();
-    pnlListaTarefas.repaint();
-}
-
-   public void selecionarTopico(int numeroTopico) {
-    this.idTopicoAtual = numeroTopico;
-    carregarTarefasDoBanco(numeroTopico);
-    verificarEColorirBotoesTopicos();
-}
-
+    
     public Connection getConexao() {
         try {
             if (this.conexao == null || this.conexao.isClosed()) {
@@ -140,23 +197,21 @@ public class TelaTarefa extends javax.swing.JFrame {
     }
 
     public TelaTarefa() {
-    initComponents();
-    verificarEColorirBotoesTopicos();
-}
+        initComponents();
 
-   public TelaTarefa(int idUsuario) {
-    initComponents();
-    this.idUsuarioLogado = idUsuario;
-    conexao = ModuloDbConecta.connector();
-    verificarEColorirBotoesTopicos();
-
-    if (SessaoUsuario.getInstance().getNomeUsuario() != null) {
-        Usuario.setText(SessaoUsuario.getInstance().getNomeUsuario());
+        lblMensagem.setText("Dica: Use Ctrl + T para abrir o tutorial desta lista. Ele muda quando você tem tarefas criadas!");
+        
+        if (SessaoUsuario.getInstance().getNomeUsuario() != null) {
+            nomeUsuario.setText(SessaoUsuario.getInstance().getNomeUsuario());
+        }
+        
+        conexao = ModuloDbConecta.connector();
+            
+        carregarTarefasDoBanco(idTopicoAtual);
     }
 
-    carregarTarefasDoBanco(idTopicoAtual);
-}
-
+    
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -174,7 +229,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         btnPesquisa = new javax.swing.JButton();
         btnOutro = new javax.swing.JButton();
         lblSelecionarTopico = new javax.swing.JLabel();
-        btnCriarTarefa = new javax.swing.JButton();
+        btnNovaTarefa = new javax.swing.JButton();
         lblFrase = new javax.swing.JLabel();
         nomeUsuario = new javax.swing.JLabel();
         lblMensagem = new javax.swing.JLabel();
@@ -195,6 +250,9 @@ public class TelaTarefa extends javax.swing.JFrame {
         scrollPainelCards.setViewportView(pnlListaTarefas);
 
         btnEstudo.setText("Estudo");
+        btnEstudo.setMaximumSize(new java.awt.Dimension(72, 23));
+        btnEstudo.setMinimumSize(new java.awt.Dimension(72, 23));
+        btnEstudo.setPreferredSize(new java.awt.Dimension(70, 25));
         btnEstudo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEstudoActionPerformed(evt);
@@ -202,6 +260,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         });
 
         btnCasa.setText("Casa");
+        btnCasa.setPreferredSize(new java.awt.Dimension(70, 25));
         btnCasa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCasaActionPerformed(evt);
@@ -209,6 +268,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         });
 
         btnProjeto.setText("Projeto");
+        btnProjeto.setPreferredSize(new java.awt.Dimension(70, 25));
         btnProjeto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProjetoActionPerformed(evt);
@@ -216,6 +276,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         });
 
         btnRotina.setText("Rotina");
+        btnRotina.setPreferredSize(new java.awt.Dimension(70, 25));
         btnRotina.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRotinaActionPerformed(evt);
@@ -223,6 +284,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         });
 
         btnTrabalho.setText("Trabalho");
+        btnTrabalho.setPreferredSize(new java.awt.Dimension(70, 25));
         btnTrabalho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTrabalhoActionPerformed(evt);
@@ -230,6 +292,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         });
 
         btnViagem.setText("Viagem");
+        btnViagem.setPreferredSize(new java.awt.Dimension(70, 25));
         btnViagem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViagemActionPerformed(evt);
@@ -237,6 +300,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         });
 
         btnLivro.setText("Livro");
+        btnLivro.setPreferredSize(new java.awt.Dimension(70, 25));
         btnLivro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLivroActionPerformed(evt);
@@ -244,6 +308,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         });
 
         btnPesquisa.setText("Pesquisa");
+        btnPesquisa.setPreferredSize(new java.awt.Dimension(70, 25));
         btnPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPesquisaActionPerformed(evt);
@@ -251,6 +316,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         });
 
         btnOutro.setText("Outro");
+        btnOutro.setPreferredSize(new java.awt.Dimension(70, 25));
         btnOutro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOutroActionPerformed(evt);
@@ -261,10 +327,10 @@ public class TelaTarefa extends javax.swing.JFrame {
         lblSelecionarTopico.setForeground(new java.awt.Color(255, 255, 255));
         lblSelecionarTopico.setText("Selecione um Tópico:");
 
-        btnCriarTarefa.setText("Criar Tarefa");
-        btnCriarTarefa.addActionListener(new java.awt.event.ActionListener() {
+        btnNovaTarefa.setText("Criar Tarefa");
+        btnNovaTarefa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCriarTarefaActionPerformed(evt);
+                btnNovaTarefaActionPerformed(evt);
             }
         });
 
@@ -291,7 +357,7 @@ public class TelaTarefa extends javax.swing.JFrame {
         desktopPane.setLayer(btnPesquisa, javax.swing.JLayeredPane.DEFAULT_LAYER);
         desktopPane.setLayer(btnOutro, javax.swing.JLayeredPane.DEFAULT_LAYER);
         desktopPane.setLayer(lblSelecionarTopico, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        desktopPane.setLayer(btnCriarTarefa, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        desktopPane.setLayer(btnNovaTarefa, javax.swing.JLayeredPane.DEFAULT_LAYER);
         desktopPane.setLayer(lblFrase, javax.swing.JLayeredPane.DEFAULT_LAYER);
         desktopPane.setLayer(nomeUsuario, javax.swing.JLayeredPane.DEFAULT_LAYER);
         desktopPane.setLayer(lblMensagem, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -313,29 +379,29 @@ public class TelaTarefa extends javax.swing.JFrame {
                                 .addComponent(lblSelecionarTopico))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, desktopPaneLayout.createSequentialGroup()
                                 .addGap(44, 44, 44)
-                                .addComponent(btnEstudo)
+                                .addComponent(btnEstudo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnCasa)
+                                .addComponent(btnCasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnProjeto)
+                                .addComponent(btnProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnRotina)
+                                .addComponent(btnRotina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(19, 19, 19)
-                                .addComponent(btnTrabalho)
+                                .addComponent(btnTrabalho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnViagem)))
+                                .addComponent(btnViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
-                        .addComponent(btnPesquisa)
+                        .addComponent(btnPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnLivro)
+                        .addComponent(btnLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnOutro))
+                        .addComponent(btnOutro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(desktopPaneLayout.createSequentialGroup()
                         .addGap(19, 19, 19)
                         .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(desktopPaneLayout.createSequentialGroup()
                                 .addGap(291, 291, 291)
-                                .addComponent(btnCriarTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnNovaTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(scrollPainelCards, javax.swing.GroupLayout.PREFERRED_SIZE, 808, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblMensagem))))
                 .addContainerGap(65, Short.MAX_VALUE))
@@ -351,25 +417,25 @@ public class TelaTarefa extends javax.swing.JFrame {
                         .addComponent(nomeUsuario)))
                 .addGap(8, 8, 8)
                 .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCasa)
-                    .addComponent(btnProjeto)
-                    .addComponent(btnRotina)
-                    .addComponent(btnTrabalho)
-                    .addComponent(btnViagem)
-                    .addComponent(btnLivro)
-                    .addComponent(btnPesquisa)
-                    .addComponent(btnOutro)
-                    .addComponent(btnEstudo))
+                    .addComponent(btnCasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRotina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTrabalho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnOutro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEstudo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrollPainelCards, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCriarTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnNovaTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblMensagem)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        btnCriarTarefa.getAccessibleContext().setAccessibleName("Clique aqui para Criar Tarefa");
+        btnNovaTarefa.getAccessibleContext().setAccessibleName("Clique aqui para Criar Tarefa");
 
         MnConfiguracao.setForeground(new java.awt.Color(0, 51, 255));
         MnConfiguracao.setText("Configurações");
@@ -455,7 +521,7 @@ public class TelaTarefa extends javax.swing.JFrame {
 
     private void mnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnSairActionPerformed
         // TODO add your handling code here:
-        int sairOK = JOptionPane.showConfirmDialog(null, "Você deseja realmente Sair?", "ATENÇÂO !!!", JOptionPane.YES_NO_OPTION);
+        int sairOK = JOptionPane.showConfirmDialog(null,"Você deseja realmente Sair?","ATENÇÂO !!!",JOptionPane.YES_NO_OPTION);
         if (sairOK == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
@@ -493,10 +559,11 @@ public class TelaTarefa extends javax.swing.JFrame {
             tlUsuario.setSelected(true);
         } catch (java.beans.PropertyVetoException e) {
             e.printStackTrace();
-        }
+        }  
     }//GEN-LAST:event_mnUsuarioActionPerformed
 
-    private void btnCriarTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarTarefaActionPerformed
+    private void btnNovaTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaTarefaActionPerformed
+        // TODO add your handling code here:
         TelaAdicionarTarefa telaCadastro = null;
 
         for (javax.swing.JInternalFrame frame : desktopPane.getAllFrames()) {
@@ -508,16 +575,6 @@ public class TelaTarefa extends javax.swing.JFrame {
 
         if (telaCadastro == null) {
             telaCadastro = new TelaAdicionarTarefa(this);
-
-            // Listener específico para JInternalFrame atualizar ao fechar
-            telaCadastro.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
-                @Override
-                public void internalFrameClosed(javax.swing.event.InternalFrameEvent e) {
-                    atualizarCoresTopicos();
-                    carregarTarefasDoBanco(idTopicoAtual);
-                }
-            });
-
             desktopPane.add(telaCadastro);
         }
 
@@ -528,52 +585,53 @@ public class TelaTarefa extends javax.swing.JFrame {
         } catch (java.beans.PropertyVetoException e) {
             e.printStackTrace();
         }
-
-    }//GEN-LAST:event_btnCriarTarefaActionPerformed
+    }//GEN-LAST:event_btnNovaTarefaActionPerformed
 
     private void btnEstudoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstudoActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(1);
+        selecionarTopico(btnEstudo);
+        // Destaca a borda do botão clicado com a cor Laranja Chrono$ (#FF6B00)
+   
     }//GEN-LAST:event_btnEstudoActionPerformed
 
     private void btnCasaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCasaActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(2);
+        selecionarTopico(btnCasa);
     }//GEN-LAST:event_btnCasaActionPerformed
 
     private void btnProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProjetoActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(3);
+        selecionarTopico(btnProjeto);
     }//GEN-LAST:event_btnProjetoActionPerformed
 
     private void btnRotinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRotinaActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(4);
+        selecionarTopico(btnRotina);
     }//GEN-LAST:event_btnRotinaActionPerformed
 
     private void btnTrabalhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTrabalhoActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(5);
+        selecionarTopico(btnTrabalho);
     }//GEN-LAST:event_btnTrabalhoActionPerformed
 
     private void btnViagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViagemActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(6);
+        selecionarTopico(btnViagem);
     }//GEN-LAST:event_btnViagemActionPerformed
 
     private void btnLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLivroActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(7);
+        selecionarTopico(btnLivro);
     }//GEN-LAST:event_btnLivroActionPerformed
 
     private void btnPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisaActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(8);
+        selecionarTopico(btnPesquisa);
     }//GEN-LAST:event_btnPesquisaActionPerformed
 
     private void btnOutroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutroActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(9);
+        selecionarTopico(btnOutro);
     }//GEN-LAST:event_btnOutroActionPerformed
 
     private void mnTutorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnTutorialActionPerformed
@@ -601,48 +659,48 @@ public class TelaTarefa extends javax.swing.JFrame {
             tlVisao.setLocation(x, y);
         }
 
-        tlVisao.atualizarDashboard();
+        tlVisao.atualizarDashboard(); 
         tlVisao.setVisible(true);
 
         try {
-            tlVisao.setSelected(true);
+            tlVisao.setSelected(true); 
         } catch (java.beans.PropertyVetoException e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_mnIndicadorVGActionPerformed
 
-        public static void main(String args[]) {
-            try {
-                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                    if ("Nimbus".equals(info.getName())) {
-                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                        break;
-                    }
+    public static void main(String args[]) {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
                 }
-            } catch (ClassNotFoundException ex) {
-                java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-                java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
-
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    new TelaTarefa().setVisible(true);
-                }
-            });
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(TelaTarefa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new TelaTarefa().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu MnConfiguracao;
     private javax.swing.JMenu Sair;
     private javax.swing.JButton btnCasa;
-    private javax.swing.JButton btnCriarTarefa;
     private javax.swing.JButton btnEstudo;
     private javax.swing.JButton btnLivro;
+    private javax.swing.JButton btnNovaTarefa;
     private javax.swing.JButton btnOutro;
     private javax.swing.JButton btnPesquisa;
     private javax.swing.JButton btnProjeto;
@@ -663,138 +721,4 @@ public class TelaTarefa extends javax.swing.JFrame {
     private javax.swing.JPanel pnlListaTarefas;
     private javax.swing.JScrollPane scrollPainelCards;
     // End of variables declaration//GEN-END:variables
-private void atualizarCorBotao(javax.swing.JButton btn, String categoria) {
-    if (btn == null) return;
-
-    String sql = "SELECT COUNT(*) FROM t_tarefa WHERE ds_categoria = ?";
-
-    try (java.sql.Connection conexao = AcessoDB.ModuloDbConecta.connector()) {
-        if (conexao == null) return;
-
-        try (java.sql.PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setString(1, categoria);
-
-            try (java.sql.ResultSet rs = stmt.executeQuery()) {
-                if (rs.next() && rs.getInt(1) > 0) {
-                    btn.putClientProperty("JButton.buttonType", "roundRect");
-                    btn.setBackground(new java.awt.Color(40, 167, 69));
-                    btn.setForeground(java.awt.Color.WHITE);
-                    btn.setOpaque(true);
-                    btn.setContentAreaFilled(true);
-                } else {
-                    btn.putClientProperty("JButton.buttonType", null);
-                    btn.setBackground(null);
-                    btn.setForeground(java.awt.Color.BLACK);
-                }
-            }
-        }
-    } catch (Exception e) {
-        System.err.println("Erro ao atualizar cor do botão: " + e.getMessage());
-    }
-}
-
-   public void verificarEColorirBotoesTopicos() {
-    int idUsuario = Modelos.SessaoUsuario.getInstance().getIdUsuario();
-    
-    // Se não houver usuário logado no teste direto, usa o id 1 padrão para testar
-    if (idUsuario == 0) {
-        idUsuario = 1; 
-    }
-
-    javax.swing.JButton[] botoes = {
-        btnEstudo, btnCasa, btnProjeto, btnRotina,
-        btnTrabalho, btnViagem, btnLivro, btnPesquisa, btnOutro
-    };
-
-    int[] idsTopicos = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    String sql = "SELECT COUNT(*) FROM t_tarefa WHERE id_topico = ? AND id_usuario = ?";
-
-    try (java.sql.Connection conexao = AcessoDB.ModuloDbConecta.connector()) {
-        if (conexao == null) return;
-
-        try (java.sql.PreparedStatement pst = conexao.prepareStatement(sql)) {
-            for (int i = 0; i < botoes.length; i++) {
-                javax.swing.JButton btn = botoes[i];
-                if (btn == null) continue;
-
-                pst.setInt(1, idsTopicos[i]);
-                pst.setInt(2, idUsuario);
-
-                try (java.sql.ResultSet rs = pst.executeQuery()) {
-                    if (rs.next() && rs.getInt(1) > 0) {
-                        btn.putClientProperty("JButton.buttonType", "roundRect");
-                        btn.setBackground(new java.awt.Color(40, 167, 69));
-                        btn.setForeground(java.awt.Color.WHITE);
-                        btn.setOpaque(true);
-                        btn.setContentAreaFilled(true);
-                    } else {
-                        btn.putClientProperty("JButton.buttonType", null);
-                        btn.setBackground(null);
-                        btn.setForeground(java.awt.Color.BLACK);
-                    }
-                }
-            }
-        }
-    } catch (Exception e) {
-        System.err.println("Erro ao colorir botões: " + e.getMessage());
-    }
-
-    this.revalidate();
-    this.repaint();
-}
-
-    private static class Usuario {
-
-        public static void setText(String nomeUsuario) {
-            // método vazio ou com a lógica desejada
-        }
-
-        public Usuario() {
-        }
-    }
-
-    public void atualizarCoresTopicos() {
-        javax.swing.JButton[] botoes = {btnEstudo, btnCasa, btnProjeto, btnRotina, btnTrabalho, btnViagem, btnPesquisa, btnLivro, btnOutro};
-        int[] idsTopicos = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-        String sql = "SELECT COUNT(*) FROM t_tarefa WHERE id_topico = ? AND id_usuario = ?";
-
-        try (java.sql.Connection conn = AcessoDB.ModuloDbConecta.connector(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            for (int i = 0; i < botoes.length; i++) {
-                stmt.setInt(1, idsTopicos[i]);
-                stmt.setInt(2, this.idUsuarioLogado);
-
-                java.sql.ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    int qtdTarefas = rs.getInt(1);
-
-                    // Garante que o Swing pinte a cor de fundo customizada
-                    botoes[i].setOpaque(true);
-                    botoes[i].setBorderPainted(false);
-
-                    if (qtdTarefas > 0) {
-                        botoes[i].setBackground(new java.awt.Color(40, 167, 69)); // Verde
-                        botoes[i].setForeground(java.awt.Color.WHITE);
-                    } else {
-                        botoes[i].setBackground(new java.awt.Color(108, 117, 125)); // Cinza
-                        botoes[i].setForeground(java.awt.Color.WHITE);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao atualizar cores dos tópicos: " + e.getMessage());
-        }
-    } // Fecha o método atualizarCoresTopicos
-
-    public void verificarTodosTopicos() {
-        atualizarCorBotao(btnEstudo, "Estudo");
-        atualizarCorBotao(btnCasa, "Casa");
-        atualizarCorBotao(btnProjeto, "Projeto");
-        atualizarCorBotao(btnRotina, "Rotina");
-        atualizarCorBotao(btnTrabalho, "Trabalho");
-        atualizarCorBotao(btnViagem, "Viagem");
-        atualizarCorBotao(btnPesquisa, "Pesquisa");
-        atualizarCorBotao(btnLivro, "Livro");
-        atualizarCorBotao(btnOutro, "Outro");
-    }
 }

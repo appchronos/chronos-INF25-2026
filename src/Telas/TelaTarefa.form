@@ -182,7 +182,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <EmptySpace min="-2" pref="291" max="-2" attributes="0"/>
-                                  <Component id="btnCriarTarefa" min="-2" pref="274" max="-2" attributes="0"/>
+                                  <Component id="btnNovaTarefa" min="-2" pref="274" max="-2" attributes="0"/>
                               </Group>
                               <Component id="scrollPainelCards" min="-2" pref="808" max="-2" attributes="0"/>
                               <Component id="lblMensagem" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -219,7 +219,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="scrollPainelCards" min="-2" pref="451" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnCriarTarefa" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="btnNovaTarefa" min="-2" pref="40" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="lblMensagem" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
@@ -243,6 +243,15 @@
         <Component class="javax.swing.JButton" name="btnEstudo">
           <Properties>
             <Property name="text" type="java.lang.String" value="Estudo"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[72, 23]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[72, 23]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[70, 25]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEstudoActionPerformed"/>
@@ -251,6 +260,9 @@
         <Component class="javax.swing.JButton" name="btnCasa">
           <Properties>
             <Property name="text" type="java.lang.String" value="Casa"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[70, 25]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCasaActionPerformed"/>
@@ -259,6 +271,9 @@
         <Component class="javax.swing.JButton" name="btnProjeto">
           <Properties>
             <Property name="text" type="java.lang.String" value="Projeto"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[70, 25]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnProjetoActionPerformed"/>
@@ -267,6 +282,9 @@
         <Component class="javax.swing.JButton" name="btnRotina">
           <Properties>
             <Property name="text" type="java.lang.String" value="Rotina"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[70, 25]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRotinaActionPerformed"/>
@@ -275,6 +293,9 @@
         <Component class="javax.swing.JButton" name="btnTrabalho">
           <Properties>
             <Property name="text" type="java.lang.String" value="Trabalho"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[70, 25]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTrabalhoActionPerformed"/>
@@ -283,6 +304,9 @@
         <Component class="javax.swing.JButton" name="btnViagem">
           <Properties>
             <Property name="text" type="java.lang.String" value="Viagem"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[70, 25]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViagemActionPerformed"/>
@@ -291,6 +315,9 @@
         <Component class="javax.swing.JButton" name="btnLivro">
           <Properties>
             <Property name="text" type="java.lang.String" value="Livro"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[70, 25]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLivroActionPerformed"/>
@@ -299,6 +326,9 @@
         <Component class="javax.swing.JButton" name="btnPesquisa">
           <Properties>
             <Property name="text" type="java.lang.String" value="Pesquisa"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[70, 25]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPesquisaActionPerformed"/>
@@ -307,6 +337,9 @@
         <Component class="javax.swing.JButton" name="btnOutro">
           <Properties>
             <Property name="text" type="java.lang.String" value="Outro"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[70, 25]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOutroActionPerformed"/>
@@ -323,7 +356,7 @@
             <Property name="text" type="java.lang.String" value="Selecione um T&#xf3;pico:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btnCriarTarefa">
+        <Component class="javax.swing.JButton" name="btnNovaTarefa">
           <Properties>
             <Property name="text" type="java.lang.String" value="Criar Tarefa"/>
           </Properties>
@@ -331,7 +364,7 @@
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Clique aqui para Criar Tarefa"/>
           </AccessibilityProperties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCriarTarefaActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNovaTarefaActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="lblFrase">
