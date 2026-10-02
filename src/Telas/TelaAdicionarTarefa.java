@@ -113,6 +113,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
 
     public TelaAdicionarTarefa(TelaTarefa telaPrincipal) {
         initComponents();
+        
 
         lblMensagem.setText("Dica: Dúvidas sobre os campos? Pressione Ctrl + T para ver o guia de cadastro.");
         
@@ -150,46 +151,46 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
 
         lblObservacao.setText("(*) = Campos Obrigatórios.");
 
-        lblAdicionarTarefa.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblAdicionarTarefa.setText("(*)Adicionar Tarefa:");
+        lblAdicionarTarefa.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
+        btnAdicionarTarefa.setText("Adicionar Tarefa");
         btnAdicionarTarefa.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnAdicionarTarefa.setForeground(new java.awt.Color(0, 51, 255));
-        btnAdicionarTarefa.setText("Adicionar Tarefa");
         btnAdicionarTarefa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAdicionarTarefaActionPerformed(evt);
             }
         });
 
-        lblDescricaoTarefa.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblDescricaoTarefa.setText("Descrição da Tarefa:");
+        lblDescricaoTarefa.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
+        lblCadPermissoes.setText("Nova Tarefa");
         lblCadPermissoes.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblCadPermissoes.setForeground(new java.awt.Color(0, 51, 255));
-        lblCadPermissoes.setText("Nova Tarefa");
 
-        lblValor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblValor.setText("Valor das Tarefa:");
+        lblValor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        lblSelecionarTopico.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblSelecionarTopico.setText("(*)Selecionar Tópico:");
+        lblSelecionarTopico.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        btnFechar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnFechar.setText("Cancelar");
+        btnFechar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnFechar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFecharActionPerformed(evt);
             }
         });
 
-        cbTopico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7", "Item 8", "Item 9" }));
+        cbTopico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Estudo", "Casa", "Projeto", "Rotina ", "Trabalho", "Viaagem", "Pesquisa", "Livro", "Outro" }));
 
-        lblMensagem.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         lblMensagem.setText("Tutorial Mensagem");
+        lblMensagem.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
 
-        lblValor1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblValor1.setText("Data/Hora Limite de Finalização:");
+        lblValor1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -210,12 +211,12 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                                     .addComponent(lblAdicionarTarefa, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cbTopico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btnAdicionarTarefa)
-                                    .addComponent(programarTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(programarTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbTopico, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(lblMensagem))
                         .addGap(68, 68, 68))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -232,9 +233,9 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 .addGap(31, 31, 31)
                 .addComponent(lblCadPermissoes, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(65, 65, 65)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblSelecionarTopico)
-                    .addComponent(cbTopico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbTopico, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblAdicionarTarefa)

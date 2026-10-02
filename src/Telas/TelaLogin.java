@@ -98,6 +98,7 @@ import javax.swing.JFrame;
     public TelaLogin() {  
         initComponents();
         
+        
         conexao = ModuloDbConecta.connector();
         
     }
@@ -111,7 +112,7 @@ import javax.swing.JFrame;
         lblUsuario = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         lblSenha = new javax.swing.JLabel();
-        btnLogin = new javax.swing.JButton();
+        btnAcessar = new javax.swing.JButton();
         btnSair = new javax.swing.JButton();
         lblAplicativo = new javax.swing.JLabel();
         mnEsqueceuSenha = new javax.swing.JLabel();
@@ -137,13 +138,13 @@ import javax.swing.JFrame;
         lblSenha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSenha.setText("Senha:");
 
-        btnLogin.setBackground(new java.awt.Color(0, 51, 255));
-        btnLogin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogin.setText("Acessar");
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+        btnAcessar.setBackground(new java.awt.Color(0, 51, 255));
+        btnAcessar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnAcessar.setForeground(new java.awt.Color(255, 255, 255));
+        btnAcessar.setText("Acessar");
+        btnAcessar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
+                btnAcessarActionPerformed(evt);
             }
         });
 
@@ -183,6 +184,12 @@ import javax.swing.JFrame;
             }
         });
 
+        txtSenha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSenhaKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -192,28 +199,23 @@ import javax.swing.JFrame;
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblUsuario)
                     .addComponent(lblSenha))
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(mnEsqueceuSenha)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(btnMudarSenha))
-                                .addComponent(txtSenha)
-                                .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(btnSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(lblBemVindo2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnCadastro)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblAplicativo)
-                            .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(mnEsqueceuSenha)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btnMudarSenha))
+                        .addComponent(txtSenha)
+                        .addComponent(btnAcessar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(btnSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(lblBemVindo2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnCadastro)))
+                    .addComponent(lblAplicativo)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(326, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -247,7 +249,7 @@ import javax.swing.JFrame;
                     .addComponent(btnMudarSenha)
                     .addComponent(mnEsqueceuSenha))
                 .addGap(26, 26, 26)
-                .addComponent(btnLogin)
+                .addComponent(btnAcessar)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblBemVindo2)
@@ -261,10 +263,10 @@ import javax.swing.JFrame;
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+    private void btnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcessarActionPerformed
         // TODO add your handling code here:
         logar();
-    }//GEN-LAST:event_btnLoginActionPerformed
+    }//GEN-LAST:event_btnAcessarActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
         // TODO add your handling code here:
@@ -284,6 +286,12 @@ import javax.swing.JFrame;
         tlEsqueceuSenha.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnMudarSenhaActionPerformed
+
+    private void txtSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSenhaKeyPressed
+if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+    btnAcessar.doClick(); // Troque 'btnAcessar' pelo nome do seu botão de login, se for diferente
+}        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSenhaKeyPressed
 
     /**
      * @param args the command line arguments
@@ -321,8 +329,8 @@ import javax.swing.JFrame;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAcessar;
     private javax.swing.JButton btnCadastro;
-    private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnMudarSenha;
     private javax.swing.JButton btnSair;
     private javax.swing.JLabel lblAplicativo;
