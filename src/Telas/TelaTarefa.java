@@ -102,7 +102,7 @@ public class TelaTarefa extends javax.swing.JFrame {
 
         try {
             PreparedStatement pstLocal = conexao.prepareStatement(sql);
-            pstLocal.setInt(1, SessaoUsuario.getInstance().getIdUsuario());
+            pstLocal.setInt(1,1);
             pstLocal.setInt(2, idTopico);
             boolean encontrouTarefas = false;
 
@@ -116,6 +116,7 @@ public class TelaTarefa extends javax.swing.JFrame {
 
                 CardTarefa card = new CardTarefa(this.getConexao(), id);
                 card.setExibirDados(nome, desc, valor);
+                pnlListaTarefas.add(card);
 
                 card.setOnTarefaIniciadaListener(new CardTarefa.OnTarefaIniciadaListener() {
                     @Override
@@ -148,6 +149,7 @@ public class TelaTarefa extends javax.swing.JFrame {
                 lblAvisoVazio.setAlignmentX(Component.CENTER_ALIGNMENT);
                 pnlListaTarefas.add(javax.swing.Box.createVerticalStrut(20));
                 pnlListaTarefas.add(lblAvisoVazio);
+                
             } else {
                 pnlListaTarefas.add(javax.swing.Box.createVerticalGlue());
             }
@@ -156,6 +158,9 @@ public class TelaTarefa extends javax.swing.JFrame {
             pnlListaTarefas.repaint();
             scrollPainelCards.revalidate();
             scrollPainelCards.repaint();
+            
+            pnlListaTarefas.revalidate();
+            pnlListaTarefas.repaint();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar tarefas do tópico: " + e.getMessage());
@@ -590,6 +595,7 @@ private void selecionarTopico(JButton botaoSelecionado) {
     private void btnEstudoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstudoActionPerformed
         // TODO add your handling code here:
         selecionarTopico(btnEstudo);
+        carregarTarefasDoBanco( 4); // ID 4 = Estudo
         // Destaca a borda do botão clicado com a cor Laranja Chrono$ (#FF6B00)
    
     }//GEN-LAST:event_btnEstudoActionPerformed
@@ -597,41 +603,50 @@ private void selecionarTopico(JButton botaoSelecionado) {
     private void btnCasaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCasaActionPerformed
         // TODO add your handling code here:
         selecionarTopico(btnCasa);
+        carregarTarefasDoBanco( 2); // Ajuste para o ID de Casa no seu banco
     }//GEN-LAST:event_btnCasaActionPerformed
 
     private void btnProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProjetoActionPerformed
         // TODO add your handling code here:
         selecionarTopico(btnProjeto);
+        carregarTarefasDoBanco( 3); // ID 3 = Projeto
     }//GEN-LAST:event_btnProjetoActionPerformed
 
     private void btnRotinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRotinaActionPerformed
         // TODO add your handling code here:
         selecionarTopico(btnRotina);
+        carregarTarefasDoBanco( 6);
+        
     }//GEN-LAST:event_btnRotinaActionPerformed
 
     private void btnTrabalhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTrabalhoActionPerformed
         // TODO add your handling code here:
         selecionarTopico(btnTrabalho);
+        carregarTarefasDoBanco( 5); // ID 5 = Trabalho
     }//GEN-LAST:event_btnTrabalhoActionPerformed
 
     private void btnViagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViagemActionPerformed
         // TODO add your handling code here:
         selecionarTopico(btnViagem);
+        carregarTarefasDoBanco( 7);
     }//GEN-LAST:event_btnViagemActionPerformed
 
     private void btnLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLivroActionPerformed
         // TODO add your handling code here:
         selecionarTopico(btnLivro);
+        carregarTarefasDoBanco( 1);
     }//GEN-LAST:event_btnLivroActionPerformed
 
     private void btnPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisaActionPerformed
         // TODO add your handling code here:
         selecionarTopico(btnPesquisa);
+        carregarTarefasDoBanco( 8); // ID 8 = Pesquisa
     }//GEN-LAST:event_btnPesquisaActionPerformed
 
     private void btnOutroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutroActionPerformed
         // TODO add your handling code here:
         selecionarTopico(btnOutro);
+        carregarTarefasDoBanco( 9);
     }//GEN-LAST:event_btnOutroActionPerformed
 
     private void mnTutorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnTutorialActionPerformed
