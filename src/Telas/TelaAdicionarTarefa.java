@@ -6,6 +6,10 @@ import javax.swing.JOptionPane;
 import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+
 
 public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
     
@@ -31,6 +35,8 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
         }
     }
     
+    
+    
     public void cadastroTarefa() {
         if (txtNome.getText().trim().isEmpty() || cbTopico.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "Por favor, preencha o Nome da tarefa e selecione um Tópico!");
@@ -52,7 +58,28 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             }
         }
 
-        String sql = "INSERT INTO t_tarefa (id_usuario, id_topico, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao) VALUES (?, ?, ?, ?, ?, CURDATE())";
+        java.time.LocalDate dataSelecionada = programarTarefa.getDatePicker().getDate();
+        java.time.LocalTime horaSelecionada = programarTarefa.getTimePicker().getTime();
+
+        java.time.LocalDateTime dataHoraPrevisao = null;
+
+        if (dataSelecionada != null) {
+            dataHoraPrevisao = (horaSelecionada != null)
+                    ? java.time.LocalDateTime.of(dataSelecionada, horaSelecionada)
+                    : dataSelecionada.atTime(23, 59, 59);
+        }
+
+        String dataHoraFormatada = "";
+        if (dataHoraPrevisao != null) {
+            java.time.format.DateTimeFormatter formatador = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            dataHoraFormatada = dataHoraPrevisao.format(formatador);
+        }
+
+        java.sql.Timestamp timestampParaBanco = (dataHoraPrevisao != null)
+                ? java.sql.Timestamp.valueOf(dataHoraPrevisao)
+                : null;
+
+        String sql = "INSERT INTO t_tarefa (id_usuario, id_topico, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao, dt_previsao) VALUES (?, ?, ?, ?, ?, CURDATE(), ?)";
 
         try (PreparedStatement pstLocal = conexao.prepareStatement(sql)) {
             int idLogado = SessaoUsuario.getInstance().getIdUsuario();
@@ -65,6 +92,12 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             pstLocal.setString(4, descricao);
             pstLocal.setDouble(5, valor);
 
+            if (timestampParaBanco != null) {
+                pstLocal.setTimestamp(6, timestampParaBanco);
+            } else {
+                pstLocal.setNull(6, java.sql.Types.TIMESTAMP);
+            }
+
             pstLocal.executeUpdate();
 
             JOptionPane.showMessageDialog(this, "Tarefa adicionada com sucesso!");
@@ -76,7 +109,8 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             this.dispose();
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao salvar tarefa no banco de dados: " + e.getMessage());
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao inserir no banco: " + e.getMessage());
         }
     }
     
@@ -103,6 +137,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 + "<li><b>Nome da Tarefa:</b> Insira um título claro e direto para a atividade que pretende executar.</li>"
                 + "<li><b>Descrição:</b> Detalhe os objetivos ou notas complementares sobre a tarefa (opcional).</li>"
                 + "<li><b>Valor/Peso:</b> Defina uma métrica de importância numérica para o seu controle individual.</li>"
+                + "<li><b>Data/Hora Limite de Finalização:</b> Defina para quando deve ser concluída a tarefa.</li>"
                 + "<li><b>Tópico Automático:</b> O sistema pré-seleciona a categoria com base no botão clicado na tela anterior.</li>"
                 + "</ol>"
                 + "</body>"
@@ -112,11 +147,9 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
     }
 
     public TelaAdicionarTarefa(TelaTarefa telaPrincipal) {
-        initComponents();
-        
+        initComponents(); 
 
         lblMensagem.setText("Dica: Dúvidas sobre os campos? Pressione Ctrl + T para ver o guia de cadastro.");
-        
         this.telaPrincipal = telaPrincipal;
 
         if (this.telaPrincipal != null) {
@@ -125,7 +158,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             this.conexao = ModuloDbConecta.connector();
         }
 
-        preencherComboTopicos();
+        preencherComboTopicos(); 
     }
 
     
