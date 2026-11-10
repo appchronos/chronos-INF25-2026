@@ -6,10 +6,6 @@ import javax.swing.JOptionPane;
 import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
-
 
 public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
     
@@ -35,8 +31,6 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
         }
     }
     
-    
-    
     public void cadastroTarefa() {
         if (txtNome.getText().trim().isEmpty() || cbTopico.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "Por favor, preencha o Nome da tarefa e selecione um Tópico!");
@@ -58,28 +52,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             }
         }
 
-        java.time.LocalDate dataSelecionada = programarTarefa.getDatePicker().getDate();
-        java.time.LocalTime horaSelecionada = programarTarefa.getTimePicker().getTime();
-
-        java.time.LocalDateTime dataHoraPrevisao = null;
-
-        if (dataSelecionada != null) {
-            dataHoraPrevisao = (horaSelecionada != null)
-                    ? java.time.LocalDateTime.of(dataSelecionada, horaSelecionada)
-                    : dataSelecionada.atTime(23, 59, 59);
-        }
-
-        String dataHoraFormatada = "";
-        if (dataHoraPrevisao != null) {
-            java.time.format.DateTimeFormatter formatador = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            dataHoraFormatada = dataHoraPrevisao.format(formatador);
-        }
-
-        java.sql.Timestamp timestampParaBanco = (dataHoraPrevisao != null)
-                ? java.sql.Timestamp.valueOf(dataHoraPrevisao)
-                : null;
-
-        String sql = "INSERT INTO t_tarefa (id_usuario, id_topico, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao, dt_previsao) VALUES (?, ?, ?, ?, ?, CURDATE(), ?)";
+        String sql = "INSERT INTO t_tarefa (id_usuario, id_topico, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao) VALUES (?, ?, ?, ?, ?, CURDATE())";
 
         try (PreparedStatement pstLocal = conexao.prepareStatement(sql)) {
             int idLogado = SessaoUsuario.getInstance().getIdUsuario();
@@ -92,12 +65,6 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             pstLocal.setString(4, descricao);
             pstLocal.setDouble(5, valor);
 
-            if (timestampParaBanco != null) {
-                pstLocal.setTimestamp(6, timestampParaBanco);
-            } else {
-                pstLocal.setNull(6, java.sql.Types.TIMESTAMP);
-            }
-
             pstLocal.executeUpdate();
 
             JOptionPane.showMessageDialog(this, "Tarefa adicionada com sucesso!");
@@ -109,8 +76,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             this.dispose();
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao inserir no banco: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Erro ao salvar tarefa no banco de dados: " + e.getMessage());
         }
     }
     
@@ -137,7 +103,6 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 + "<li><b>Nome da Tarefa:</b> Insira um título claro e direto para a atividade que pretende executar.</li>"
                 + "<li><b>Descrição:</b> Detalhe os objetivos ou notas complementares sobre a tarefa (opcional).</li>"
                 + "<li><b>Valor/Peso:</b> Defina uma métrica de importância numérica para o seu controle individual.</li>"
-                + "<li><b>Data/Hora Limite de Finalização:</b> Defina para quando deve ser concluída a tarefa.</li>"
                 + "<li><b>Tópico Automático:</b> O sistema pré-seleciona a categoria com base no botão clicado na tela anterior.</li>"
                 + "</ol>"
                 + "</body>"
@@ -147,9 +112,10 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
     }
 
     public TelaAdicionarTarefa(TelaTarefa telaPrincipal) {
-        initComponents(); 
+        initComponents();
 
         lblMensagem.setText("Dica: Dúvidas sobre os campos? Pressione Ctrl + T para ver o guia de cadastro.");
+        
         this.telaPrincipal = telaPrincipal;
 
         if (this.telaPrincipal != null) {
@@ -158,7 +124,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             this.conexao = ModuloDbConecta.connector();
         }
 
-        preencherComboTopicos(); 
+        preencherComboTopicos();
     }
 
     
@@ -184,46 +150,46 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
 
         lblObservacao.setText("(*) = Campos Obrigatórios.");
 
-        lblAdicionarTarefa.setText("(*)Adicionar Tarefa:");
         lblAdicionarTarefa.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblAdicionarTarefa.setText("(*)Adicionar Tarefa:");
 
-        btnAdicionarTarefa.setText("Adicionar Tarefa");
         btnAdicionarTarefa.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnAdicionarTarefa.setForeground(new java.awt.Color(0, 51, 255));
+        btnAdicionarTarefa.setText("Adicionar Tarefa");
         btnAdicionarTarefa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAdicionarTarefaActionPerformed(evt);
             }
         });
 
-        lblDescricaoTarefa.setText("Descrição da Tarefa:");
         lblDescricaoTarefa.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblDescricaoTarefa.setText("Descrição da Tarefa:");
 
-        lblCadPermissoes.setText("Nova Tarefa");
         lblCadPermissoes.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblCadPermissoes.setForeground(new java.awt.Color(0, 51, 255));
+        lblCadPermissoes.setText("Nova Tarefa");
 
-        lblValor.setText("Valor das Tarefa:");
         lblValor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblValor.setText("Valor das Tarefa:");
 
-        lblSelecionarTopico.setText("(*)Selecionar Tópico:");
         lblSelecionarTopico.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblSelecionarTopico.setText("(*)Selecionar Tópico:");
 
-        btnFechar.setText("Cancelar");
         btnFechar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnFechar.setText("Cancelar");
         btnFechar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFecharActionPerformed(evt);
             }
         });
 
-        cbTopico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Estudo", "Casa", "Projeto", "Rotina ", "Trabalho", "Viaagem", "Pesquisa", "Livro", "Outro" }));
+        cbTopico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7", "Item 8", "Item 9" }));
 
-        lblMensagem.setText("Tutorial Mensagem");
         lblMensagem.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
+        lblMensagem.setText("Tutorial Mensagem");
 
-        lblValor1.setText("Data/Hora Limite de Finalização:");
         lblValor1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblValor1.setText("Data/Hora Limite de Finalização:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -244,12 +210,12 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                                     .addComponent(lblAdicionarTarefa, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbTopico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btnAdicionarTarefa)
-                                    .addComponent(programarTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cbTopico, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(programarTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(lblMensagem))
                         .addGap(68, 68, 68))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -266,9 +232,9 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
                 .addGap(31, 31, 31)
                 .addComponent(lblCadPermissoes, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(65, 65, 65)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSelecionarTopico)
-                    .addComponent(cbTopico, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbTopico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblAdicionarTarefa)

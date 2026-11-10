@@ -7,8 +7,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Component;
-import java.awt.Color;
-import javax.swing.JButton;
 
 
 public class TelaTarefa extends javax.swing.JFrame {
@@ -102,7 +100,7 @@ public class TelaTarefa extends javax.swing.JFrame {
 
         try {
             PreparedStatement pstLocal = conexao.prepareStatement(sql);
-            pstLocal.setInt(1,1);
+            pstLocal.setInt(1, SessaoUsuario.getInstance().getIdUsuario());
             pstLocal.setInt(2, idTopico);
             boolean encontrouTarefas = false;
 
@@ -116,7 +114,6 @@ public class TelaTarefa extends javax.swing.JFrame {
 
                 CardTarefa card = new CardTarefa(this.getConexao(), id);
                 card.setExibirDados(nome, desc, valor);
-                pnlListaTarefas.add(card);
 
                 card.setOnTarefaIniciadaListener(new CardTarefa.OnTarefaIniciadaListener() {
                     @Override
@@ -149,7 +146,6 @@ public class TelaTarefa extends javax.swing.JFrame {
                 lblAvisoVazio.setAlignmentX(Component.CENTER_ALIGNMENT);
                 pnlListaTarefas.add(javax.swing.Box.createVerticalStrut(20));
                 pnlListaTarefas.add(lblAvisoVazio);
-                
             } else {
                 pnlListaTarefas.add(javax.swing.Box.createVerticalGlue());
             }
@@ -158,36 +154,15 @@ public class TelaTarefa extends javax.swing.JFrame {
             pnlListaTarefas.repaint();
             scrollPainelCards.revalidate();
             scrollPainelCards.repaint();
-            
-            pnlListaTarefas.revalidate();
-            pnlListaTarefas.repaint();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar tarefas do tópico: " + e.getMessage());
         }
     }
     
-    // Método para resetar a cor de todos e destacar apenas o clicado
-private void selecionarTopico(JButton botaoSelecionado) {
-        JButton[] botoes = {btnEstudo, btnCasa, btnProjeto, btnRotina, btnTrabalho, btnViagem, btnPesquisa, btnLivro, btnOutro};
-
-        Color corFundoPadrao = new Color(255, 255, 255); // Fundo branco/cinza claro dos botões
-        Color corLaranja = new Color(255, 140, 0);       // Cor laranja de destaque para a borda
-        Color corBordaPadrao = new Color(200, 200, 200);  // Borda suave para os não selecionados
-
-        for (JButton btn : botoes) {
-            btn.setFocusPainted(false);
-            btn.setBackground(corFundoPadrao);
-            btn.setForeground(Color.BLACK); // Texto escuro mantido em todos
-
-            if (btn == botaoSelecionado) {
-                // Aplica apenas a borda laranja com espessura de 2px
-                btn.setBorder(javax.swing.BorderFactory.createLineBorder(corLaranja, 2));
-            } else {
-                // Restaura a borda padrão fina dos botões desativados
-                btn.setBorder(javax.swing.BorderFactory.createLineBorder(corBordaPadrao, 1));
-            }
-        }
+    public void selecionarTopico(int numeroTopico) {
+        this.idTopicoAtual = numeroTopico;
+        carregarTarefasDoBanco(numeroTopico);
     }
     
     public Connection getConexao() {
@@ -255,9 +230,6 @@ private void selecionarTopico(JButton botaoSelecionado) {
         scrollPainelCards.setViewportView(pnlListaTarefas);
 
         btnEstudo.setText("Estudo");
-        btnEstudo.setMaximumSize(new java.awt.Dimension(72, 23));
-        btnEstudo.setMinimumSize(new java.awt.Dimension(72, 23));
-        btnEstudo.setPreferredSize(new java.awt.Dimension(70, 25));
         btnEstudo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEstudoActionPerformed(evt);
@@ -265,7 +237,6 @@ private void selecionarTopico(JButton botaoSelecionado) {
         });
 
         btnCasa.setText("Casa");
-        btnCasa.setPreferredSize(new java.awt.Dimension(70, 25));
         btnCasa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCasaActionPerformed(evt);
@@ -273,7 +244,6 @@ private void selecionarTopico(JButton botaoSelecionado) {
         });
 
         btnProjeto.setText("Projeto");
-        btnProjeto.setPreferredSize(new java.awt.Dimension(70, 25));
         btnProjeto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProjetoActionPerformed(evt);
@@ -281,7 +251,6 @@ private void selecionarTopico(JButton botaoSelecionado) {
         });
 
         btnRotina.setText("Rotina");
-        btnRotina.setPreferredSize(new java.awt.Dimension(70, 25));
         btnRotina.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRotinaActionPerformed(evt);
@@ -289,7 +258,6 @@ private void selecionarTopico(JButton botaoSelecionado) {
         });
 
         btnTrabalho.setText("Trabalho");
-        btnTrabalho.setPreferredSize(new java.awt.Dimension(70, 25));
         btnTrabalho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTrabalhoActionPerformed(evt);
@@ -297,7 +265,6 @@ private void selecionarTopico(JButton botaoSelecionado) {
         });
 
         btnViagem.setText("Viagem");
-        btnViagem.setPreferredSize(new java.awt.Dimension(70, 25));
         btnViagem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViagemActionPerformed(evt);
@@ -305,7 +272,6 @@ private void selecionarTopico(JButton botaoSelecionado) {
         });
 
         btnLivro.setText("Livro");
-        btnLivro.setPreferredSize(new java.awt.Dimension(70, 25));
         btnLivro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLivroActionPerformed(evt);
@@ -313,7 +279,6 @@ private void selecionarTopico(JButton botaoSelecionado) {
         });
 
         btnPesquisa.setText("Pesquisa");
-        btnPesquisa.setPreferredSize(new java.awt.Dimension(70, 25));
         btnPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPesquisaActionPerformed(evt);
@@ -321,7 +286,6 @@ private void selecionarTopico(JButton botaoSelecionado) {
         });
 
         btnOutro.setText("Outro");
-        btnOutro.setPreferredSize(new java.awt.Dimension(70, 25));
         btnOutro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOutroActionPerformed(evt);
@@ -384,23 +348,23 @@ private void selecionarTopico(JButton botaoSelecionado) {
                                 .addComponent(lblSelecionarTopico))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, desktopPaneLayout.createSequentialGroup()
                                 .addGap(44, 44, 44)
-                                .addComponent(btnEstudo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnEstudo)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnCasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnCasa)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnProjeto)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnRotina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnRotina)
                                 .addGap(19, 19, 19)
-                                .addComponent(btnTrabalho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnTrabalho)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnViagem)))
                         .addGap(18, 18, 18)
-                        .addComponent(btnPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnPesquisa)
                         .addGap(18, 18, 18)
-                        .addComponent(btnLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnLivro)
                         .addGap(18, 18, 18)
-                        .addComponent(btnOutro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnOutro))
                     .addGroup(desktopPaneLayout.createSequentialGroup()
                         .addGap(19, 19, 19)
                         .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -422,22 +386,22 @@ private void selecionarTopico(JButton botaoSelecionado) {
                         .addComponent(nomeUsuario)))
                 .addGap(8, 8, 8)
                 .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRotina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTrabalho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOutro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEstudo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCasa)
+                    .addComponent(btnProjeto)
+                    .addComponent(btnRotina)
+                    .addComponent(btnTrabalho)
+                    .addComponent(btnViagem)
+                    .addComponent(btnLivro)
+                    .addComponent(btnPesquisa)
+                    .addComponent(btnOutro)
+                    .addComponent(btnEstudo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrollPainelCards, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNovaTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblMensagem)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         btnNovaTarefa.getAccessibleContext().setAccessibleName("Clique aqui para Criar Tarefa");
@@ -594,59 +558,47 @@ private void selecionarTopico(JButton botaoSelecionado) {
 
     private void btnEstudoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstudoActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(btnEstudo);
-        carregarTarefasDoBanco( 4); // ID 4 = Estudo
-        // Destaca a borda do botão clicado com a cor Laranja Chrono$ (#FF6B00)
-   
+        selecionarTopico(1);
     }//GEN-LAST:event_btnEstudoActionPerformed
 
     private void btnCasaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCasaActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(btnCasa);
-        carregarTarefasDoBanco( 2); // Ajuste para o ID de Casa no seu banco
+        selecionarTopico(2);
     }//GEN-LAST:event_btnCasaActionPerformed
 
     private void btnProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProjetoActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(btnProjeto);
-        carregarTarefasDoBanco( 3); // ID 3 = Projeto
+        selecionarTopico(3);
     }//GEN-LAST:event_btnProjetoActionPerformed
 
     private void btnRotinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRotinaActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(btnRotina);
-        carregarTarefasDoBanco( 6);
-        
+        selecionarTopico(4);
     }//GEN-LAST:event_btnRotinaActionPerformed
 
     private void btnTrabalhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTrabalhoActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(btnTrabalho);
-        carregarTarefasDoBanco( 5); // ID 5 = Trabalho
+        selecionarTopico(5);
     }//GEN-LAST:event_btnTrabalhoActionPerformed
 
     private void btnViagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViagemActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(btnViagem);
-        carregarTarefasDoBanco( 7);
+        selecionarTopico(6);
     }//GEN-LAST:event_btnViagemActionPerformed
 
     private void btnLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLivroActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(btnLivro);
-        carregarTarefasDoBanco( 1);
+        selecionarTopico(7);
     }//GEN-LAST:event_btnLivroActionPerformed
 
     private void btnPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisaActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(btnPesquisa);
-        carregarTarefasDoBanco( 8); // ID 8 = Pesquisa
+        selecionarTopico(8);
     }//GEN-LAST:event_btnPesquisaActionPerformed
 
     private void btnOutroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutroActionPerformed
         // TODO add your handling code here:
-        selecionarTopico(btnOutro);
-        carregarTarefasDoBanco( 9);
+        selecionarTopico(9);
     }//GEN-LAST:event_btnOutroActionPerformed
 
     private void mnTutorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnTutorialActionPerformed

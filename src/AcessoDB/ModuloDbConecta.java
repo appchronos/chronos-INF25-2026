@@ -10,7 +10,7 @@ public class ModuloDbConecta {
         String driver = "com.mysql.cj.jdbc.Driver";      
         String url = "jdbc:mysql://127.0.0.1:3306/db_chronos";
         String user = "root";
-        String senha = "1234";            
+        String senha = "";            
         try {          
             Class.forName(driver);
             conexao = DriverManager.getConnection(url, user, senha);           
