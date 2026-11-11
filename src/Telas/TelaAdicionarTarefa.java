@@ -6,6 +6,9 @@ import javax.swing.JOptionPane;
 import java.sql.*;
 import AcessoDB.ModuloDbConecta;
 import java.awt.Color;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 
 public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
     
@@ -52,7 +55,25 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             }
         }
 
-        String sql = "INSERT INTO t_tarefa (id_usuario, id_topico, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao) VALUES (?, ?, ?, ?, ?, CURDATE())";
+        programarTarefa.requestFocusInWindow();
+
+        java.time.LocalDateTime dataHora = programarTarefa.getDateTimePermissive();
+
+        if (dataHora == null) {
+            java.time.LocalDate data = programarTarefa.getDatePicker().getDate();
+            java.time.LocalTime hora = programarTarefa.getTimePicker().getTime();
+            if (data != null) {
+                dataHora = (hora != null) ? java.time.LocalDateTime.of(data, hora) : data.atTime(23, 59, 59);
+            }
+        }
+
+        String dataHoraIso = null;
+        if (dataHora != null) {
+            java.time.format.DateTimeFormatter fmt = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            dataHoraIso = dataHora.format(fmt);
+        }
+
+        String sql = "INSERT INTO t_tarefa (id_usuario, id_topico, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao, dt_previsao) VALUES (?, ?, ?, ?, ?, CURDATE(), ?)";
 
         try (PreparedStatement pstLocal = conexao.prepareStatement(sql)) {
             int idLogado = SessaoUsuario.getInstance().getIdUsuario();
@@ -65,9 +86,18 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             pstLocal.setString(4, descricao);
             pstLocal.setDouble(5, valor);
 
-            pstLocal.executeUpdate();
+            // 4. Envia o valor formatado para a coluna DATETIME
+            if (dataHoraIso != null) {
+                pstLocal.setString(6, dataHoraIso);
+            } else {
+                pstLocal.setNull(6, java.sql.Types.VARCHAR);
+            }
 
-            JOptionPane.showMessageDialog(this, "Tarefa adicionada com sucesso!");
+            int linhasAfetadas = pstLocal.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                JOptionPane.showMessageDialog(this, "Tarefa adicionada com sucesso");
+            }
 
             if (telaPrincipal != null) {
                 telaPrincipal.carregarTarefasDoBanco(idTopico);
@@ -76,9 +106,11 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             this.dispose();
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao salvar tarefa no banco de dados: " + e.getMessage());
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao inserir no banco: " + e.getMessage());
         }
     }
+
     
     void setTopicoSelecionado(int idTopicoAtual) {
         for (int i = 0; i < cbTopico.getItemCount(); i++) {
