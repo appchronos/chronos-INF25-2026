@@ -3,23 +3,84 @@ package Telas;
 
 import Modelos.SessaoUsuario;
 import java.sql.*;
-import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import AcessoDB.ModuloDbConecta;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.GroupLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 
 public class TelaTarefa extends javax.swing.JFrame {
 
-    private Connection conexao = null;  
+    private Connection conexao = null;
     private int idTopicoAtual = 1;
-    
+
     public void atualizarNomeUsuario() {
         nomeUsuario.setText(SessaoUsuario.getInstance().getNomeUsuario());
     }
-    
+
+    private JPanel criarCabecalhoColunas() {
+        JPanel pnlCabecalho = new JPanel();
+        pnlCabecalho.setBackground(new Color(230, 235, 242));
+        pnlCabecalho.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(180, 190, 205)));
+        pnlCabecalho.setPreferredSize(new Dimension(780, 32));
+
+        Font fonteCabecalho = new Font("Segoe UI", Font.BOLD, 12);
+        Color corTexto = new Color(40, 40, 40);
+
+        JLabel lblColNomeDesc = new JLabel("Nome / Descrição");
+        lblColNomeDesc.setFont(fonteCabecalho);
+        lblColNomeDesc.setForeground(corTexto);
+
+        JLabel lblColValor = new JLabel("Valor / Ganho Tempo");
+        lblColValor.setFont(fonteCabecalho);
+        lblColValor.setForeground(corTexto);
+
+        JLabel lblColTempoPrazo = new JLabel("Tempo Decorrido / Prazo Final");
+        lblColTempoPrazo.setFont(fonteCabecalho);
+        lblColTempoPrazo.setForeground(corTexto);
+
+        JLabel lblColAcoes = new JLabel("Ações");
+        lblColAcoes.setFont(fonteCabecalho);
+        lblColAcoes.setForeground(corTexto);
+
+        GroupLayout layout = new GroupLayout(pnlCabecalho);
+        pnlCabecalho.setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(65, 65, 65)
+                                .addComponent(lblColNomeDesc)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
+                                .addComponent(lblColValor)
+                                .addGap(72, 72, 72)
+                                .addComponent(lblColTempoPrazo)
+                                .addGap(82, 82, 82)
+                                .addComponent(lblColAcoes)
+                                .addGap(108, 108, 108))
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(7, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lblColNomeDesc)
+                                        .addComponent(lblColValor)
+                                        .addComponent(lblColTempoPrazo)
+                                        .addComponent(lblColAcoes))
+                                .addGap(7, 7, 7))
+        );
+
+        return pnlCabecalho;
+    }
+
     private void tutorial() {
-        
+
         TelaAdicionarTarefa telaCadastroAberta = null;
         TelaVisaoGeral telaVisaoGeralAberta = null;
 
@@ -43,7 +104,7 @@ public class TelaTarefa extends javax.swing.JFrame {
             boolean possuiTarefas = false;
 
             for (java.awt.Component comp : pnlListaTarefas.getComponents()) {
-                if (comp instanceof CardTarefa) { 
+                if (comp instanceof CardTarefa) {
                     possuiTarefas = true;
                     break;
                 }
@@ -78,15 +139,15 @@ public class TelaTarefa extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, textoTutorial, "Tutorial do Usuário", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
-     public void carregarTarefasDoBanco(int idTopico) {
+
+    public void carregarTarefasDoBanco(int idTopico) {
         this.idTopicoAtual = idTopico;
 
         for (Component comp : pnlListaTarefas.getComponents()) {
             comp.setVisible(false);
         }
         pnlListaTarefas.removeAll();
-        pnlListaTarefas.revalidate(); 
+        pnlListaTarefas.revalidate();
 
         try {
             if (conexao == null || conexao.isClosed()) {
@@ -112,8 +173,20 @@ public class TelaTarefa extends javax.swing.JFrame {
                 String desc = rsLocal.getString("ds_tarefa");
                 double valor = rsLocal.getDouble("vl_tarefa");
 
+                Timestamp dtCriacao = null;
+                Timestamp dtPrevisao = null;
+                try {
+                    dtCriacao = rsLocal.getTimestamp("dt_criacao");
+                } catch (SQLException ignored) {
+                }
+                try {
+                    dtPrevisao = rsLocal.getTimestamp("dt_previsao");
+                } catch (SQLException ignored) {
+                }
+
                 CardTarefa card = new CardTarefa(this.getConexao(), id);
                 card.setExibirDados(nome, desc, valor);
+                card.setProgramacao(dtCriacao, dtPrevisao);
 
                 card.setOnTarefaIniciadaListener(new CardTarefa.OnTarefaIniciadaListener() {
                     @Override
@@ -159,12 +232,12 @@ public class TelaTarefa extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro ao carregar tarefas do tópico: " + e.getMessage());
         }
     }
-    
+
     public void selecionarTopico(int numeroTopico) {
         this.idTopicoAtual = numeroTopico;
         carregarTarefasDoBanco(numeroTopico);
     }
-    
+
     public Connection getConexao() {
         try {
             if (this.conexao == null || this.conexao.isClosed()) {
@@ -179,14 +252,16 @@ public class TelaTarefa extends javax.swing.JFrame {
     public TelaTarefa() {
         initComponents();
 
+        scrollPainelCards.setColumnHeaderView(criarCabecalhoColunas());
+
         lblMensagem.setText("Dica: Use Ctrl + T para abrir o tutorial desta lista. Ele muda quando você tem tarefas criadas!");
-        
+
         if (SessaoUsuario.getInstance().getNomeUsuario() != null) {
             nomeUsuario.setText(SessaoUsuario.getInstance().getNomeUsuario());
         }
-        
+
         conexao = ModuloDbConecta.connector();
-            
+
         carregarTarefasDoBanco(idTopicoAtual);
     }
 
@@ -224,12 +299,16 @@ public class TelaTarefa extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Minhas Tarefas");
-        setResizable(false);
 
         pnlListaTarefas.setLayout(new javax.swing.BoxLayout(pnlListaTarefas, javax.swing.BoxLayout.Y_AXIS));
         scrollPainelCards.setViewportView(pnlListaTarefas);
 
         btnEstudo.setText("Estudo");
+        btnEstudo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                btnEstudoFocusGained(evt);
+            }
+        });
         btnEstudo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEstudoActionPerformed(evt);
@@ -368,12 +447,12 @@ public class TelaTarefa extends javax.swing.JFrame {
                     .addGroup(desktopPaneLayout.createSequentialGroup()
                         .addGap(19, 19, 19)
                         .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(desktopPaneLayout.createSequentialGroup()
-                                .addGap(291, 291, 291)
-                                .addComponent(btnNovaTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(scrollPainelCards, javax.swing.GroupLayout.PREFERRED_SIZE, 808, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblMensagem))))
-                .addContainerGap(65, Short.MAX_VALUE))
+                            .addComponent(lblMensagem)
+                            .addGroup(desktopPaneLayout.createSequentialGroup()
+                                .addGap(262, 262, 262)
+                                .addComponent(btnNovaTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         desktopPaneLayout.setVerticalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -401,7 +480,7 @@ public class TelaTarefa extends javax.swing.JFrame {
                 .addComponent(btnNovaTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblMensagem)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         btnNovaTarefa.getAccessibleContext().setAccessibleName("Clique aqui para Criar Tarefa");
@@ -473,18 +552,18 @@ public class TelaTarefa extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(desktopPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(desktopPane)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(desktopPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(89, 89, 89))
+                .addContainerGap())
         );
 
-        setSize(new java.awt.Dimension(857, 674));
+        setSize(new java.awt.Dimension(872, 678));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -636,6 +715,10 @@ public class TelaTarefa extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mnIndicadorVGActionPerformed
 
+    private void btnEstudoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_btnEstudoFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEstudoFocusGained
+
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -659,6 +742,7 @@ public class TelaTarefa extends javax.swing.JFrame {
                 new TelaTarefa().setVisible(true);
             }
         });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

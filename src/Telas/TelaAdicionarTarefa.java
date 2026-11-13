@@ -5,9 +5,11 @@ import Modelos.SessaoUsuario;
 import javax.swing.JOptionPane;
 import java.sql.*;
 import AcessoDB.ModuloDbConecta;
-import java.awt.Color;
-import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 
 public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
@@ -25,7 +27,6 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             cbTopico.removeAllItems();
 
             while (rsLocal.next()) {
-                
                 Modelos.Topico topico = new Modelos.Topico(rsLocal.getInt("id_topico"), rsLocal.getString("nm_topico"));
                 ((javax.swing.DefaultComboBoxModel) cbTopico.getModel()).addElement(topico);
             }
@@ -33,7 +34,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Erro ao carregar tópicos: " + e.getMessage());
         }
     }
-    
+
     public void cadastroTarefa() {
         if (txtNome.getText().trim().isEmpty() || cbTopico.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "Por favor, preencha o Nome da tarefa e selecione um Tópico!");
@@ -57,25 +58,27 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
 
         programarTarefa.requestFocusInWindow();
 
-        java.time.LocalDateTime dataHora = programarTarefa.getDateTimePermissive();
+        LocalDateTime dataHora = programarTarefa.getDateTimePermissive();
 
         if (dataHora == null) {
-            java.time.LocalDate data = programarTarefa.getDatePicker().getDate();
-            java.time.LocalTime hora = programarTarefa.getTimePicker().getTime();
+            LocalDate data = programarTarefa.getDatePicker().getDate();
+            LocalTime hora = programarTarefa.getTimePicker().getTime();
             if (data != null) {
-                dataHora = (hora != null) ? java.time.LocalDateTime.of(data, hora) : data.atTime(23, 59, 59);
+                dataHora = (hora != null) ? LocalDateTime.of(data, hora) : data.atTime(23, 59);
+            } else if (hora != null) {
+                dataHora = LocalDateTime.of(LocalDate.now(), hora);
             }
         }
 
-        String dataHoraIso = null;
+        // Trunca para minutos exatos para que 20:21 até 20:41 resulte exatamente em 20 minutos
+        LocalDateTime agoraCriacao = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
         if (dataHora != null) {
-            java.time.format.DateTimeFormatter fmt = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            dataHoraIso = dataHora.format(fmt);
+            dataHora = dataHora.truncatedTo(ChronoUnit.MINUTES);
         }
 
-        String sql = "INSERT INTO t_tarefa (id_usuario, id_topico, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao, dt_previsao) VALUES (?, ?, ?, ?, ?, CURDATE(), ?)";
+        String sql = "INSERT INTO t_tarefa (id_usuario, id_topico, nm_tarefa, ds_tarefa, vl_tarefa, dt_criacao, dt_previsao) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement pstLocal = conexao.prepareStatement(sql)) {
+        try (PreparedStatement pstLocal = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             int idLogado = SessaoUsuario.getInstance().getIdUsuario();
             String nome = txtNome.getText().trim();
             String descricao = txtDescricao.getText().trim();
@@ -85,17 +88,26 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             pstLocal.setString(3, nome);
             pstLocal.setString(4, descricao);
             pstLocal.setDouble(5, valor);
+            pstLocal.setTimestamp(6, Timestamp.valueOf(agoraCriacao));
 
-            // 4. Envia o valor formatado para a coluna DATETIME
-            if (dataHoraIso != null) {
-                pstLocal.setString(6, dataHoraIso);
+            if (dataHora != null) {
+                pstLocal.setTimestamp(7, Timestamp.valueOf(dataHora));
             } else {
-                pstLocal.setNull(6, java.sql.Types.VARCHAR);
+                pstLocal.setNull(7, java.sql.Types.TIMESTAMP);
             }
 
             int linhasAfetadas = pstLocal.executeUpdate();
 
             if (linhasAfetadas > 0) {
+                if (dataHora != null) {
+                    try (ResultSet rsKeys = pstLocal.getGeneratedKeys()) {
+                        if (rsKeys.next()) {
+                            int idGerado = rsKeys.getInt(1);
+                            long mins = Math.max(0, Duration.between(agoraCriacao, dataHora).toMinutes());
+                            Modelos.GerenciadorLocal.salvarDuracaoPrevista(idGerado, Duration.ofMinutes(mins));
+                        }
+                    }
+                }
                 JOptionPane.showMessageDialog(this, "Tarefa adicionada com sucesso");
             }
 
@@ -111,7 +123,6 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
         }
     }
 
-    
     void setTopicoSelecionado(int idTopicoAtual) {
         for (int i = 0; i < cbTopico.getItemCount(); i++) {
             Object item = cbTopico.getItemAt(i);
@@ -124,7 +135,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
             }
         }
     }
-    
+
     public void exibirTutorialTela() {
         String textoTutorial = "<html>"
                 + "<body style='width: 360px; font-family: Segoe UI, sans-serif;'>"
@@ -147,7 +158,7 @@ public class TelaAdicionarTarefa extends javax.swing.JInternalFrame {
         initComponents();
 
         lblMensagem.setText("Dica: Dúvidas sobre os campos? Pressione Ctrl + T para ver o guia de cadastro.");
-        
+
         this.telaPrincipal = telaPrincipal;
 
         if (this.telaPrincipal != null) {
